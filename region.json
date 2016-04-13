@@ -1,0 +1,157 @@
+{
+  "title": "The schema of the location event",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "A unique UUID assocaited with each event used for deduplication."
+    },
+    "offset": {
+      "type": "string",
+      "description": "This field is only used when directly consuming from the connect api to indicate the offset for resuming.  Connect integrations will always have this value set to 0."
+    },
+    "occurred": {
+      "type": "string",
+      "description": "The time the event occured as an iso8601 UTC timestamp."
+    },
+    "processed": {
+      "type": "string",
+      "description": "The time the event was processed as an iso8601 UTC timestamp."
+    },
+    "device": {
+      "type": "object",
+      "description": "An object describing attributes of the device.  Only one channel association will be given.",
+      "properties": {
+        "ios_channel": {
+          "type": "string",
+          "description": "The IOS channel the device is associated with."
+        },
+        "android_channel": {
+            "type": "string",
+            "description": "The Android channel the device is assocaited with."
+        },
+        "amazon_channel": {
+            "type": "string",
+            "description": "The Amazon channel the device is assocaited with."
+        },
+        "named_user_id": {
+            "type": "string",
+            "description": "The named user assocaited with the device."
+        },
+        "attributes": {
+          "type": "object",
+          "properties": {
+            "locale_variant": {
+              "type": "string"
+            },
+            "app_version": {
+              "type": "string",
+              "description": "Indicates the version of the application"
+            },
+            "device_model": {
+              "type": "string",
+              "description": "Indicates the device model"
+            },
+            "connection_type": {
+              "type": "string",
+              "description": "Indicates if the connection is WIFI or 3g etc.."
+            },
+            "app_package_name": {
+              "type": "string",
+              "description": "Indicates the applications package name"
+            },
+            "iana_timezone": {
+              "type": "string",
+              "description": "Indicates the IANA timezone"
+            },
+            "push_opt_in": {
+              "type": "string",
+              "description": "Indicates if the device is opted in for push"
+            },
+            "locale_country_code": {
+              "type": "string",
+              "description": "Indicates the countries locale country code"
+            },
+            "device_os": {
+              "type": "string",
+              "description": "Indicates the devices operating system of IOS or android and possibly version"
+            },
+            "locale_timezone": {
+              "type": "string",
+              "description": "Indicates the timezone for the device"
+            },
+            "carrier": {
+              "type": "string",
+              "description": "Indicates the carrier on which the device is active"
+            },
+            "locale_language_code": {
+              "type": "string",
+              "description": "Indicates the locale language code for the device"
+            },
+            "location_enabled": {
+              "type": "string",
+              "description": "Indicates if the device has location tracking enabled"
+            },
+            "background_push_enabled": {
+              "type": "string",
+              "description": "Indicates if the device has background push enabled"
+            },
+            "ua_sdk_version": {
+              "type": "string",
+              "description": "Indicates what version of the ua sdk is in use"
+            },
+            "location_permission": {
+              "type": "string",
+              "description": "Indicates if the device has permission to use the location information for enhancing user experience"
+            }
+          }
+        }
+      }
+    },
+    "body": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "type": "string",
+          "description": "The session the location event was associated with if fired during an open"
+        },
+        "region_id": {
+          "type": "string",
+          "description": "A string uniquely identifying the region in the Urban Airship system."
+        },
+        "name": {
+          "type": "string",
+          "description": "A human-readable name for the event. May be retrieved from a third party."
+        },
+        "source_info": {
+          "type": "object",
+          "description": "Because Gimbal is just one possible provider of this information, region event bodies contain a source_info field for provider specifics, with the following fields",
+          "properties": {
+            "source": {
+              "type": "string",
+              "description": "A string identifying the system originating the event."
+            },
+            "region_id": {
+              "type": "string",
+              "description": "The unique region identifier for the provider’s system."
+            },
+            "required": ["source", "region_id"]
+          }
+        }
+      }
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of the event"
+    }
+  },
+  "required": [
+    "id",
+    "offset",
+    "occurred",
+    "processed",
+    "device",
+    "body",
+    "type"
+  ]
+}

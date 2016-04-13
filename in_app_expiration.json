@@ -1,0 +1,189 @@
+{
+  "title": "The schema of the open event",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "A unique UUID assocaited with each event used for deduplication."
+    },
+    "offset": {
+      "type": "string",
+      "description": "This field is only used when directly consuming from the connect api to indicate the offset for resuming.  Connect integrations will always have this value set to 0."
+    },
+    "occurred": {
+      "type": "string",
+      "description": "The time the event occured as an iso8601 UTC timestamp."
+    },
+    "processed": {
+      "type": "string",
+      "description": "The time the event was processed as an iso8601 UTC timestamp."
+    },
+    "device": {
+      "type": "object",
+      "description": "An object describing attributes of the device.  Only one channel association will be given.",
+      "properties": {
+        "ios_channel": {
+          "type": "string",
+          "description": "The IOS channel the device is associated with."
+        },
+        "android_channel": {
+            "type": "string",
+            "description": "The Android channel the device is assocaited with."
+        },
+        "amazon_channel": {
+            "type": "string",
+            "description": "The Amazon channel the device is assocaited with."
+        },
+        "named_user_id": {
+            "type": "string",
+            "description": "The named user assocaited with the device."
+        },
+        "attributes": {
+          "type": "object",
+          "properties": {
+            "locale_variant": {
+              "type": "string"
+            },
+            "app_version": {
+              "type": "string",
+              "description": "Indicates the version of the application"
+            },
+            "device_model": {
+              "type": "string",
+              "description": "Indicates the device model"
+            },
+            "connection_type": {
+              "type": "string",
+              "description": "Indicates if the connection is WIFI or 3g etc.."
+            },
+            "app_package_name": {
+              "type": "string",
+              "description": "Indicates the applications package name"
+            },
+            "iana_timezone": {
+              "type": "string",
+              "description": "Indicates the IANA timezone"
+            },
+            "push_opt_in": {
+              "type": "string",
+              "description": "Indicates if the device is opted in for push"
+            },
+            "locale_country_code": {
+              "type": "string",
+              "description": "Indicates the countries locale country code"
+            },
+            "device_os": {
+              "type": "string",
+              "description": "Indicates the devices operating system of IOS or android and possibly version"
+            },
+            "locale_timezone": {
+              "type": "string",
+              "description": "Indicates the timezone for the device"
+            },
+            "carrier": {
+              "type": "string",
+              "description": "Indicates the carrier on which the device is active"
+            },
+            "locale_language_code": {
+              "type": "string",
+              "description": "Indicates the locale language code for the device"
+            },
+            "location_enabled": {
+              "type": "string",
+              "description": "Indicates if the device has location tracking enabled"
+            },
+            "background_push_enabled": {
+              "type": "string",
+              "description": "Indicates if the device has background push enabled"
+            },
+            "ua_sdk_version": {
+              "type": "string",
+              "description": "Indicates what version of the ua sdk is in use"
+            },
+            "location_permission": {
+              "type": "string",
+              "description": "Indicates if the device has permission to use the location information for enhancing user experience"
+            }
+          }
+        }
+      }
+    },
+    "body": {
+      "type": "object",
+      "required": ["push_id", "type"],
+      "properties": {
+        "push_id": {
+          "type": "string",
+          "description": "A Push ID for the push which delivered the In-App Message instruction to the device."
+        },
+        "group_id": {
+          "type": "string",
+          "description": "Present if the push which delivered the In-App Message was part of a group. See Group ID."
+        },
+        "time_sent": {
+          "type": "string",
+          "description": "An ISO 8601 datetime indicating when the payload defining the In-App Message was sent to the device. May be absent."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["REPLACED", "EXPIRED", "ALREADY_DISPLAYED"],
+          "description": "'REPLACED' indicates The In-App message was replaced by a more current one. If type is REPLACED, the replacing_push key will be present. 'EXPIRED' indicates The In-App message exceeded it’s expiration date. If type is EXPIRED, then the time key will be present. 'ALREADY_DISPLAYED' The message was opened directly (either from the lock screen or notification center). The Urban Airship SDK will NOT display it again in the app, because the user is guaranteed to have seen it."
+        },
+        "time_expired": {
+          "type": "string",
+          "description": "Present for expirations of type EXPIRED. An ISO 8601 datetime, in UTC, when the message was set to expire."
+        },
+        "replacing_push": {
+          "type": "object",
+          "description": "If the open was a direct open caused by a push this is the meta data describing that push",
+          "properties": {
+            "push_id": {
+              "type": "string",
+              "description": "The push id of the triggering push"
+            },
+            "time": {
+              "type": "string",
+              "description": "iso8601 timestamp indicating when the triggering push was recieved"
+            },
+            "group_id": {
+              "type": "string",
+              "description": "The push's group_id if it is a part of an automation event pipeline"
+            }
+          },
+          "required": ["push_id", "time"]
+        },
+        "triggering_push": {
+          "type": "object",
+          "description": "If the open was a direct open caused by a push this is the meta data describing that push",
+          "properties": {
+            "push_id": {
+              "type": "string",
+              "description": "The push id of the triggering push"
+            },
+            "time": {
+              "type": "string",
+              "description": "iso8601 timestamp indicating when the triggering push was recieved"
+            },
+            "group_id": {
+              "type": "string",
+              "description": "The push's group_id if it is a part of an automation event pipeline"
+            }
+          }
+        }
+      }
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of the event"
+    }
+  },
+  "required": [
+    "id",
+    "offset",
+    "occurred",
+    "processed",
+    "device",
+    "body",
+    "type"
+  ]
+}
