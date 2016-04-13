@@ -21,18 +21,22 @@
     "device": {
       "type": "object",
       "description": "An object describing attributes of the device.  Only one channel association will be given.",
+      "additionalProperties": true,
       "properties": {
         "ios_channel": {
           "type": "string",
+          "format": "uuid",
           "description": "The IOS channel the device is associated with."
         },
         "android_channel": {
-            "type": "string",
-            "description": "The Android channel the device is assocaited with."
+          "type": "string",
+          "format": "uuid",
+          "description": "The Android channel the device is assocaited with."
         },
         "amazon_channel": {
-            "type": "string",
-            "description": "The Amazon channel the device is assocaited with."
+          "type": "string",
+          "format": "uuid",
+          "description": "The Amazon channel the device is assocaited with."
         },
         "named_user_id": {
             "type": "string",
@@ -40,6 +44,7 @@
         },
         "attributes": {
           "type": "object",
+          "additionalProperties": true,
           "properties": {
             "locale_variant": {
               "type": "string"

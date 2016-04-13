@@ -4,6 +4,7 @@
   "properties": {
     "id": {
       "type": "string",
+      "format": "uuid",
       "description": "A unique UUID assocaited with each event used for deduplication."
     },
     "offset": {
@@ -12,34 +13,41 @@
     },
     "occurred": {
       "type": "string",
+      "format": "date-time",
       "description": "The time the event occured as an iso8601 UTC timestamp."
     },
     "processed": {
       "type": "string",
+      "format": "date-time",
       "description": "The time the event was processed as an iso8601 UTC timestamp."
     },
     "device": {
       "type": "object",
       "description": "An object describing attributes of the device.  Only one channel association will be given.",
+      "additionalProperties": true,
       "properties": {
         "ios_channel": {
           "type": "string",
+          "format": "uuid",
           "description": "The IOS channel the device is associated with."
         },
         "android_channel": {
-            "type": "string",
-            "description": "The Android channel the device is assocaited with."
+          "type": "string",
+          "format": "uuid",
+          "description": "The Android channel the device is assocaited with."
         },
         "amazon_channel": {
-            "type": "string",
-            "description": "The Amazon channel the device is assocaited with."
+          "type": "string",
+          "format": "uuid",
+          "description": "The Amazon channel the device is assocaited with."
         },
         "named_user_id": {
-            "type": "string",
-            "description": "The named user assocaited with the device."
+          "type": "string",
+          "description": "The named user assocaited with the device."
         },
         "attributes": {
           "type": "object",
+          "additionalProperties": true,
           "properties": {
             "locale_variant": {
               "type": "string"
@@ -66,7 +74,8 @@
             },
             "push_opt_in": {
               "type": "string",
-              "description": "Indicates if the device is opted in for push"
+              "description": "Indicates if the device is opted in for push",
+              "enum": ["true", "false"]
             },
             "locale_country_code": {
               "type": "string",
@@ -90,10 +99,12 @@
             },
             "location_enabled": {
               "type": "string",
+              "enum": ["true", "false"],
               "description": "Indicates if the device has location tracking enabled"
             },
             "background_push_enabled": {
               "type": "string",
+              "enum": ["true", "false"],
               "description": "Indicates if the device has background push enabled"
             },
             "ua_sdk_version": {
@@ -110,6 +121,8 @@
     },
     "body": {
       "type": "object",
+      "additionalProperties": true,
+      "required": ["name"],
       "properties": {
         "session_id": {
           "type": "string",
@@ -140,69 +153,74 @@
           "description": "The type of interaction.  If not supplied by the customer it is one of several options. 'ua_mcrap' indicates it was triggered by the Urban Airship Message Center. 'ua_landing_page' indicates it was triggered from a landing page. 'ua_interactive_notification' indicates it was triggered from an interactive notification"
         },
         "properties": {
+          "description": "Adhoc collection of custom event attributes provided by the customer",
           "type": "object",
-          "description": "Customer defined freeform json attributes to be associated with the custom event"
+          "additionalProperties": true,
+          "properties": {
+            "ltv": {
+              "type": "boolean"
+            },
+            "date": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
         },
         "last_delivered": {
           "type": "object",
           "description": "Details about the last push delivered in the last 40 days which did not trigger a direct open",
+          "additionalProperties": true,
+          "required": ["push_id", "time"],
           "properties": {
             "push_id": {
               "type": "string",
+              "format": "uuid",
               "description": "The push id of the last delivered push"
             },
             "time": {
               "type": "string",
+              "format": "date-time",
               "description": "iso8601 timestamp indicating when the last_delieverd push was recieved"
             },
             "group_id": {
               "type": "string",
+              "format": "uuid",
               "description": "The push's group_id if it is a part of an automation event pipeline"
-            },
-            "variant": {
-              "type": "string",
-              "description": "The variant id if the push is a part of an a/b experiment"
-            },
-            "experiment_id": {
-              "type": "string",
-              "description": "The experiemnt id which a possible experiment push is associated with"
             }
-          },
-          "required": ["push_id", "time"]
+          }
         },
         "triggering_push": {
           "type": "object",
           "description": "If the open was a direct open caused by a push this is the meta data describing that push",
+          "additionalProperties": true,
+          "required": ["push_id", "time"],
           "properties": {
             "push_id": {
               "type": "string",
+              "format": "uuid",
               "description": "The push id of the triggering push"
             },
             "time": {
               "type": "string",
+              "format": "date-time",
               "description": "iso8601 timestamp indicating when the triggering push was recieved"
             },
             "group_id": {
               "type": "string",
+              "format": "uuid",
               "description": "The push's group_id if it is a part of an automation event pipeline"
-            },
-            "variant": {
-              "type": "string",
-              "description": "The variant id if the push is a part of an a/b experiment"
-            },
-            "experiment_id": {
-              "type": "string",
-              "description": "The experiemnt id which a possible experiment push is associated with"
             }
-          },
-          "required": ["push_id", "time"]
+          }
         }
-      },
-      "required": ["session_id"]
+      }
     },
     "type": {
       "type": "string",
-      "description": "The type of event that occured"
+      "description": "The type of event that occured",
+      "enum": ["CUSTOM"]
     }
   },
   "required": [

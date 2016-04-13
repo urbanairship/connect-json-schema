@@ -4,6 +4,7 @@
   "properties": {
     "id": {
       "type": "string",
+      "format": "uuid",
       "description": "A unique UUID assocaited with each event used for deduplication."
     },
     "offset": {
@@ -12,34 +13,41 @@
     },
     "occurred": {
       "type": "string",
+      "format": "date-time",
       "description": "The time the event occured as an iso8601 UTC timestamp."
     },
     "processed": {
       "type": "string",
+      "format": "date-time",
       "description": "The time the event was processed as an iso8601 UTC timestamp."
     },
     "device": {
       "type": "object",
       "description": "An object describing attributes of the device.  Only one channel association will be given.",
+      "additionalProperties": true,
       "properties": {
         "ios_channel": {
           "type": "string",
+          "format": "uuid",
           "description": "The IOS channel the device is associated with."
         },
         "android_channel": {
-            "type": "string",
-            "description": "The Android channel the device is assocaited with."
+          "type": "string",
+          "format": "uuid",
+          "description": "The Android channel the device is assocaited with."
         },
         "amazon_channel": {
-            "type": "string",
-            "description": "The Amazon channel the device is assocaited with."
+          "type": "string",
+          "format": "uuid",
+          "description": "The Amazon channel the device is assocaited with."
         },
         "named_user_id": {
-            "type": "string",
-            "description": "The named user assocaited with the device."
+          "type": "string",
+          "description": "The named user assocaited with the device."
         },
         "attributes": {
           "type": "object",
+          "additionalProperties": true,
           "properties": {
             "locale_variant": {
               "type": "string"
@@ -111,17 +119,21 @@
     "body": {
       "type": "object",
       "required": ["push_id", "type"],
+      "additionalProperties": true,
       "properties": {
         "push_id": {
           "type": "string",
+          "format": "uuid",
           "description": "A Push ID for the push which delivered the In-App Message instruction to the device."
         },
         "group_id": {
           "type": "string",
+          "format": "uuid",
           "description": "Present if the push which delivered the In-App Message was part of a group. See Group ID."
         },
         "time_sent": {
           "type": "string",
+          "format": "date-time",
           "description": "An ISO 8601 datetime indicating when the payload defining the In-App Message was sent to the device. May be absent."
         },
         "type": {
@@ -131,22 +143,27 @@
         },
         "time_expired": {
           "type": "string",
+          "format": "date-time",
           "description": "Present for expirations of type EXPIRED. An ISO 8601 datetime, in UTC, when the message was set to expire."
         },
         "replacing_push": {
           "type": "object",
           "description": "If the open was a direct open caused by a push this is the meta data describing that push",
+          "additionalProperties": true,
           "properties": {
             "push_id": {
               "type": "string",
+              "format": "uuid",
               "description": "The push id of the triggering push"
             },
             "time": {
               "type": "string",
+              "format": "date-time",
               "description": "iso8601 timestamp indicating when the triggering push was recieved"
             },
             "group_id": {
               "type": "string",
+              "format": "uuid",
               "description": "The push's group_id if it is a part of an automation event pipeline"
             }
           },
@@ -155,17 +172,21 @@
         "triggering_push": {
           "type": "object",
           "description": "If the open was a direct open caused by a push this is the meta data describing that push",
+          "additionalProperties": true,
           "properties": {
             "push_id": {
               "type": "string",
+              "format": "uuid",
               "description": "The push id of the triggering push"
             },
             "time": {
               "type": "string",
+              "format": "date-time",
               "description": "iso8601 timestamp indicating when the triggering push was recieved"
             },
             "group_id": {
               "type": "string",
+              "format": "uuid",
               "description": "The push's group_id if it is a part of an automation event pipeline"
             }
           }

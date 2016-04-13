@@ -4,6 +4,7 @@
   "properties": {
     "id": {
       "type": "string",
+      "format": "uuid",
       "description": "A unique UUID assocaited with each event used for deduplication."
     },
     "offset": {
@@ -12,27 +13,33 @@
     },
     "occurred": {
       "type": "string",
+      "format": "date-time",
       "description": "The time the event occured as an iso8601 UTC timestamp."
     },
     "processed": {
       "type": "string",
+      "format": "date-time",
       "description": "The time the event was processed as an iso8601 UTC timestamp."
     },
     "device": {
       "type": "object",
       "description": "An object describing attributes of the device.  Only one channel association will be given.",
+      "additionalProperties": true,
       "properties": {
         "ios_channel": {
           "type": "string",
+          "format": "uuid",
           "description": "The IOS channel the device is associated with."
         },
         "android_channel": {
-            "type": "string",
-            "description": "The Android channel the device is assocaited with."
+          "type": "string",
+          "format": "uuid",
+          "description": "The Android channel the device is assocaited with."
         },
         "amazon_channel": {
-            "type": "string",
-            "description": "The Amazon channel the device is assocaited with."
+          "type": "string",
+          "format": "uuid",
+          "description": "The Amazon channel the device is assocaited with."
         },
         "named_user_id": {
             "type": "string",
@@ -40,6 +47,7 @@
         },
         "attributes": {
           "type": "object",
+          "additionalProperties": true,
           "properties": {
             "locale_variant": {
               "type": "string"
@@ -110,21 +118,25 @@
     },
     "body": {
       "type": "object",
-      "description": "MESSAGE_CLICK type events indicate that a message was clicked but no button pressed. 'USER_DISMISSED' indicates that a user clicked an x or swiped to dismiss the notification. 'BUTTON_CLICK' indicates that a user pressed a given button"
+      "description": "MESSAGE_CLICK type events indicate that a message was clicked but no button pressed. 'USER_DISMISSED' indicates that a user clicked an x or swiped to dismiss the notification. 'BUTTON_CLICK' indicates that a user pressed a given button",
       "properties": {
         "session_id": {
-          "type": "string"
+          "type": "string",
+          "format": "uuid"
         },
         "push_id": {
           "type": "string",
+          "format": "uuid",
           "description": "A Push ID for the push which delivered the In-App Message instruction to the device."
         },
         "group_id": {
           "type": "string",
+          "format": "uuid",
           "description": "The push's group_id if it is a part of an automation event pipeline"
         },
         "time_sent": {
           "type": "string",
+          "format": "date-time",
           "description": "An ISO 8601 datetime indicating when the payload defining the In-App Message was sent to the device."
         },
         "type": {
@@ -149,14 +161,17 @@
           "properties": {
             "push_id": {
               "type": "string",
+              "format": "uuid",
               "description": "The push id of the triggering push"
             },
             "time": {
               "type": "string",
+              "format": "date-time",
               "description": "iso8601 timestamp indicating when the triggering push was recieved"
             },
             "group_id": {
               "type": "string",
+              "format": "uuid",
               "description": "The push's group_id if it is a part of an automation event pipeline"
             }
           },
