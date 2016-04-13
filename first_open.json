@@ -1,6 +1,11 @@
 {
-  "title": "Schema describing the close event",
   "type": "object",
+  "self": {
+     "vendor": "com.urbanairship.connect",
+     "name": "FIRST_OPEN",
+     "version": "1-0-0",
+     "format": "jsonschema"
+  },
   "properties": {
     "id": {
       "type": "string",

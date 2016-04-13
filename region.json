@@ -1,5 +1,10 @@
 {
-  "title": "The schema of the location event",
+  "self": {
+     "vendor": "com.urbanairship.connect",
+     "name": "REGION",
+     "version": "1-0-0",
+     "format": "jsonschema"
+  },
   "type": "object",
   "properties": {
     "id": {
