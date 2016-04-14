@@ -1,7 +1,7 @@
 {
   "self": {
      "vendor": "com.urbanairship.connect",
-     "name": "SEND",
+     "name": "PUSH_BODY",
      "version": "1-0-0",
      "format": "jsonschema"
   },
@@ -29,6 +29,7 @@
     "device": {
       "type": "object",
       "description": "An object describing attributes of the device.  Only one channel association will be given.",
+      "additionalProperties": true,
       "properties": {
         "ios_channel": {
           "type": "string",
@@ -51,6 +52,7 @@
         },
         "attributes": {
           "type": "object",
+          "additionalProperties": true,
           "properties": {
             "locale_variant": {
               "type": "string"
@@ -121,6 +123,7 @@
     },
     "body": {
       "type": "object",
+      "additionalProperties": true,
       "properties": {
         "push_id": {
           "type": "string",

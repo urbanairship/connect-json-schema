@@ -29,6 +29,7 @@
     "device": {
       "type": "object",
       "description": "An object describing attributes of the device.  Only one channel association will be given.",
+      "additionalProperties": true,
       "properties": {
         "ios_channel": {
           "type": "string",
@@ -51,6 +52,7 @@
         },
         "attributes": {
           "type": "object",
+          "additionalProperties": true,
           "properties": {
             "locale_variant": {
               "type": "string"

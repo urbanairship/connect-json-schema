@@ -28,6 +28,7 @@
     },
     "device": {
       "type": "object",
+      "additionalProperties": true,
       "description": "An object describing attributes of the device.  Only one channel association will be given.",
       "properties": {
         "ios_channel": {
@@ -50,6 +51,7 @@
           "description": "The named user assocaited with the device."
         },
         "attributes": {
+          "additionalProperties": true,
           "type": "object",
           "properties": {
             "locale_variant": {
@@ -121,6 +123,7 @@
     },
     "body": {
       "type": "object",
+      "additionalProperties": true,
       "properties": {
         "session_id": {
           "type": "string",

@@ -124,6 +124,7 @@
     "body": {
       "type": "object",
       "description": "MESSAGE_CLICK type events indicate that a message was clicked but no button pressed. 'USER_DISMISSED' indicates that a user clicked an x or swiped to dismiss the notification. 'BUTTON_CLICK' indicates that a user pressed a given button",
+      "additionalProperties": true,
       "properties": {
         "session_id": {
           "type": "string",
