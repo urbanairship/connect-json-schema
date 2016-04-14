@@ -9,6 +9,7 @@
   "properties": {
     "id": {
       "type": "string",
+      "format": "uuid",
       "description": "A unique UUID assocaited with each event used for deduplication."
     },
     "offset": {
@@ -17,10 +18,12 @@
     },
     "occurred": {
       "type": "string",
+      "format": "date-time",
       "description": "The time the event occured as an iso8601 UTC timestamp."
     },
     "processed": {
       "type": "string",
+      "format": "date-time",
       "description": "The time the event was processed as an iso8601 UTC timestamp."
     },
     "device": {
@@ -123,6 +126,7 @@
       "properties": {
         "session_id": {
           "type": "string",
+          "format": "uuid",
           "description": "The session the location event was associated with if fired during an open"
         },
         "latitude": {

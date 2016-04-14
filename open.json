@@ -9,6 +9,7 @@
   "properties": {
     "id": {
       "type": "string",
+      "format": "uuid",
       "description": "A unique UUID assocaited with each event used for deduplication."
     },
     "offset": {
@@ -17,10 +18,12 @@
     },
     "occurred": {
       "type": "string",
+      "format": "date-time",
       "description": "The time the event occured as an iso8601 UTC timestamp."
     },
     "processed": {
       "type": "string",
+      "format": "date-time",
       "description": "The time the event was processed as an iso8601 UTC timestamp."
     },
     "device": {
@@ -29,19 +32,22 @@
       "properties": {
         "ios_channel": {
           "type": "string",
+          "format": "uuid",
           "description": "The IOS channel the device is associated with."
         },
         "android_channel": {
-            "type": "string",
-            "description": "The Android channel the device is assocaited with."
+          "type": "string",
+          "format": "uuid",
+          "description": "The Android channel the device is assocaited with."
         },
         "amazon_channel": {
-            "type": "string",
-            "description": "The Amazon channel the device is assocaited with."
+          "type": "string",
+          "format": "uuid",
+          "description": "The Amazon channel the device is assocaited with."
         },
         "named_user_id": {
-            "type": "string",
-            "description": "The named user assocaited with the device."
+          "type": "string",
+          "description": "The named user assocaited with the device."
         },
         "attributes": {
           "type": "object",
@@ -117,7 +123,9 @@
       "type": "object",
       "properties": {
         "session_id": {
-          "type": "string"
+          "type": "string",
+          "description": "The session associated with the open",
+          "format": "uuid"
         },
         "last_delivered": {
           "type": "object",
@@ -125,23 +133,18 @@
           "properties": {
             "push_id": {
               "type": "string",
+              "format": "uuid",
               "description": "The push id of the last delivered push"
             },
             "time": {
               "type": "string",
+              "format": "date-time",
               "description": "iso8601 timestamp indicating when the last_delieverd push was recieved"
             },
             "group_id": {
               "type": "string",
+              "format": "uuid",
               "description": "The push's group_id if it is a part of an automation event pipeline"
-            },
-            "variant": {
-              "type": "string",
-              "description": "The variant id if the push is a part of an a/b experiment"
-            },
-            "experiment_id": {
-              "type": "string",
-              "description": "The experiemnt id which a possible experiment push is associated with"
             }
           }
         },
@@ -151,23 +154,18 @@
           "properties": {
             "push_id": {
               "type": "string",
+              "format": "uuid",
               "description": "The push id of the triggering push"
             },
             "time": {
               "type": "string",
+              "format": "date-time",
               "description": "iso8601 timestamp indicating when the triggering push was recieved"
             },
             "group_id": {
               "type": "string",
+              "format": "uuid",
               "description": "The push's group_id if it is a part of an automation event pipeline"
-            },
-            "variant": {
-              "type": "string",
-              "description": "The variant id if the push is a part of an a/b experiment"
-            },
-            "experiment_id": {
-              "type": "string",
-              "description": "The experiemnt id which a possible experiment push is associated with"
             }
           }
         }
