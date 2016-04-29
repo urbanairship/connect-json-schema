@@ -33,12 +33,12 @@
         "push_id": {
           "type": "string",
           "format": "uuid",
-          "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id."
+          "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id which is not associated with a pipeline or plt."
         },
         "group_id": {
           "type": "string",
           "format": "uuid",
-          "description": "If the send event fulfills a push that is part of a group, then it will have a group_id field."
+          "description": "If the push is associated with a PLT or a pipeline a group id will be present.  Sends of this push body will have the push id on the send event."
         },
         "trimmed": {
           "type": "boolean",
@@ -49,7 +49,7 @@
           "description": "A base64 encoding of the push payloads json.  Trimmed if the trimmed boolean is true"
         }
       },
-      "required": ["push_id"]
+      "required": ["payload"]
     },
     "type": {
       "type": "string",
