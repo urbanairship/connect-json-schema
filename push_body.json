@@ -38,7 +38,7 @@
         "group_id": {
           "type": "string",
           "format": "uuid",
-          "description": "If the push is associated with a PLT or a pipeline a group id will be present.  Sends of this push body will have the push id on the send event."
+          "description": "If the push is associated with a PLT or a pipeline a group id will be present.  Sends of this push body will have the group id on the event."
         },
         "trimmed": {
           "type": "boolean",
