@@ -122,59 +122,42 @@
     },
     "body": {
       "type": "object",
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "required": ["current"],
       "properties": {
         "session_id": {
           "type": "string",
           "description": "The session associated with the open",
           "format": "uuid"
         },
-        "last_delivered": {
+        "add": {
           "type": "object",
-          "description": "Details about the last push delivered in the last 40 days which did not trigger a direct open",
-          "properties": {
-            "push_id": {
-              "type": "string",
-              "format": "uuid",
-              "description": "The push id of the last delivered push"
-            },
-            "time": {
-              "type": "string",
-              "format": "date-time",
-              "description": "iso8601 timestamp indicating when the last_delieverd push was recieved"
-            },
-            "group_id": {
-              "type": "string",
-              "format": "uuid",
-              "description": "The push's group_id if it is a part of an automation event pipeline"
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
             }
           }
         },
-        "triggering_push": {
+        "remove": {
           "type": "object",
-          "description": "If the open was a direct open caused by a push this is the meta data describing that push",
-          "properties": {
-            "push_id": {
-              "type": "string",
-              "format": "uuid",
-              "description": "The push id of the triggering push"
-            },
-            "time": {
-              "type": "string",
-              "format": "date-time",
-              "description": "iso8601 timestamp indicating when the triggering push was recieved"
-            },
-            "group_id": {
-              "type": "string",
-              "format": "uuid",
-              "description": "The push's group_id if it is a part of an automation event pipeline"
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "current": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
             }
           }
         }
       }
-    },
-    "type": {
-      "type": "string"
     }
   },
   "required": [
