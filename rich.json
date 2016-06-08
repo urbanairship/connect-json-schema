@@ -141,7 +141,6 @@
           "description": "The time of the push in question"
         }
       },
-      "required": ["push_id"]
     },
     "type": {
       "type": "string",
