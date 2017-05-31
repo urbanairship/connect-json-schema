@@ -2,7 +2,7 @@
     "self": {
         "version": "1-0-0", 
         "vendor": "com.urbanairship.connect", 
-        "name": "CLOSE", 
+        "name": "IN_APP_MESSAGE_DISPLAY", 
         "format": "jsonschema"
     }, 
     "type": "object", 
@@ -14,7 +14,7 @@
         }, 
         "type": {
             "enum": [
-                "CLOSE"
+                "IN_APP_MESSAGE_DISPLAY"
             ], 
             "type": "string", 
             "description": "The type of the event"
@@ -160,6 +160,20 @@
             "additionalProperties": true, 
             "type": "object", 
             "properties": {
+                "push_id": {
+                    "type": "string", 
+                    "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id.", 
+                    "format": "uuid"
+                }, 
+                "group_id": {
+                    "type": "string", 
+                    "description": "If the send event fulfills a push that is part of a group, then it will have a group_id field.", 
+                    "format": "uuid"
+                }, 
+                "variant_id": {
+                    "type": "integer", 
+                    "description": "Only present if the notification was sent as part of an experiment."
+                }, 
                 "session_id": {
                     "type": "string", 
                     "description": "An identifier for the session of user activity. May be absent.", 

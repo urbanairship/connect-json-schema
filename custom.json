@@ -1,241 +1,250 @@
 {
-  "title": "Schema describing the close event",
-  "self": {
-     "vendor": "com.urbanairship.connect",
-     "name": "CUSTOM",
-     "version": "1-0-0",
-     "format": "jsonschema"
-  },
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "A unique UUID assocaited with each event used for deduplication."
-    },
-    "offset": {
-      "type": "string",
-      "description": "This field is only used when directly consuming from the connect api to indicate the offset for resuming.  Connect integrations will always have this value set to 0."
-    },
-    "occurred": {
-      "type": "string",
-      "format": "date-time",
-      "description": "The time the event occured as an iso8601 UTC timestamp."
-    },
-    "processed": {
-      "type": "string",
-      "format": "date-time",
-      "description": "The time the event was processed as an iso8601 UTC timestamp."
-    },
-    "device": {
-      "type": "object",
-      "description": "An object describing attributes of the device.  Only one channel association will be given.",
-      "additionalProperties": true,
-      "properties": {
-        "ios_channel": {
-          "type": "string",
-          "format": "uuid",
-          "description": "The IOS channel the device is associated with."
-        },
-        "android_channel": {
-          "type": "string",
-          "format": "uuid",
-          "description": "The Android channel the device is assocaited with."
-        },
-        "amazon_channel": {
-          "type": "string",
-          "format": "uuid",
-          "description": "The Amazon channel the device is assocaited with."
-        },
-        "named_user_id": {
-          "type": "string",
-          "description": "The named user assocaited with the device."
-        },
-        "attributes": {
-          "type": "object",
-          "additionalProperties": true,
-          "properties": {
-            "locale_variant": {
-              "type": "string"
-            },
-            "app_version": {
-              "type": "string",
-              "description": "Indicates the version of the application"
-            },
-            "device_model": {
-              "type": "string",
-              "description": "Indicates the device model"
-            },
-            "connection_type": {
-              "type": "string",
-              "description": "Indicates if the connection is WIFI or 3g etc.."
-            },
-            "app_package_name": {
-              "type": "string",
-              "description": "Indicates the applications package name"
-            },
-            "iana_timezone": {
-              "type": "string",
-              "description": "Indicates the IANA timezone"
-            },
-            "push_opt_in": {
-              "type": "string",
-              "description": "Indicates if the device is opted in for push",
-              "enum": ["true", "false"]
-            },
-            "locale_country_code": {
-              "type": "string",
-              "description": "Indicates the countries locale country code"
-            },
-            "device_os": {
-              "type": "string",
-              "description": "Indicates the devices operating system of IOS or android and possibly version"
-            },
-            "locale_timezone": {
-              "type": "string",
-              "description": "Indicates the timezone for the device"
-            },
-            "carrier": {
-              "type": "string",
-              "description": "Indicates the carrier on which the device is active"
-            },
-            "locale_language_code": {
-              "type": "string",
-              "description": "Indicates the locale language code for the device"
-            },
-            "location_enabled": {
-              "type": "string",
-              "enum": ["true", "false"],
-              "description": "Indicates if the device has location tracking enabled"
-            },
-            "background_push_enabled": {
-              "type": "string",
-              "enum": ["true", "false"],
-              "description": "Indicates if the device has background push enabled"
-            },
-            "ua_sdk_version": {
-              "type": "string",
-              "description": "Indicates what version of the ua sdk is in use"
-            },
-            "location_permission": {
-              "type": "string",
-              "description": "Indicates if the device has permission to use the location information for enhancing user experience"
+    "self": {
+        "version": "1-0-0", 
+        "vendor": "com.urbanairship.connect", 
+        "name": "CUSTOM", 
+        "format": "jsonschema"
+    }, 
+    "type": "object", 
+    "properties": {
+        "processed": {
+            "type": "string", 
+            "description": "The time the event was processed as an iso8601 UTC timestamp.", 
+            "format": "date-time"
+        }, 
+        "type": {
+            "enum": [
+                "CUSTOM"
+            ], 
+            "type": "string", 
+            "description": "The type of the event"
+        }, 
+        "id": {
+            "type": "string", 
+            "description": "A unique UUID assocaited with each event used for deduplication.", 
+            "format": "uuid"
+        }, 
+        "occurred": {
+            "type": "string", 
+            "description": "The time the event occured as an iso8601 UTC timestamp.", 
+            "format": "date-time"
+        }, 
+        "offset": {
+            "type": "string", 
+            "description": "This field is only used when directly consuming from the connect api to indicate the offset for resuming.  Connect integrations will always have this value set to 0."
+        }, 
+        "device": {
+            "type": "object", 
+            "description": "An object describing attributes of the device.  Only one channel association will be given.", 
+            "properties": {
+                "ios_channel": {
+                    "type": "string", 
+                    "description": "The iOS channel the device is associated with.", 
+                    "format": "uuid"
+                }, 
+                "named_user_id": {
+                    "type": "string", 
+                    "description": "The named user assocaited with the device."
+                }, 
+                "amazon_channel": {
+                    "type": "string", 
+                    "description": "The Amazon channel the device is assocaited with.", 
+                    "format": "uuid"
+                }, 
+                "android_channel": {
+                    "type": "string", 
+                    "description": "The Android channel the device is assocaited with.", 
+                    "format": "uuid"
+                }, 
+                "attributes": {
+                    "additionalProperties": true, 
+                    "identifiers": {
+                        "type": "object", 
+                        "properties": {
+                            "GA_CID": {
+                                "type": "string", 
+                                "description": "Set via associated ids in client SDK for the Google analytics Integration"
+                            }, 
+                            "com.urbanairship.vendor": {
+                                "type": "string", 
+                                "description": "Set via associated ids in client SDK"
+                            }, 
+                            "com.urbanairship.idfa": {
+                                "type": "string", 
+                                "description": "Set via associated ids in client SDK"
+                            }, 
+                            "com.urbanairship.phone_number": {
+                                "type": "string", 
+                                "description": "Set via associated ids in client SDK"
+                            }, 
+                            "AA_visitorID": {
+                                "type": "string", 
+                                "description": "Set via associated ids in client SDK for the Adobe Analytics Integration"
+                            }, 
+                            "com.urbanairship.limited_ad_tracking_enabled": {
+                                "type": "string", 
+                                "description": "Set via associated ids in client SDK"
+                            }
+                        }
+                    }, 
+                    "type": "object", 
+                    "properties": {
+                        "connection_type": {
+                            "type": "string", 
+                            "description": "Indicates if the connection is WIFI or 3g etc.."
+                        }, 
+                        "device_model": {
+                            "type": "string", 
+                            "description": "Indicates the device model"
+                        }, 
+                        "locale_language_code": {
+                            "type": "string", 
+                            "description": "Indicates the locale language code for the device"
+                        }, 
+                        "background_push_enabled": {
+                            "type": "string", 
+                            "description": "Indicates if the device has background push enabled"
+                        }, 
+                        "push_opt_in": {
+                            "type": "string", 
+                            "description": "Indicates if the device is opted in for push"
+                        }, 
+                        "ua_sdk_version": {
+                            "type": "string", 
+                            "description": "Indicates what version of the ua sdk is in use"
+                        }, 
+                        "app_package_name": {
+                            "type": "string", 
+                            "description": "Indicates the applications package name"
+                        }, 
+                        "locale_timezone": {
+                            "type": "string", 
+                            "description": "Indicates the timezone for the device"
+                        }, 
+                        "iana_timezone": {
+                            "type": "string", 
+                            "description": "Indicates the IANA timezone"
+                        }, 
+                        "carrier": {
+                            "type": "string", 
+                            "description": "Indicates the carrier on which the device is active"
+                        }, 
+                        "locale_country_code": {
+                            "type": "string", 
+                            "description": "Indicates the countries locale country code"
+                        }, 
+                        "location_permission": {
+                            "type": "string", 
+                            "description": "Indicates if the device has permission to use the location information for enhancing user experience"
+                        }, 
+                        "location_enabled": {
+                            "type": "string", 
+                            "description": "Indicates if the device has location tracking enabled"
+                        }, 
+                        "device_os": {
+                            "type": "string", 
+                            "description": "Indicates the devices operating system of IOS or android and possibly version"
+                        }, 
+                        "app_version": {
+                            "type": "string", 
+                            "description": "Indicates the version of the application"
+                        }, 
+                        "locale_variant": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
-          }
+        }, 
+        "body": {
+            "additionalProperties": true, 
+            "type": "object", 
+            "properties": {
+                "value": {
+                    "type": "number", 
+                    "description": "The value of units associated with the custom event. May be absent.  This value may not be representable as a 64-bit floating-point number."
+                }, 
+                "transaction": {
+                    "type": "string", 
+                    "description": "A string set by the customer to wrap a sequence of interactions. May be absent."
+                }, 
+                "name": {
+                    "type": "string", 
+                    "description": "The name of the user defined event"
+                }, 
+                "interaction_type": {
+                    "enum": [
+                        "ua_mcrap", 
+                        "ua_landing_page", 
+                        "ua_interactive_notification"
+                    ], 
+                    "type": "string", 
+                    "description": "The type of interaction.  If not supplied by the customer it is one of several options. 'ua_mcrap' indicates it was triggered by the Urban Airship Message Center. 'ua_landing_page' indicates it was triggered from a landing page. 'ua_interactive_notification' indicates it was triggered from an interactive notification"
+                }, 
+                "source": {
+                    "enum": [
+                        "sdk", 
+                        "api"
+                    ], 
+                    "type": "string", 
+                    "description": "Required. This field takes one of the following values:sdk If the custom event was sent from one of our SDKs. api If the event was created by a request against the Server Side Custom Events API."
+                }, 
+                "customer_id": {
+                    "type": "string", 
+                    "description": "Customer-side id, such as an email address. May be absent."
+                }, 
+                "properties": {
+                    "additionalProperties": true, 
+                    "type": "object", 
+                    "description": "Adhoc collection of custom event attributes provided by the customer", 
+                    "properties": {
+                        "date": {
+                            "type": "string", 
+                            "format": "date-time"
+                        }, 
+                        "ltv": {
+                            "type": "boolean"
+                        }, 
+                        "description": {
+                            "type": "string"
+                        }
+                    }
+                }, 
+                "session_id": {
+                    "type": "string", 
+                    "description": "An identifier for the session of user activity. May be absent."
+                }, 
+                "interaction_id": {
+                    "type": "string", 
+                    "description": "An Urban Airship identifier uniquely identifying the interaction. May be absent."
+                }, 
+                "push_id": {
+                    "type": "string", 
+                    "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id.", 
+                    "format": "uuid"
+                }, 
+                "group_id": {
+                    "type": "string", 
+                    "description": "If the send event fulfills a push that is part of a group, then it will have a group_id field.", 
+                    "format": "uuid"
+                }, 
+                "variant_id": {
+                    "type": "integer", 
+                    "description": "Only present if the notification was sent as part of an experiment."
+                }
+            }, 
+            "required": [
+                "name"
+            ]
         }
-      }
-    },
-    "body": {
-      "type": "object",
-      "additionalProperties": true,
-      "required": ["name"],
-      "properties": {
-        "session_id": {
-          "type": "string",
-          "description": "Specifies the session the event was associated with"
-        },
-        "name": {
-          "type": "string",
-          "description": "The name of the user defined event"
-        },
-        "value": {
-          "type": "number",
-          "description": "The value of units associated with the custom event. May be absent.  This value may not be representable as a 64-bit floating-point number."
-        },
-        "transaction": {
-          "type": "string",
-          "description": "A string set by the customer to wrap a sequence of interactions. May be absent."
-        },
-        "customer_id": {
-          "type": "string",
-          "description": "Customer-side id, such as an email address. May be absent."
-        },
-        "interaction_id": {
-          "type": "string",
-          "description": "An Urban Airship identifier uniquely identifying the interaction. May be absent."
-        },
-        "interaction_type": {
-          "type": "string",
-          "description": "The type of interaction.  If not supplied by the customer it is one of several options. 'ua_mcrap' indicates it was triggered by the Urban Airship Message Center. 'ua_landing_page' indicates it was triggered from a landing page. 'ua_interactive_notification' indicates it was triggered from an interactive notification"
-        },
-        "properties": {
-          "description": "Adhoc collection of custom event attributes provided by the customer",
-          "type": "object",
-          "additionalProperties": true,
-          "properties": {
-            "ltv": {
-              "type": "boolean"
-            },
-            "date": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": {
-              "type": "string"
-            }
-          }
-        },
-        "last_delivered": {
-          "type": "object",
-          "description": "Details about the last push delivered in the last 40 days which did not trigger a direct open",
-          "additionalProperties": true,
-          "required": ["push_id", "time"],
-          "properties": {
-            "push_id": {
-              "type": "string",
-              "format": "uuid",
-              "description": "The push id of the last delivered push"
-            },
-            "time": {
-              "type": "string",
-              "format": "date-time",
-              "description": "iso8601 timestamp indicating when the last_delieverd push was recieved"
-            },
-            "group_id": {
-              "type": "string",
-              "format": "uuid",
-              "description": "The push's group_id if it is a part of an automation event pipeline"
-            }
-          }
-        },
-        "triggering_push": {
-          "type": "object",
-          "description": "If the open was a direct open caused by a push this is the meta data describing that push",
-          "additionalProperties": true,
-          "required": ["push_id", "time"],
-          "properties": {
-            "push_id": {
-              "type": "string",
-              "format": "uuid",
-              "description": "The push id of the triggering push"
-            },
-            "time": {
-              "type": "string",
-              "format": "date-time",
-              "description": "iso8601 timestamp indicating when the triggering push was recieved"
-            },
-            "group_id": {
-              "type": "string",
-              "format": "uuid",
-              "description": "The push's group_id if it is a part of an automation event pipeline"
-            }
-          }
-        }
-      }
-    },
-    "type": {
-      "type": "string",
-      "description": "The type of event that occured",
-      "enum": ["CUSTOM"]
-    }
-  },
-  "required": [
-    "id",
-    "offset",
-    "occurred",
-    "processed",
-    "device",
-    "body",
-    "type"
-  ]
+    }, 
+    "required": [
+        "id", 
+        "offset", 
+        "occurred", 
+        "processed", 
+        "device", 
+        "body", 
+        "type"
+    ]
 }

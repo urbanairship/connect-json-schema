@@ -2,7 +2,7 @@
     "self": {
         "version": "1-0-0", 
         "vendor": "com.urbanairship.connect", 
-        "name": "CLOSE", 
+        "name": "IN_APP_MESSAGE_EXPIRATION", 
         "format": "jsonschema"
     }, 
     "type": "object", 
@@ -14,7 +14,7 @@
         }, 
         "type": {
             "enum": [
-                "CLOSE"
+                "IN_APP_MESSAGE_EXPIRATION"
             ], 
             "type": "string", 
             "description": "The type of the event"
@@ -160,10 +160,90 @@
             "additionalProperties": true, 
             "type": "object", 
             "properties": {
+                "push_id": {
+                    "type": "string", 
+                    "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id.", 
+                    "format": "uuid"
+                }, 
+                "group_id": {
+                    "type": "string", 
+                    "description": "If the send event fulfills a push that is part of a group, then it will have a group_id field.", 
+                    "format": "uuid"
+                }, 
+                "variant_id": {
+                    "type": "integer", 
+                    "description": "Only present if the notification was sent as part of an experiment."
+                }, 
                 "session_id": {
                     "type": "string", 
                     "description": "An identifier for the session of user activity. May be absent.", 
                     "format": "uuid"
+                }, 
+                "triggering_push": {
+                    "additionalProperties": true, 
+                    "type": "object", 
+                    "description": "If the open was a direct open caused by a push this is the meta data describing that push", 
+                    "properties": {
+                        "push_id": {
+                            "type": "string", 
+                            "description": "The push id of the triggering push", 
+                            "format": "uuid"
+                        }, 
+                        "group_id": {
+                            "type": "string", 
+                            "description": "The push's group_id if it is a part of an automation event pipeline", 
+                            "format": "uuid"
+                        }, 
+                        "time": {
+                            "type": "string", 
+                            "description": "iso8601 timestamp indicating when the triggering push was recieved", 
+                            "format": "date-time"
+                        }
+                    }
+                }, 
+                "time_sent": {
+                    "type": "string", 
+                    "description": "An ISO 8601 datetime indicating when the payload defining the In-App Message was sent to the device. May be absent.", 
+                    "format": "date-time"
+                }, 
+                "type": {
+                    "enum": [
+                        "REPLACED", 
+                        "EXPIRED", 
+                        "ALREADY_DISPLAYED"
+                    ], 
+                    "type": "string", 
+                    "description": "'REPLACED' indicates The In-App message was replaced by a more current one. If type is REPLACED, the replacing_push key will be present. 'EXPIRED' indicates The In-App message exceeded it's expiration date. If type is EXPIRED, then the time key will be present. 'ALREADY_DISPLAYED' The message was opened directly (either from the lock screen or notification center). The Urban Airship SDK will NOT display it again in the app, because the user is guaranteed to have seen it."
+                }, 
+                "time_expired": {
+                    "type": "string", 
+                    "description": "Present for expirations of type EXPIRED. An ISO 8601 datetime, in UTC, when the message was set to expire.", 
+                    "format": "date-time"
+                }, 
+                "replacing_push": {
+                    "additionalProperties": true, 
+                    "required": [
+                        "push_id"
+                    ], 
+                    "type": "object", 
+                    "description": "If the open was a direct open caused by a push this is the meta data describing that push", 
+                    "properties": {
+                        "push_id": {
+                            "type": "string", 
+                            "description": "The push id of the triggering push", 
+                            "format": "uuid"
+                        }, 
+                        "group_id": {
+                            "type": "string", 
+                            "description": "The push's group_id if it is a part of an automation event pipeline", 
+                            "format": "uuid"
+                        }, 
+                        "time": {
+                            "type": "string", 
+                            "description": "iso8601 timestamp indicating when the triggering push was recieved", 
+                            "format": "date-time"
+                        }
+                    }
                 }
             }
         }

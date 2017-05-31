@@ -1,159 +1,189 @@
 {
-  "self": {
-     "vendor": "com.urbanairship.connect",
-     "name": "RICH",
-     "version": "1-0-0",
-     "format": "jsonschema"
-  },
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "A unique UUID assocaited with each event used for deduplication."
-    },
-    "offset": {
-      "type": "string",
-      "description": "This field is only used when directly consuming from the connect api to indicate the offset for resuming.  Connect integrations will always have this value set to 0."
-    },
-    "occurred": {
-      "type": "string",
-      "format": "date-format",
-      "description": "The time the event occured as an iso8601 UTC timestamp."
-    },
-    "processed": {
-      "type": "string",
-      "format": "date-format",
-      "description": "The time the event was processed as an iso8601 UTC timestamp."
-    },
-    "device": {
-      "type": "object",
-      "additionalProperties": true,
-      "description": "An object describing attributes of the device.  Only one channel association will be given.",
-      "properties": {
-        "ios_channel": {
-          "type": "string",
-          "format": "uuid",
-          "description": "The IOS channel the device is associated with."
-        },
-        "android_channel": {
-          "type": "string",
-          "format": "uuid",
-          "description": "The Android channel the device is assocaited with."
-        },
-        "amazon_channel": {
-          "type": "string",
-          "format": "uuid",
-          "description": "The Amazon channel the device is assocaited with."
-        },
-        "named_user_id": {
-            "type": "string",
-            "description": "The named user assocaited with the device."
-        },
-        "attributes": {
-          "type": "object",
-          "additionalProperties": true,
-          "properties": {
-            "locale_variant": {
-              "type": "string"
-            },
-            "app_version": {
-              "type": "string",
-              "description": "Indicates the version of the application"
-            },
-            "device_model": {
-              "type": "string",
-              "description": "Indicates the device model"
-            },
-            "connection_type": {
-              "type": "string",
-              "description": "Indicates if the connection is WIFI or 3g etc.."
-            },
-            "app_package_name": {
-              "type": "string",
-              "description": "Indicates the applications package name"
-            },
-            "iana_timezone": {
-              "type": "string",
-              "description": "Indicates the IANA timezone"
-            },
-            "push_opt_in": {
-              "type": "string",
-              "description": "Indicates if the device is opted in for push"
-            },
-            "locale_country_code": {
-              "type": "string",
-              "description": "Indicates the countries locale country code"
-            },
-            "device_os": {
-              "type": "string",
-              "description": "Indicates the devices operating system of IOS or android and possibly version"
-            },
-            "locale_timezone": {
-              "type": "string",
-              "description": "Indicates the timezone for the device"
-            },
-            "carrier": {
-              "type": "string",
-              "description": "Indicates the carrier on which the device is active"
-            },
-            "locale_language_code": {
-              "type": "string",
-              "description": "Indicates the locale language code for the device"
-            },
-            "location_enabled": {
-              "type": "string",
-              "description": "Indicates if the device has location tracking enabled"
-            },
-            "background_push_enabled": {
-              "type": "string",
-              "description": "Indicates if the device has background push enabled"
-            },
-            "ua_sdk_version": {
-              "type": "string",
-              "description": "Indicates what version of the ua sdk is in use"
-            },
-            "location_permission": {
-              "type": "string",
-              "description": "Indicates if the device has permission to use the location information for enhancing user experience"
+    "self": {
+        "version": "1-0-0", 
+        "vendor": "com.urbanairship.connect", 
+        "name": "RICH_DELIVERY", 
+        "format": "jsonschema"
+    }, 
+    "type": "object", 
+    "properties": {
+        "processed": {
+            "type": "string", 
+            "description": "The time the event was processed as an iso8601 UTC timestamp.", 
+            "format": "date-time"
+        }, 
+        "type": {
+            "enum": [
+                "RICH_DELIVERY"
+            ], 
+            "type": "string", 
+            "description": "The type of the event"
+        }, 
+        "id": {
+            "type": "string", 
+            "description": "A unique UUID assocaited with each event used for deduplication.", 
+            "format": "uuid"
+        }, 
+        "occurred": {
+            "type": "string", 
+            "description": "The time the event occured as an iso8601 UTC timestamp.", 
+            "format": "date-time"
+        }, 
+        "offset": {
+            "type": "string", 
+            "description": "This field is only used when directly consuming from the connect api to indicate the offset for resuming.  Connect integrations will always have this value set to 0."
+        }, 
+        "device": {
+            "type": "object", 
+            "description": "An object describing attributes of the device.  Only one channel association will be given.", 
+            "properties": {
+                "ios_channel": {
+                    "type": "string", 
+                    "description": "The iOS channel the device is associated with.", 
+                    "format": "uuid"
+                }, 
+                "named_user_id": {
+                    "type": "string", 
+                    "description": "The named user assocaited with the device."
+                }, 
+                "amazon_channel": {
+                    "type": "string", 
+                    "description": "The Amazon channel the device is assocaited with.", 
+                    "format": "uuid"
+                }, 
+                "android_channel": {
+                    "type": "string", 
+                    "description": "The Android channel the device is assocaited with.", 
+                    "format": "uuid"
+                }, 
+                "attributes": {
+                    "additionalProperties": true, 
+                    "identifiers": {
+                        "type": "object", 
+                        "properties": {
+                            "GA_CID": {
+                                "type": "string", 
+                                "description": "Set via associated ids in client SDK for the Google analytics Integration"
+                            }, 
+                            "com.urbanairship.vendor": {
+                                "type": "string", 
+                                "description": "Set via associated ids in client SDK"
+                            }, 
+                            "com.urbanairship.idfa": {
+                                "type": "string", 
+                                "description": "Set via associated ids in client SDK"
+                            }, 
+                            "com.urbanairship.phone_number": {
+                                "type": "string", 
+                                "description": "Set via associated ids in client SDK"
+                            }, 
+                            "AA_visitorID": {
+                                "type": "string", 
+                                "description": "Set via associated ids in client SDK for the Adobe Analytics Integration"
+                            }, 
+                            "com.urbanairship.limited_ad_tracking_enabled": {
+                                "type": "string", 
+                                "description": "Set via associated ids in client SDK"
+                            }
+                        }
+                    }, 
+                    "type": "object", 
+                    "properties": {
+                        "connection_type": {
+                            "type": "string", 
+                            "description": "Indicates if the connection is WIFI or 3g etc.."
+                        }, 
+                        "device_model": {
+                            "type": "string", 
+                            "description": "Indicates the device model"
+                        }, 
+                        "locale_language_code": {
+                            "type": "string", 
+                            "description": "Indicates the locale language code for the device"
+                        }, 
+                        "background_push_enabled": {
+                            "type": "string", 
+                            "description": "Indicates if the device has background push enabled"
+                        }, 
+                        "push_opt_in": {
+                            "type": "string", 
+                            "description": "Indicates if the device is opted in for push"
+                        }, 
+                        "ua_sdk_version": {
+                            "type": "string", 
+                            "description": "Indicates what version of the ua sdk is in use"
+                        }, 
+                        "app_package_name": {
+                            "type": "string", 
+                            "description": "Indicates the applications package name"
+                        }, 
+                        "locale_timezone": {
+                            "type": "string", 
+                            "description": "Indicates the timezone for the device"
+                        }, 
+                        "iana_timezone": {
+                            "type": "string", 
+                            "description": "Indicates the IANA timezone"
+                        }, 
+                        "carrier": {
+                            "type": "string", 
+                            "description": "Indicates the carrier on which the device is active"
+                        }, 
+                        "locale_country_code": {
+                            "type": "string", 
+                            "description": "Indicates the countries locale country code"
+                        }, 
+                        "location_permission": {
+                            "type": "string", 
+                            "description": "Indicates if the device has permission to use the location information for enhancing user experience"
+                        }, 
+                        "location_enabled": {
+                            "type": "string", 
+                            "description": "Indicates if the device has location tracking enabled"
+                        }, 
+                        "device_os": {
+                            "type": "string", 
+                            "description": "Indicates the devices operating system of IOS or android and possibly version"
+                        }, 
+                        "app_version": {
+                            "type": "string", 
+                            "description": "Indicates the version of the application"
+                        }, 
+                        "locale_variant": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
-          }
+        }, 
+        "body": {
+            "additionalProperties": true, 
+            "type": "object", 
+            "properties": {
+                "push_id": {
+                    "type": "string", 
+                    "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id.", 
+                    "format": "uuid"
+                }, 
+                "group_id": {
+                    "type": "string", 
+                    "description": "If the send event fulfills a push that is part of a group, then it will have a group_id field.", 
+                    "format": "uuid"
+                }, 
+                "variant_id": {
+                    "type": "integer", 
+                    "description": "Only present if the notification was sent as part of an experiment."
+                }
+            }
         }
-      }
-    },
-    "body": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "push_id": {
-          "type": "string",
-          "format": "uuid",
-          "description": "The push id of the rich push in question"
-        },
-        "group_id": {
-          "type": "string",
-          "format": "uuid",
-          "description": "If the send event fulfills a push that is part of a group, then it will have a group_id field."
-        },
-        "time": {
-          "type": "string",
-          "format": "date-time",
-          "description": "The time of the push in question"
-        }
-      },
-    },
-    "type": {
-      "type": "string",
-      "enum": ["RICH_DELIVERY"]
-    }
-  },
-  "required": [
-    "id",
-    "offset",
-    "occurred",
-    "processed",
-    "device",
-    "body",
-    "type"
-  ]
+    }, 
+    "required": [
+        "id", 
+        "offset", 
+        "occurred", 
+        "processed", 
+        "device", 
+        "body", 
+        "type"
+    ]
 }

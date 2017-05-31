@@ -1,68 +1,84 @@
 {
-  "self": {
-     "vendor": "com.urbanairship.connect",
-     "name": "PUSH_BODY",
-     "version": "1-0-0",
-     "format": "jsonschema"
-  },
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "A unique UUID assocaited with each event used for deduplication."
-    },
-    "offset": {
-      "type": "string",
-      "description": "This field is only used when directly consuming from the connect api to indicate the offset for resuming.  Connect integrations will always have this value set to 0."
-    },
-    "occurred": {
-      "type": "string",
-      "format": "date-time",
-      "description": "The time the event occured as an iso8601 UTC timestamp."
-    },
-    "processed": {
-      "type": "string",
-      "format": "date-time",
-      "description": "The time the event was processed as an iso8601 UTC timestamp."
-    },
-    "body": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-        "push_id": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id which is not associated with a pipeline or plt."
-        },
-        "group_id": {
-          "type": "string",
-          "format": "uuid",
-          "description": "If the push is associated with a PLT or a pipeline a group id will be present.  Sends of this push body will have the group id on the event."
-        },
-        "trimmed": {
-          "type": "boolean",
-          "description": "Was the payload trimmed due to size"
-        },
-        "payload": {
-          "type": "string",
-          "description": "A base64 encoding of the push payloads json.  Trimmed if the trimmed boolean is true"
+    "self": {
+        "version": "1-0-0", 
+        "vendor": "com.urbanairship.connect", 
+        "name": "PUSH_BODY", 
+        "format": "jsonschema"
+    }, 
+    "type": "object", 
+    "properties": {
+        "processed": {
+            "type": "string", 
+            "description": "The time the event was processed as an iso8601 UTC timestamp.", 
+            "format": "date-time"
+        }, 
+        "type": {
+            "enum": [
+                "PUSH_BODY"
+            ], 
+            "type": "string", 
+            "description": "The type of the event"
+        }, 
+        "id": {
+            "type": "string", 
+            "description": "A unique UUID assocaited with each event used for deduplication.", 
+            "format": "uuid"
+        }, 
+        "occurred": {
+            "type": "string", 
+            "description": "The time the event occured as an iso8601 UTC timestamp.", 
+            "format": "date-time"
+        }, 
+        "offset": {
+            "type": "string", 
+            "description": "This field is only used when directly consuming from the connect api to indicate the offset for resuming.  Connect integrations will always have this value set to 0."
+        }, 
+        "body": {
+            "additionalProperties": true, 
+            "required": [
+                "payload", 
+                "push_id", 
+                "resource"
+            ], 
+            "type": "object", 
+            "properties": {
+                "trimmed": {
+                    "type": "boolean", 
+                    "description": "Was the payload trimmed due to size"
+                }, 
+                "push_id": {
+                    "type": "string", 
+                    "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id which is not associated with a pipeline or plt.", 
+                    "format": "uuid"
+                }, 
+                "resource": {
+                    "enum": [
+                        "PUSH", 
+                        "PIPELINES", 
+                        "SCHEDULES", 
+                        "EXPERIMENTS"
+                    ], 
+                    "type": "string", 
+                    "description": "A string hinting how consumers should interpret the payload JSON"
+                }, 
+                "group_id": {
+                    "type": "string", 
+                    "description": "If the push is associated with a PLT or a pipeline a group id will be present.  Sends of this push body will have the group id on the event.", 
+                    "format": "uuid"
+                }, 
+                "payload": {
+                    "type": "string", 
+                    "description": "A base64 encoding of the push payloads json.  Trimmed if the trimmed boolean is true"
+                }
+            }
         }
-      },
-      "required": ["payload"]
-    },
-    "type": {
-      "type": "string",
-      "description": "The type of the event",
-      "enum": ["SEND"]
-    }
-  },
-  "required": [
-    "id",
-    "offset",
-    "occurred",
-    "processed",
-    "body",
-    "type"
-  ]
+    }, 
+    "required": [
+        "id", 
+        "offset", 
+        "occurred", 
+        "processed", 
+        "body", 
+        "type"
+    ]
 }

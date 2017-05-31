@@ -2,7 +2,7 @@
     "self": {
         "version": "1-0-0", 
         "vendor": "com.urbanairship.connect", 
-        "name": "CLOSE", 
+        "name": "IN_APP_MESSAGE_RESOLUTION", 
         "format": "jsonschema"
     }, 
     "type": "object", 
@@ -14,7 +14,7 @@
         }, 
         "type": {
             "enum": [
-                "CLOSE"
+                "IN_APP_MESSAGE_RESOLUTION"
             ], 
             "type": "string", 
             "description": "The type of the event"
@@ -160,10 +160,50 @@
             "additionalProperties": true, 
             "type": "object", 
             "properties": {
+                "push_id": {
+                    "type": "string", 
+                    "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id.", 
+                    "format": "uuid"
+                }, 
+                "group_id": {
+                    "type": "string", 
+                    "description": "If the send event fulfills a push that is part of a group, then it will have a group_id field.", 
+                    "format": "uuid"
+                }, 
+                "variant_id": {
+                    "type": "integer", 
+                    "description": "Only present if the notification was sent as part of an experiment."
+                }, 
                 "session_id": {
                     "type": "string", 
                     "description": "An identifier for the session of user activity. May be absent.", 
                     "format": "uuid"
+                }, 
+                "time_sent": {
+                    "type": "string", 
+                    "description": "An ISO 8601 datetime indicating when the payload defining the In-App Message was sent to the device.", 
+                    "format": "date-time"
+                }, 
+                "type": {
+                    "enum": [
+                        "BUTTON_CLICK", 
+                        "MESSAGE_CLICK", 
+                        "TIMED_OUT", 
+                        "USER_DISMISSED"
+                    ], 
+                    "type": "string"
+                }, 
+                "button_id": {
+                    "type": "string", 
+                    "description": "A unique identifier for the button.  Only present if type is 'BUTTON_CLICK'"
+                }, 
+                "button_group": {
+                    "type": "string", 
+                    "description": "A category associated with the message.  Only present if type is 'BUTTON_CLICK'"
+                }, 
+                "button_description": {
+                    "type": "string", 
+                    "description": "The title of the button on which the user clicked. Only present if type is 'BUTTON_CLICK'"
                 }
             }
         }
