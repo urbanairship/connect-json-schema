@@ -1,6 +1,6 @@
 {
     "self": {
-        "version": "1-0-0", 
+        "version": "1-0-1", 
         "vendor": "com.urbanairship.connect", 
         "name": "LOCATION", 
         "format": "jsonschema"
@@ -37,56 +37,12 @@
             "type": "object", 
             "description": "An object describing attributes of the device.  Only one channel association will be given.", 
             "properties": {
-                "ios_channel": {
-                    "type": "string", 
-                    "description": "The iOS channel the device is associated with.", 
-                    "format": "uuid"
-                }, 
                 "named_user_id": {
                     "type": "string", 
                     "description": "The named user assocaited with the device."
                 }, 
-                "amazon_channel": {
-                    "type": "string", 
-                    "description": "The Amazon channel the device is assocaited with.", 
-                    "format": "uuid"
-                }, 
-                "android_channel": {
-                    "type": "string", 
-                    "description": "The Android channel the device is assocaited with.", 
-                    "format": "uuid"
-                }, 
                 "attributes": {
                     "additionalProperties": true, 
-                    "identifiers": {
-                        "type": "object", 
-                        "properties": {
-                            "GA_CID": {
-                                "type": "string", 
-                                "description": "Set via associated ids in client SDK for the Google analytics Integration"
-                            }, 
-                            "com.urbanairship.vendor": {
-                                "type": "string", 
-                                "description": "Set via associated ids in client SDK"
-                            }, 
-                            "com.urbanairship.idfa": {
-                                "type": "string", 
-                                "description": "Set via associated ids in client SDK"
-                            }, 
-                            "com.urbanairship.phone_number": {
-                                "type": "string", 
-                                "description": "Set via associated ids in client SDK"
-                            }, 
-                            "AA_visitorID": {
-                                "type": "string", 
-                                "description": "Set via associated ids in client SDK for the Adobe Analytics Integration"
-                            }, 
-                            "com.urbanairship.limited_ad_tracking_enabled": {
-                                "type": "string", 
-                                "description": "Set via associated ids in client SDK"
-                            }
-                        }
-                    }, 
                     "type": "object", 
                     "properties": {
                         "connection_type": {
@@ -153,6 +109,59 @@
                             "type": "string"
                         }
                     }
+                }, 
+                "identifiers": {
+                    "type": "object", 
+                    "properties": {
+                        "GA_CID": {
+                            "type": "string", 
+                            "description": "Set via associated ids in client SDK for the Google analytics Integration"
+                        }, 
+                        "com.urbanairship.vendor": {
+                            "type": "string", 
+                            "description": "Set via associated ids in client SDK"
+                        }, 
+                        "com.urbanairship.idfa": {
+                            "type": "string", 
+                            "description": "Set via associated ids in client SDK"
+                        }, 
+                        "com.urbanairship.phone_number": {
+                            "type": "string", 
+                            "description": "Set via associated ids in client SDK"
+                        }, 
+                        "AA_visitorID": {
+                            "type": "string", 
+                            "description": "Set via associated ids in client SDK for the Adobe Analytics Integration"
+                        }, 
+                        "com.urbanairship.limited_ad_tracking_enabled": {
+                            "type": "string", 
+                            "description": "Set via associated ids in client SDK"
+                        }
+                    }
+                }, 
+                "device_type": {
+                    "type": "string", 
+                    "description": "The platform which the channel defines."
+                }, 
+                "channel": {
+                    "type": "string", 
+                    "description": "The channel the device is associated with.", 
+                    "format": "uuid"
+                }, 
+                "ios_channel": {
+                    "type": "string", 
+                    "description": "Deprecated. Use channel and device_type. The iOS channel the device is associated with.", 
+                    "format": "uuid"
+                }, 
+                "android_channel": {
+                    "type": "string", 
+                    "description": "Deprecated. Use channel and device_type. The Android channel the device is assocaited with.", 
+                    "format": "uuid"
+                }, 
+                "amazon_channel": {
+                    "type": "string", 
+                    "description": "Deprecated. Use channel and device_type. The Amazon channel the device is assocaited with.", 
+                    "format": "uuid"
                 }
             }
         }, 
