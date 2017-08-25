@@ -192,8 +192,8 @@
                 }, 
                 "source": {
                     "enum": [
-                        "sdk", 
-                        "api"
+                        "SDK", 
+                        "API"
                     ], 
                     "type": "string", 
                     "description": "Required. This field takes one of the following values:sdk If the custom event was sent from one of our SDKs. api If the event was created by a request against the Server Side Custom Events API."
