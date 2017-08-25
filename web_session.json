@@ -2,7 +2,7 @@
     "self": {
         "version": "1-0-1", 
         "vendor": "com.urbanairship.connect", 
-        "name": "SEND", 
+        "name": "WEB_SESSION", 
         "format": "jsonschema"
     }, 
     "type": "object", 
@@ -14,7 +14,7 @@
         }, 
         "type": {
             "enum": [
-                "SEND"
+                "WEB_SESSION"
             ], 
             "type": "string", 
             "description": "The type of the event"
@@ -168,27 +168,32 @@
         "body": {
             "additionalProperties": true, 
             "type": "object", 
-            "required": [
-                "push_id"
-            ], 
             "properties": {
-                "push_id": {
+                "last_delivered": {
+                    "type": "object", 
+                    "description": "Details about the last push delivered in the last 40 days which did not trigger a direct open", 
+                    "properties": {
+                        "push_id": {
+                            "type": "string", 
+                            "description": "The push id of the last delivered push", 
+                            "format": "uuid"
+                        }, 
+                        "group_id": {
+                            "type": "string", 
+                            "description": "The push's group_id if it is a part of an automation event pipeline", 
+                            "format": "uuid"
+                        }, 
+                        "time": {
+                            "type": "string", 
+                            "description": "An ISO 8601 datetime, in UTC, when the push occurred. May be absent.", 
+                            "format": "date-time"
+                        }
+                    }
+                }, 
+                "session_id": {
                     "type": "string", 
-                    "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id.", 
+                    "description": "An identifier for the session of user activity. May be absent.", 
                     "format": "uuid"
-                }, 
-                "group_id": {
-                    "type": "string", 
-                    "description": "If the send event fulfills a push that is part of a group, then it will have a group_id field.", 
-                    "format": "uuid"
-                }, 
-                "alerting": {
-                    "type": "boolean", 
-                    "description": "A boolean indicating whether a send event was alerting. Alerting send event has nofification text, badge or sound."
-                }, 
-                "variant_id": {
-                    "type": "integer", 
-                    "description": "Only present if the notification was sent as part of an experiment."
                 }
             }
         }

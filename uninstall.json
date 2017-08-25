@@ -167,7 +167,15 @@
         }, 
         "body": {
             "additionalProperties": true, 
-            "type": "object"
+            "type": "object", 
+            "required": [
+                "decay"
+            ], 
+            "properties": {
+                "decay": {
+                    "type": "boolean"
+                }
+            }
         }
     }, 
     "required": [
@@ -176,6 +184,7 @@
         "occurred", 
         "processed", 
         "device", 
+        "body", 
         "type"
     ]
 }
