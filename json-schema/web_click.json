@@ -2,7 +2,7 @@
     "self": {
         "version": "1-0-1", 
         "vendor": "com.urbanairship.connect", 
-        "name": "RICH_READ", 
+        "name": "WEB_CLICK", 
         "format": "jsonschema"
     }, 
     "type": "object", 
@@ -14,7 +14,7 @@
         }, 
         "type": {
             "enum": [
-                "RICH_READ"
+                "WEB_CLICK"
             ], 
             "type": "string", 
             "description": "The type of the event"
@@ -162,6 +162,10 @@
                     "type": "string", 
                     "description": "Deprecated. Use channel and device_type. The Amazon channel the device is assocaited with.", 
                     "format": "uuid"
+                }, 
+                "open_platform_name": {
+                    "type": "string", 
+                    "description": "If device_type is OPEN, this field will show the name of the open platform."
                 }
             }
         }, 
@@ -171,17 +175,8 @@
             "properties": {
                 "push_id": {
                     "type": "string", 
-                    "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id.", 
+                    "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id which is not associated with a pipeline or plt.", 
                     "format": "uuid"
-                }, 
-                "group_id": {
-                    "type": "string", 
-                    "description": "If the send event fulfills a push that is part of a group, then it will have a group_id field.", 
-                    "format": "uuid"
-                }, 
-                "variant_id": {
-                    "type": "integer", 
-                    "description": "Only present if the notification was sent as part of an experiment."
                 }
             }
         }

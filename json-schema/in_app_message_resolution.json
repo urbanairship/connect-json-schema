@@ -162,6 +162,10 @@
                     "type": "string", 
                     "description": "Deprecated. Use channel and device_type. The Amazon channel the device is assocaited with.", 
                     "format": "uuid"
+                }, 
+                "open_platform_name": {
+                    "type": "string", 
+                    "description": "If device_type is OPEN, this field will show the name of the open platform."
                 }
             }
         }, 

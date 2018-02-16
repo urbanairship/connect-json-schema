@@ -2,7 +2,7 @@
     "self": {
         "version": "1-0-1", 
         "vendor": "com.urbanairship.connect", 
-        "name": "WEB_CLICK", 
+        "name": "TAG_CHANGE", 
         "format": "jsonschema"
     }, 
     "type": "object", 
@@ -14,7 +14,7 @@
         }, 
         "type": {
             "enum": [
-                "WEB_CLICK"
+                "TAG_CHANGE"
             ], 
             "type": "string", 
             "description": "The type of the event"
@@ -162,6 +162,10 @@
                     "type": "string", 
                     "description": "Deprecated. Use channel and device_type. The Amazon channel the device is assocaited with.", 
                     "format": "uuid"
+                }, 
+                "open_platform_name": {
+                    "type": "string", 
+                    "description": "If device_type is OPEN, this field will show the name of the open platform."
                 }
             }
         }, 
@@ -169,12 +173,37 @@
             "additionalProperties": true, 
             "type": "object", 
             "properties": {
-                "push_id": {
-                    "type": "string", 
-                    "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id which is not associated with a pipeline or plt.", 
-                    "format": "uuid"
+                "current": {
+                    "additionalProperties": {
+                        "items": {
+                            "type": "string"
+                        }, 
+                        "type": "array"
+                    }, 
+                    "type": "object"
+                }, 
+                "add": {
+                    "additionalProperties": {
+                        "items": {
+                            "type": "string"
+                        }, 
+                        "type": "array"
+                    }, 
+                    "type": "object"
+                }, 
+                "remove": {
+                    "additionalProperties": {
+                        "items": {
+                            "type": "string"
+                        }, 
+                        "type": "array"
+                    }, 
+                    "type": "object"
                 }
-            }
+            }, 
+            "required": [
+                "current"
+            ]
         }
     }, 
     "required": [

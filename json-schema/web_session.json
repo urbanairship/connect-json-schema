@@ -2,7 +2,7 @@
     "self": {
         "version": "1-0-1", 
         "vendor": "com.urbanairship.connect", 
-        "name": "UNINSTALL", 
+        "name": "WEB_SESSION", 
         "format": "jsonschema"
     }, 
     "type": "object", 
@@ -14,7 +14,7 @@
         }, 
         "type": {
             "enum": [
-                "UNINSTALL"
+                "WEB_SESSION"
             ], 
             "type": "string", 
             "description": "The type of the event"
@@ -162,18 +162,42 @@
                     "type": "string", 
                     "description": "Deprecated. Use channel and device_type. The Amazon channel the device is assocaited with.", 
                     "format": "uuid"
+                }, 
+                "open_platform_name": {
+                    "type": "string", 
+                    "description": "If device_type is OPEN, this field will show the name of the open platform."
                 }
             }
         }, 
         "body": {
             "additionalProperties": true, 
             "type": "object", 
-            "required": [
-                "decay"
-            ], 
             "properties": {
-                "decay": {
-                    "type": "boolean"
+                "last_delivered": {
+                    "type": "object", 
+                    "description": "Details about the last push delivered in the last 40 days which did not trigger a direct open", 
+                    "properties": {
+                        "push_id": {
+                            "type": "string", 
+                            "description": "The push id of the last delivered push", 
+                            "format": "uuid"
+                        }, 
+                        "group_id": {
+                            "type": "string", 
+                            "description": "The push's group_id if it is a part of an automation event pipeline", 
+                            "format": "uuid"
+                        }, 
+                        "time": {
+                            "type": "string", 
+                            "description": "An ISO 8601 datetime, in UTC, when the push occurred. May be absent.", 
+                            "format": "date-time"
+                        }
+                    }
+                }, 
+                "session_id": {
+                    "type": "string", 
+                    "description": "An identifier for the session of user activity. May be absent.", 
+                    "format": "uuid"
                 }
             }
         }

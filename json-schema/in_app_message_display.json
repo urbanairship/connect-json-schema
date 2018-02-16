@@ -2,7 +2,7 @@
     "self": {
         "version": "1-0-1", 
         "vendor": "com.urbanairship.connect", 
-        "name": "RICH_DELIVERY", 
+        "name": "IN_APP_MESSAGE_DISPLAY", 
         "format": "jsonschema"
     }, 
     "type": "object", 
@@ -14,7 +14,7 @@
         }, 
         "type": {
             "enum": [
-                "RICH_DELIVERY"
+                "IN_APP_MESSAGE_DISPLAY"
             ], 
             "type": "string", 
             "description": "The type of the event"
@@ -162,6 +162,10 @@
                     "type": "string", 
                     "description": "Deprecated. Use channel and device_type. The Amazon channel the device is assocaited with.", 
                     "format": "uuid"
+                }, 
+                "open_platform_name": {
+                    "type": "string", 
+                    "description": "If device_type is OPEN, this field will show the name of the open platform."
                 }
             }
         }, 
@@ -182,6 +186,11 @@
                 "variant_id": {
                     "type": "integer", 
                     "description": "Only present if the notification was sent as part of an experiment."
+                }, 
+                "session_id": {
+                    "type": "string", 
+                    "description": "An identifier for the session of user activity. May be absent.", 
+                    "format": "uuid"
                 }
             }
         }

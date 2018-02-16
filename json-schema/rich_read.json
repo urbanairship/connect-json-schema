@@ -2,7 +2,7 @@
     "self": {
         "version": "1-0-1", 
         "vendor": "com.urbanairship.connect", 
-        "name": "CONTROL", 
+        "name": "RICH_READ", 
         "format": "jsonschema"
     }, 
     "type": "object", 
@@ -14,7 +14,7 @@
         }, 
         "type": {
             "enum": [
-                "CONTROL"
+                "RICH_READ"
             ], 
             "type": "string", 
             "description": "The type of the event"
@@ -162,6 +162,10 @@
                     "type": "string", 
                     "description": "Deprecated. Use channel and device_type. The Amazon channel the device is assocaited with.", 
                     "format": "uuid"
+                }, 
+                "open_platform_name": {
+                    "type": "string", 
+                    "description": "If device_type is OPEN, this field will show the name of the open platform."
                 }
             }
         }, 
@@ -178,6 +182,10 @@
                     "type": "string", 
                     "description": "If the send event fulfills a push that is part of a group, then it will have a group_id field.", 
                     "format": "uuid"
+                }, 
+                "variant_id": {
+                    "type": "integer", 
+                    "description": "Only present if the notification was sent as part of an experiment."
                 }
             }
         }

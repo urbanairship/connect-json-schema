@@ -2,7 +2,7 @@
     "self": {
         "version": "1-0-1", 
         "vendor": "com.urbanairship.connect", 
-        "name": "RICH_DELETE", 
+        "name": "FIRST_OPEN", 
         "format": "jsonschema"
     }, 
     "type": "object", 
@@ -14,7 +14,7 @@
         }, 
         "type": {
             "enum": [
-                "RICH_DELETE"
+                "FIRST_OPEN"
             ], 
             "type": "string", 
             "description": "The type of the event"
@@ -162,26 +162,10 @@
                     "type": "string", 
                     "description": "Deprecated. Use channel and device_type. The Amazon channel the device is assocaited with.", 
                     "format": "uuid"
-                }
-            }
-        }, 
-        "body": {
-            "additionalProperties": true, 
-            "type": "object", 
-            "properties": {
-                "push_id": {
-                    "type": "string", 
-                    "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id.", 
-                    "format": "uuid"
                 }, 
-                "group_id": {
+                "open_platform_name": {
                     "type": "string", 
-                    "description": "If the send event fulfills a push that is part of a group, then it will have a group_id field.", 
-                    "format": "uuid"
-                }, 
-                "variant_id": {
-                    "type": "integer", 
-                    "description": "Only present if the notification was sent as part of an experiment."
+                    "description": "If device_type is OPEN, this field will show the name of the open platform."
                 }
             }
         }
@@ -192,7 +176,6 @@
         "occurred", 
         "processed", 
         "device", 
-        "body", 
         "type"
     ]
 }

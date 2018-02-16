@@ -2,7 +2,7 @@
     "self": {
         "version": "1-0-1", 
         "vendor": "com.urbanairship.connect", 
-        "name": "FIRST_OPEN", 
+        "name": "SCREEN_VIEWED", 
         "format": "jsonschema"
     }, 
     "type": "object", 
@@ -14,7 +14,7 @@
         }, 
         "type": {
             "enum": [
-                "FIRST_OPEN"
+                "SCREEN_VIEWED"
             ], 
             "type": "string", 
             "description": "The type of the event"
@@ -162,6 +162,28 @@
                     "type": "string", 
                     "description": "Deprecated. Use channel and device_type. The Amazon channel the device is assocaited with.", 
                     "format": "uuid"
+                }, 
+                "open_platform_name": {
+                    "type": "string", 
+                    "description": "If device_type is OPEN, this field will show the name of the open platform."
+                }
+            }
+        }, 
+        "body": {
+            "additionalProperties": true, 
+            "type": "object", 
+            "properties": {
+                "duration": {
+                    "type": "number"
+                }, 
+                "previous_screen": {
+                    "type": "string"
+                }, 
+                "session_id": {
+                    "type": "string"
+                }, 
+                "viewed_screen": {
+                    "type": "string"
                 }
             }
         }
@@ -172,6 +194,7 @@
         "occurred", 
         "processed", 
         "device", 
+        "body", 
         "type"
     ]
 }

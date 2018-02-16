@@ -1,0 +1,488 @@
+[
+    {
+        "name": "id",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "offset",
+        "type": "INTEGER",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "occurred",
+        "type": "TIMESTAMP",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "processed",
+        "type": "TIMESTAMP",
+        "mode": "NULLABLE"
+    },
+    {
+        "name": "device",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+            {
+                "name": "channel",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "device_type",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "open_platform_name",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "named_user_id",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "attributes",
+                "type": "RECORD",
+                "mode": "NULLABLE",
+                "fields": [
+                    {
+                        "name": "locale_variant",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "app_version",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "device_model",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "connection_type",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "app_package_name",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "iana_timezone",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "push_opt_in",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "locale_country_code",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "locale_timezone",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "carrier",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "locale_language_code",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "location_enabled",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "background_push_enabled",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "ua_sdk_version",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "location_permission",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "body",
+        "type": "RECORD",
+        "mode": "NULLABLE",
+        "fields": [
+            {
+                "name": "session_id",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "last_delivered",
+                "type": "RECORD",
+                "mode": "NULLABLE",
+                "fields": [
+                    {
+                        "name": "push_id",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "group_id",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "variant_id",
+                        "type": "INTEGER",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "time",
+                        "type": "TIMESTAMP",
+                        "mode": "NULLABLE"
+                    }
+                ]
+            },
+            {
+                "name": "triggering_push",
+                "type": "RECORD",
+                "mode": "NULLABLE",
+                "fields": [
+                    {
+                        "name": "push_id",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "group_id",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "variant_id",
+                        "type": "INTEGER",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "time",
+                        "type": "TIMESTAMP",
+                        "mode": "NULLABLE"
+                    }
+                ]
+            },
+            {
+                "name": "payload",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "push_id",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "group_id",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "variant_id",
+                "type": "INTEGER",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "resource",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "trimmed",
+                "type": "BOOLEAN",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "alerting",
+                "type": "BOOLEAN",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "decay",
+                "type": "BOOLEAN",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "add",
+                "type": "RECORD",
+                "mode": "NULLABLE",
+                "fields": [
+                    {
+                        "name": "device",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "timezone",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_opt_in",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_background_enabled",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_location_enabled",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_ios_app_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_android_app_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_locale_country",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_locale_language",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_ios_sdk_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_android_sdk_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_ios_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_android_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_ios_model",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_churn_prediction",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    }
+                ]
+            },
+            {
+                "name": "remove",
+                "type": "RECORD",
+                "mode": "NULLABLE",
+                "fields": [
+                    {
+                        "name": "device",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "timezone",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_opt_in",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_background_enabled",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_location_enabled",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_ios_app_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_android_app_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_locale_country",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_locale_language",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_ios_sdk_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_android_sdk_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_ios_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_android_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_ios_model",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_churn_prediction",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    }
+                ]
+            },
+            {
+                "name": "current",
+                "type": "RECORD",
+                "mode": "NULLABLE",
+                "fields": [
+                    {
+                        "name": "device",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "timezone",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_opt_in",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_background_enabled",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_location_enabled",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_ios_app_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_android_app_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_locale_country",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_locale_language",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_ios_sdk_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_android_sdk_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_ios_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_android_version",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_ios_model",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    },
+                    {
+                        "name": "ua_churn_prediction",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "type",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    }
+]
