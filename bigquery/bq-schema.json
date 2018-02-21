@@ -65,6 +65,11 @@
                         "mode": "NULLABLE"
                     },
                     {
+                        "name": "device_os",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
                         "name": "connection_type",
                         "type": "STRING",
                         "mode": "NULLABLE"
