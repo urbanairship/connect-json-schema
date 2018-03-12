@@ -49,6 +49,18 @@
                             "type": "string", 
                             "description": "Indicates if the connection is WIFI or 3g etc.."
                         }, 
+                        "web_browser_version": {
+                            "type": "string", 
+                            "description": "A string indicating the version of the browser."
+                        }, 
+                        "web_browser_name": {
+                            "type": "string", 
+                            "description": "Indicates the browser running SDK, if applicable. 'chrome' would be a valid value."
+                        }, 
+                        "web_user_agent_string": {
+                            "type": "string", 
+                            "description": "If applicable, the user agent the web browser reported. (Web devices only)"
+                        }, 
                         "device_model": {
                             "type": "string", 
                             "description": "Indicates the device model"
@@ -88,6 +100,10 @@
                         "locale_country_code": {
                             "type": "string", 
                             "description": "Indicates the countries locale country code"
+                        }, 
+                        "web_browser_type": {
+                            "type": "string", 
+                            "description": "Indicate whether the browser was on a desktop or mobile phone, e.g. 'desktop'"
                         }, 
                         "location_permission": {
                             "type": "string", 
@@ -228,45 +244,53 @@
                     "description": "An Urban Airship identifier uniquely identifying the interaction. May be absent."
                 }, 
                 "last_delivered": {
-                    "type": "object", 
-                    "description": "Details about the last push delivered in the last 40 days which did not trigger a direct open", 
-                    "properties": {
-                        "push_id": {
-                            "type": "string", 
-                            "description": "The push id of the last delivered push", 
-                            "format": "uuid"
-                        }, 
-                        "group_id": {
-                            "type": "string", 
-                            "description": "The push's group_id if it is a part of an automation event pipeline", 
-                            "format": "uuid"
-                        }, 
-                        "time": {
-                            "type": "string", 
-                            "description": "An ISO 8601 datetime, in UTC, when the push occurred. May be absent.", 
-                            "format": "date-time"
-                        }
+                    "campaigns": {
+                        "desription": "Is present only if the event is associated with a campaign.", 
+                        "type": "array"
+                    }, 
+                    "time": {
+                        "type": "string", 
+                        "description": "An ISO 8601 datetime indicating when the payload defining the In-App Message was sent to the device.", 
+                        "format": "date-time"
+                    }, 
+                    "push_id": {
+                        "type": "string", 
+                        "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id.", 
+                        "format": "uuid"
+                    }, 
+                    "group_id": {
+                        "type": "string", 
+                        "description": "If the send event fulfills a push that is part of a group, then it will have a group_id field.", 
+                        "format": "uuid"
+                    }, 
+                    "variant_id": {
+                        "type": "integer", 
+                        "description": "Only present if the notification was sent as part of an experiment."
                     }
                 }, 
                 "triggering_push": {
-                    "type": "object", 
-                    "description": "If the open was a direct open caused by a push this is the meta data describing that push", 
-                    "properties": {
-                        "push_id": {
-                            "type": "string", 
-                            "description": "The push id of the triggering push", 
-                            "format": "uuid"
-                        }, 
-                        "group_id": {
-                            "type": "string", 
-                            "description": "The push's group_id if it is a part of an automation event pipeline or push to local time", 
-                            "format": "uuid"
-                        }, 
-                        "time": {
-                            "type": "string", 
-                            "description": "An ISO 8601 datetime, in UTC, when the push occurred. May be absent.", 
-                            "format": "date-time"
-                        }
+                    "campaigns": {
+                        "desription": "Is present only if the event is associated with a campaign.", 
+                        "type": "array"
+                    }, 
+                    "time": {
+                        "type": "string", 
+                        "description": "An ISO 8601 datetime indicating when the payload defining the In-App Message was sent to the device.", 
+                        "format": "date-time"
+                    }, 
+                    "push_id": {
+                        "type": "string", 
+                        "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id.", 
+                        "format": "uuid"
+                    }, 
+                    "group_id": {
+                        "type": "string", 
+                        "description": "If the send event fulfills a push that is part of a group, then it will have a group_id field.", 
+                        "format": "uuid"
+                    }, 
+                    "variant_id": {
+                        "type": "integer", 
+                        "description": "Only present if the notification was sent as part of an experiment."
                     }
                 }
             }, 
