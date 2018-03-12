@@ -128,6 +128,26 @@
                         "name": "location_permission",
                         "type": "STRING",
                         "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "web_browser_version",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "web_browser_name",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "web_browser_type",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "web_user_agent_string",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
                     }
                 ]
             }
@@ -167,6 +187,18 @@
                         "name": "time",
                         "type": "TIMESTAMP",
                         "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "campaigns",
+                        "type": "RECORD",
+                        "mode": "NULLABLE",
+                        "fields": [
+							{
+								"name": "categories",
+								"type": "STRING",
+								"mode": "REPEATED"
+							}
+                    	]
                     }
                 ]
             },
@@ -194,6 +226,57 @@
                         "name": "time",
                         "type": "TIMESTAMP",
                         "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "campaigns",
+                        "type": "RECORD",
+                        "mode": "NULLABLE",
+                        "fields": [
+							{
+								"name": "categories",
+								"type": "STRING",
+								"mode": "REPEATED"
+							}
+                    	]
+                    }
+                ]
+            },
+            {
+                "name": "replacing_push",
+                "type": "RECORD",
+                "mode": "NULLABLE",
+                "fields": [
+                    {
+                        "name": "push_id",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "group_id",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "variant_id",
+                        "type": "INTEGER",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "time",
+                        "type": "TIMESTAMP",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "campaigns",
+                        "type": "RECORD",
+                        "mode": "NULLABLE",
+                        "fields": [
+							{
+								"name": "categories",
+								"type": "STRING",
+								"mode": "REPEATED"
+							}
+                    	]
                     }
                 ]
             },
@@ -212,6 +295,18 @@
                 "type": "STRING",
                 "mode": "NULLABLE"
             },
+			{
+				"name": "campaigns",
+				"type": "RECORD",
+				"mode": "NULLABLE",
+				"fields": [
+					{
+						"name": "categories",
+						"type": "STRING",
+						"mode": "REPEATED"
+					}
+				]
+			}            
             {
                 "name": "variant_id",
                 "type": "INTEGER",
@@ -235,6 +330,186 @@
             {
                 "name": "decay",
                 "type": "BOOLEAN",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "name",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "value",
+                "type": "FLOAT",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "interaction_id",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "transaction_id",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "interaction_type",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "properties",
+                "type": "RECORD",
+                "mode": "NULLABLE",
+                "fields" : [
+					{
+					   "name": "ltv",
+					   "type": "BOOLEAN",
+					   "mode": "NULLABLE"
+					},
+					{
+						"name": "category",
+						"type": "STRING",
+						"mode": "NULLABLE"
+					},
+					{
+						"name": "id",
+						"type": "STRING",
+						"mode": "NULLABLE"
+					},
+					{
+						"name": "description",
+						"type": "STRING",
+						"mode": "NULLABLE"
+					},
+					{
+						"name": "author",
+						"type": "STRING",
+						"mode": "NULLABLE"
+					},
+					{
+						"name": "feature",
+						"type": "STRING",
+						"mode": "NULLABLE"
+					},
+					{
+						"name": "published_date",
+						"type": "STRING",
+						"mode": "NULLABLE"
+					},
+					{
+						"name": "source",
+						"type": "STRING",
+						"mode": "NULLABLE"
+					},
+					{
+						"name": "medium",
+						"type": "STRING",
+						"mode": "NULLABLE"
+					},
+					{
+						"name": "brand",
+						"type": "STRING",
+						"mode": "NULLABLE"
+					},
+					{
+						"name": "new_item",
+						"type": "STRING",
+						"mode": "NULLABLE"
+					}
+                ]
+            },
+            {
+                "name": "source",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "latitude",
+                "type": "FLOAT",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "longitude",
+                "type": "FLOAT",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "foreground",
+                "type": "BOOLEAN",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "action",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "region_id",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "source_info",
+                "type": "RECORD",
+                "mode": "NULLABLE",
+                "fields": [
+					{
+	    				"name": "source",
+		    			"type": "STRING",
+			    		"mode": "NULLABLE"
+    				},
+    				{
+	    				"name": "region_id",
+		    			"type": "STRING",
+			    		"mode": "NULLABLE"
+    				}
+                ]
+           
+            },
+            {
+                "name": "duration",
+                "type": "INTEGER",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "viewed_screen",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "previous_screen",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "time_sent",
+                "type": "TIME",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "type",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "button_id",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "button_group",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "button_description",
+                "type": "STRING",
+                "mode": "NULLABLE"
+            },
+            {
+                "name": "app_defined_id",
+                "type": "STRING",
                 "mode": "NULLABLE"
             },
             {

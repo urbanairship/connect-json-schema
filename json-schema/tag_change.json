@@ -49,6 +49,14 @@
                             "type": "string", 
                             "description": "Indicates if the connection is WIFI or 3g etc.."
                         }, 
+                        "web_browser_version": {
+                            "type": "string", 
+                            "description": "A string indicating the version of the browser."
+                        }, 
+                        "app_version": {
+                            "type": "string", 
+                            "description": "Indicates the version of the application"
+                        }, 
                         "device_model": {
                             "type": "string", 
                             "description": "Indicates the device model"
@@ -73,9 +81,9 @@
                             "type": "string", 
                             "description": "Indicates the applications package name"
                         }, 
-                        "locale_timezone": {
+                        "web_user_agent_string": {
                             "type": "string", 
-                            "description": "Indicates the timezone for the device"
+                            "description": "If applicable, the user agent the web browser reported. (Web devices only)"
                         }, 
                         "iana_timezone": {
                             "type": "string", 
@@ -85,9 +93,13 @@
                             "type": "string", 
                             "description": "Indicates the carrier on which the device is active"
                         }, 
-                        "locale_country_code": {
+                        "locale_timezone": {
                             "type": "string", 
-                            "description": "Indicates the countries locale country code"
+                            "description": "Indicates the timezone for the device"
+                        }, 
+                        "web_browser_type": {
+                            "type": "string", 
+                            "description": "Indicate whether the browser was on a desktop or mobile phone, e.g. 'desktop'"
                         }, 
                         "location_permission": {
                             "type": "string", 
@@ -97,13 +109,17 @@
                             "type": "string", 
                             "description": "Indicates if the device has location tracking enabled"
                         }, 
+                        "locale_country_code": {
+                            "type": "string", 
+                            "description": "Indicates the countries locale country code"
+                        }, 
                         "device_os": {
                             "type": "string", 
                             "description": "Indicates the devices operating system of IOS or android and possibly version"
                         }, 
-                        "app_version": {
+                        "web_browser_name": {
                             "type": "string", 
-                            "description": "Indicates the version of the application"
+                            "description": "Indicates the browser running SDK, if applicable. 'chrome' would be a valid value."
                         }, 
                         "locale_variant": {
                             "type": "string"

@@ -49,6 +49,18 @@
                             "type": "string", 
                             "description": "Indicates if the connection is WIFI or 3g etc.."
                         }, 
+                        "web_browser_version": {
+                            "type": "string", 
+                            "description": "A string indicating the version of the browser."
+                        }, 
+                        "web_browser_name": {
+                            "type": "string", 
+                            "description": "Indicates the browser running SDK, if applicable. 'chrome' would be a valid value."
+                        }, 
+                        "web_user_agent_string": {
+                            "type": "string", 
+                            "description": "If applicable, the user agent the web browser reported. (Web devices only)"
+                        }, 
                         "device_model": {
                             "type": "string", 
                             "description": "Indicates the device model"
@@ -88,6 +100,10 @@
                         "locale_country_code": {
                             "type": "string", 
                             "description": "Indicates the countries locale country code"
+                        }, 
+                        "web_browser_type": {
+                            "type": "string", 
+                            "description": "Indicate whether the browser was on a desktop or mobile phone, e.g. 'desktop'"
                         }, 
                         "location_permission": {
                             "type": "string", 
@@ -169,6 +185,15 @@
             "additionalProperties": true, 
             "type": "object", 
             "properties": {
+                "campaigns": {
+                    "desription": "Is present only if the event is associated with a campaign.", 
+                    "type": "array"
+                }, 
+                "time": {
+                    "type": "string", 
+                    "description": "An ISO 8601 datetime indicating when the payload defining the In-App Message was sent to the device.", 
+                    "format": "date-time"
+                }, 
                 "push_id": {
                     "type": "string", 
                     "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id.", 
