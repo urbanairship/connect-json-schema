@@ -193,12 +193,12 @@
                         "type": "RECORD",
                         "mode": "NULLABLE",
                         "fields": [
-							{
-								"name": "categories",
-								"type": "STRING",
-								"mode": "REPEATED"
-							}
-                    	]
+                            {
+                                "name": "categories",
+                                "type": "STRING",
+                                "mode": "REPEATED"
+                            }
+                        ]
                     }
                 ]
             },
@@ -232,12 +232,12 @@
                         "type": "RECORD",
                         "mode": "NULLABLE",
                         "fields": [
-							{
-								"name": "categories",
-								"type": "STRING",
-								"mode": "REPEATED"
-							}
-                    	]
+                            {
+                                "name": "categories",
+                                "type": "STRING",
+                                "mode": "REPEATED"
+                            }
+                        ]
                     }
                 ]
             },
@@ -271,12 +271,12 @@
                         "type": "RECORD",
                         "mode": "NULLABLE",
                         "fields": [
-							{
-								"name": "categories",
-								"type": "STRING",
-								"mode": "REPEATED"
-							}
-                    	]
+                            {
+                                "name": "categories",
+                                "type": "STRING",
+                                "mode": "REPEATED"
+                            }
+                        ]
                     }
                 ]
             },
@@ -295,18 +295,18 @@
                 "type": "STRING",
                 "mode": "NULLABLE"
             },
-			{
-				"name": "campaigns",
-				"type": "RECORD",
-				"mode": "NULLABLE",
-				"fields": [
-					{
-						"name": "categories",
-						"type": "STRING",
-						"mode": "REPEATED"
-					}
-				]
-			}            
+            {
+                "name": "campaigns",
+                "type": "RECORD",
+                "mode": "NULLABLE",
+                "fields": [
+                    {
+                        "name": "categories",
+                        "type": "STRING",
+                        "mode": "REPEATED"
+                    }
+                ]
+            },
             {
                 "name": "variant_id",
                 "type": "INTEGER",
@@ -361,62 +361,62 @@
                 "name": "properties",
                 "type": "RECORD",
                 "mode": "NULLABLE",
-                "fields" : [
-					{
-					   "name": "ltv",
-					   "type": "BOOLEAN",
-					   "mode": "NULLABLE"
-					},
-					{
-						"name": "category",
-						"type": "STRING",
-						"mode": "NULLABLE"
-					},
-					{
-						"name": "id",
-						"type": "STRING",
-						"mode": "NULLABLE"
-					},
-					{
-						"name": "description",
-						"type": "STRING",
-						"mode": "NULLABLE"
-					},
-					{
-						"name": "author",
-						"type": "STRING",
-						"mode": "NULLABLE"
-					},
-					{
-						"name": "feature",
-						"type": "STRING",
-						"mode": "NULLABLE"
-					},
-					{
-						"name": "published_date",
-						"type": "STRING",
-						"mode": "NULLABLE"
-					},
-					{
-						"name": "source",
-						"type": "STRING",
-						"mode": "NULLABLE"
-					},
-					{
-						"name": "medium",
-						"type": "STRING",
-						"mode": "NULLABLE"
-					},
-					{
-						"name": "brand",
-						"type": "STRING",
-						"mode": "NULLABLE"
-					},
-					{
-						"name": "new_item",
-						"type": "STRING",
-						"mode": "NULLABLE"
-					}
+                "fields": [
+                    {
+                        "name": "ltv",
+                        "type": "BOOLEAN",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "category",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "id",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "description",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "author",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "feature",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "published_date",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "source",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "medium",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "brand",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "new_item",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    }
                 ]
             },
             {
@@ -454,18 +454,17 @@
                 "type": "RECORD",
                 "mode": "NULLABLE",
                 "fields": [
-					{
-	    				"name": "source",
-		    			"type": "STRING",
-			    		"mode": "NULLABLE"
-    				},
-    				{
-	    				"name": "region_id",
-		    			"type": "STRING",
-			    		"mode": "NULLABLE"
-    				}
+                    {
+                        "name": "source",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    },
+                    {
+                        "name": "region_id",
+                        "type": "STRING",
+                        "mode": "NULLABLE"
+                    }
                 ]
-           
             },
             {
                 "name": "duration",

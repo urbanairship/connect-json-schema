@@ -185,6 +185,17 @@
             "additionalProperties": true, 
             "type": "object", 
             "properties": {
+                "campaigns": {
+                    "additionalProperties": true, 
+                    "desription": "Is present only if the event is associated with a campaign.", 
+                    "type": "object", 
+                    "properties": {
+                        "categories": {
+                            "type": "array", 
+                            "description": "Array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character"
+                        }
+                    }
+                }, 
                 "push_id": {
                     "type": "string", 
                     "description": "Identifies the push that is fulfilled by the send. Every send event has a push_id.", 
@@ -194,6 +205,10 @@
                     "type": "string", 
                     "description": "If the send event fulfills a push that is part of a group, then it will have a group_id field.", 
                     "format": "uuid"
+                }, 
+                "alerting": {
+                    "type": "boolean", 
+                    "description": "A boolean indicating whether a send event was alerting. Alerting send event has nofification text, badge or sound."
                 }
             }
         }

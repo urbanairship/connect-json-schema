@@ -186,12 +186,19 @@
             "type": "object", 
             "properties": {
                 "campaigns": {
+                    "additionalProperties": true, 
                     "desription": "Is present only if the event is associated with a campaign.", 
-                    "type": "array"
+                    "type": "object", 
+                    "properties": {
+                        "categories": {
+                            "type": "array", 
+                            "description": "Array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character"
+                        }
+                    }
                 }, 
                 "time": {
                     "type": "string", 
-                    "description": "An ISO 8601 datetime indicating when the payload defining the In-App Message was sent to the device.", 
+                    "description": "An ISO 8601 datetime indicating when the payload was sent to the device.", 
                     "format": "date-time"
                 }, 
                 "push_id": {
@@ -231,12 +238,19 @@
                     "type": "object", 
                     "properties": {
                         "campaigns": {
+                            "additionalProperties": true, 
                             "desription": "Is present only if the event is associated with a campaign.", 
-                            "type": "array"
+                            "type": "object", 
+                            "properties": {
+                                "categories": {
+                                    "type": "array", 
+                                    "description": "Array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character"
+                                }
+                            }
                         }, 
                         "time": {
                             "type": "string", 
-                            "description": "An ISO 8601 datetime indicating when the payload defining the In-App Message was sent to the device.", 
+                            "description": "An ISO 8601 datetime indicating when the payload was sent to the device.", 
                             "format": "date-time"
                         }, 
                         "push_id": {
@@ -274,12 +288,19 @@
                     "description": "If the open was a direct open caused by a push this is the meta data describing that push", 
                     "properties": {
                         "campaigns": {
+                            "additionalProperties": true, 
                             "desription": "Is present only if the event is associated with a campaign.", 
-                            "type": "array"
+                            "type": "object", 
+                            "properties": {
+                                "categories": {
+                                    "type": "array", 
+                                    "description": "Array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character"
+                                }
+                            }
                         }, 
                         "time": {
                             "type": "string", 
-                            "description": "An ISO 8601 datetime indicating when the payload defining the In-App Message was sent to the device.", 
+                            "description": "An ISO 8601 datetime indicating when the payload was sent to the device.", 
                             "format": "date-time"
                         }, 
                         "push_id": {
