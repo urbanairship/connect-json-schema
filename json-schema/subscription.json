@@ -1,1 +1,98 @@
-{"description":"`SUBSCRIPTION` events reflect changes to users' subscription preferences — reflected in opt_in and opt_out values. These events help you track a user's subscription status in the system and the total number of subscribers.\n","properties":{"body":{"properties":{"event_type":{"description":"Determines the source of the subscription event. `registration` and `create_and_send` events result in changes to `opted_in` dates; all other event types contain `opted_out` dates.\n\n* `registration`: Represents a change to a user's `commercial_opted_in` or `transactional_opted_in` dates. Either a user joined a list or updated their status for a list.\n* `create_and_send`: A user's opted_in status changed as a result of a create-and-send event.\n* `bounce`: Subscription status changed as a result of a bounce event.\n* `list_unsubscribe`: The user clicked the `unsubscribe` button in their email client.\n* `link_unsubscribe`: The user clicked an `unsubscribe` hyperlink in an email.\n* `spam_complaint`: The user classified an email as spam.\n* `out_of_band`: A bounce occured after the recipient MTA accepted an email.\n","enum":["registration"],"type":"string"},"identifiers":{"description":"Contains address information specific to the `channel_id` specified in the event.","properties":{"address":{"description":"The email address representing the change.","type":"string"}},"type":"object"}},"required":["event_type","identifiers"],"type":"object","x-schema-tag":"Event Body"},"device":{"description":"Holds information about the email \"device\" (an individual email channel) the event occurred against.","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The email address of the channel the event occured against.","type":"string"},"device_type":{"description":"email compliance events use the EMAIL device type.","enum":["EMAIL"],"type":"string"},"named_user":{"description":"The named user that the channel is associated with; appears only if the channel is associated with a named user.","type":"string"}},"required":["device_type","delivery_address"],"title":"Email Device","type":"object"},"id":{"description":"Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.","type":"string"},"occurred":{"description":"When the event occurred.","format":"date-time","type":"string"},"offset":{"description":"An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.","type":"string"},"processed":{"description":"When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.","format":"date-time","type":"string"},"type":{"enum":["SUBSCRIPTION"],"type":"string"}},"required":["id","device","type","occurred","processed","body"],"title":"Subscription Event","type":"object","x-note":"These events appear in the stream whenever a user changes their opted_in or opted_out dates, which may not be meaningful in all cases; a user may opt into an email list on which they're already a member. \n","x-schema-tag":"Events"}
+{
+    "description": "`SUBSCRIPTION` events reflect changes to users' subscription preferences — reflected in opt_in and opt_out values. These events help you track a user's subscription status in the system and the total number of subscribers.\n",
+    "properties": {
+        "body": {
+            "properties": {
+                "event_type": {
+                    "description": "Determines the source of the subscription event. `registration` and `create_and_send` events result in changes to `opted_in` dates; all other event types contain `opted_out` dates.\n\n* `registration`: Represents a change to a user's `commercial_opted_in` or `transactional_opted_in` dates. Either a user joined a list or updated their status for a list.\n* `create_and_send`: A user's opted_in status changed as a result of a create-and-send event.\n* `bounce`: Subscription status changed as a result of a bounce event.\n* `list_unsubscribe`: The user clicked the `unsubscribe` button in their email client.\n* `link_unsubscribe`: The user clicked an `unsubscribe` hyperlink in an email.\n* `spam_complaint`: The user classified an email as spam.\n* `out_of_band`: A bounce occured after the recipient MTA accepted an email.\n",
+                    "enum": [
+                        "registration"
+                    ],
+                    "type": "string"
+                },
+                "identifiers": {
+                    "description": "Contains address information specific to the `channel_id` specified in the event.",
+                    "properties": {
+                        "address": {
+                            "description": "The email address representing the change.",
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "required": [
+                "event_type",
+                "identifiers"
+            ],
+            "type": "object",
+            "x-schema-tag": "Event Body"
+        },
+        "device": {
+            "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
+            "properties": {
+                "channel": {
+                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                    "type": "string"
+                },
+                "delivery_address": {
+                    "description": "The email address of the channel the event occured against.",
+                    "type": "string"
+                },
+                "device_type": {
+                    "description": "email compliance events use the EMAIL device type.",
+                    "enum": [
+                        "EMAIL"
+                    ],
+                    "type": "string"
+                },
+                "named_user": {
+                    "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "device_type",
+                "delivery_address"
+            ],
+            "title": "Email Device",
+            "type": "object"
+        },
+        "id": {
+            "description": "Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.",
+            "type": "string"
+        },
+        "occurred": {
+            "description": "When the event occurred.",
+            "format": "date-time",
+            "type": "string"
+        },
+        "offset": {
+            "description": "An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.",
+            "type": "string"
+        },
+        "processed": {
+            "description": "When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.",
+            "format": "date-time",
+            "type": "string"
+        },
+        "type": {
+            "enum": [
+                "SUBSCRIPTION"
+            ],
+            "type": "string"
+        }
+    },
+    "required": [
+        "id",
+        "device",
+        "type",
+        "occurred",
+        "processed",
+        "body"
+    ],
+    "title": "Subscription Event",
+    "type": "object",
+    "x-note": "These events appear in the stream whenever a user changes their opted_in or opted_out dates, which may not be meaningful in all cases; a user may opt into an email list on which they're already a member. \n",
+    "x-schema-tag": "Events"
+}

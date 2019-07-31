@@ -1,1 +1,139 @@
-{"description":"Represents a message action that originated from a user — like an inbound SMS or email.","properties":{"body":{"description":"An event that occurs when a user sends a message from an SMS device, i.e., the message originates from a mobile device and not from the server (Airship). This event contains context related to the message's origin, the incoming message itself, and Airship's response to the origin.\n","properties":{"event_type":{"description":"The specific `MOBILE_ORIGINATED` event that occured.","enum":["mobile_originated_sms"],"type":"string"},"identifiers":{"description":"Contains the sender and MSISDN for the event.","properties":{"msisdn":{"description":"The phone number of the user involved in the compliance event.","type":"string"},"sender":{"description":"The phone number or shortcode of the sender involved in the compliance event.","type":"string"}},"required":["sender","msisdn"],"title":"SMS Identifiers","type":"object"},"properties":{"description":"Contains the mobile-originated message itself and the response to the message.\n","properties":{"inbound_message":{"description":"The contents of the message received from an SMS device.\n","type":"string"},"keyword":{"description":"The specific keyword used in the inbound message, if recognized; the keyword in the `inbound_message` determines the `outbound_message` sent to the device. If a keyword could not be matched in the `inbound_message`, this field is absent.\n","type":"string"},"outbound_message":{"description":"The response sent to the SMS device, based on the inbound message and keyword.\n","type":"string"}},"required":["inbound_message","outbound_message"],"type":"object"}},"required":["event_type","identifiers","properties"],"type":"object","x-schema-tag":"SMS-Specific Events"},"device":{"description":"Holds information about an SMS \"device\" (an individual SMS channel).","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The phone number for the channel.","format":"msisdn","type":"string"},"device_type":{"description":"SMS compliance events list the SMS device type.","enum":["SMS"],"type":"string"},"identifiers":{"description":"If present, the `identifiers` object holds the value for the `sender` property.","properties":{"sender":{"description":"The sender that the `delivery_address` received a message from.","type":"string"}},"required":["sender"],"type":"object"}},"required":["device_type"],"title":"SMS Device","type":"object"},"id":{"description":"Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.","type":"string"},"occurred":{"description":"When the event occurred.","format":"date-time","type":"string"},"offset":{"description":"An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.","type":"string"},"processed":{"description":"When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.","format":"date-time","type":"string"},"type":{"enum":["MOBILE_ORIGINATED"],"type":"string"}},"required":["id","device","type","occurred","processed","body"],"title":"Mobile Originated Event","type":"object","x-schema-tag":"Events"}
+{
+    "description": "Represents a message action that originated from a user — like an inbound SMS or email.",
+    "properties": {
+        "body": {
+            "description": "An event that occurs when a user sends a message from an SMS device, i.e., the message originates from a mobile device and not from the server (Airship). This event contains context related to the message's origin, the incoming message itself, and Airship's response to the origin.\n",
+            "properties": {
+                "event_type": {
+                    "description": "The specific `MOBILE_ORIGINATED` event that occured.",
+                    "enum": [
+                        "mobile_originated_sms"
+                    ],
+                    "type": "string"
+                },
+                "identifiers": {
+                    "description": "Contains the sender and MSISDN for the event.",
+                    "properties": {
+                        "msisdn": {
+                            "description": "The phone number of the user involved in the compliance event.",
+                            "type": "string"
+                        },
+                        "sender": {
+                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "sender",
+                        "msisdn"
+                    ],
+                    "title": "SMS Identifiers",
+                    "type": "object"
+                },
+                "properties": {
+                    "description": "Contains the mobile-originated message itself and the response to the message.\n",
+                    "properties": {
+                        "inbound_message": {
+                            "description": "The contents of the message received from an SMS device.\n",
+                            "type": "string"
+                        },
+                        "keyword": {
+                            "description": "The specific keyword used in the inbound message, if recognized; the keyword in the `inbound_message` determines the `outbound_message` sent to the device. If a keyword could not be matched in the `inbound_message`, this field is absent.\n",
+                            "type": "string"
+                        },
+                        "outbound_message": {
+                            "description": "The response sent to the SMS device, based on the inbound message and keyword.\n",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "inbound_message",
+                        "outbound_message"
+                    ],
+                    "type": "object"
+                }
+            },
+            "required": [
+                "event_type",
+                "identifiers",
+                "properties"
+            ],
+            "type": "object",
+            "x-schema-tag": "SMS-Specific Events"
+        },
+        "device": {
+            "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+            "properties": {
+                "channel": {
+                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                    "type": "string"
+                },
+                "delivery_address": {
+                    "description": "The phone number for the channel.",
+                    "format": "msisdn",
+                    "type": "string"
+                },
+                "device_type": {
+                    "description": "SMS compliance events list the SMS device type.",
+                    "enum": [
+                        "SMS"
+                    ],
+                    "type": "string"
+                },
+                "identifiers": {
+                    "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+                    "properties": {
+                        "sender": {
+                            "description": "The sender that the `delivery_address` received a message from.",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "sender"
+                    ],
+                    "type": "object"
+                }
+            },
+            "required": [
+                "device_type"
+            ],
+            "title": "SMS Device",
+            "type": "object"
+        },
+        "id": {
+            "description": "Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.",
+            "type": "string"
+        },
+        "occurred": {
+            "description": "When the event occurred.",
+            "format": "date-time",
+            "type": "string"
+        },
+        "offset": {
+            "description": "An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.",
+            "type": "string"
+        },
+        "processed": {
+            "description": "When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.",
+            "format": "date-time",
+            "type": "string"
+        },
+        "type": {
+            "enum": [
+                "MOBILE_ORIGINATED"
+            ],
+            "type": "string"
+        }
+    },
+    "required": [
+        "id",
+        "device",
+        "type",
+        "occurred",
+        "processed",
+        "body"
+    ],
+    "title": "Mobile Originated Event",
+    "type": "object",
+    "x-schema-tag": "Events"
+}

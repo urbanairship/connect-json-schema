@@ -1,1 +1,181 @@
-{"description":"Occurs when a new message has taken the place of another message, a message has passed its expiration, or because displaying the message in-app would be redundant. This event type may be latent; it is not emitted until the app becomes active.\n","properties":{"body":{"properties":{"app_defined_id":{"description":"An identifier defined by the application if the In-App Message was created by the application logic, not the UA system. If this field is present, the event body will not contain `push_id`, `group_id`,  `variant_id`, or `triggering_push` fields.","type":"string"},"group_id":{"description":"Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n","format":"uuid","title":"Group ID","type":"string"},"push_id":{"description":"A unique identifier for a push operation.","format":"uuid","title":"Push ID","type":"string"},"replacing_push":{"description":"The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.","properties":{"campaigns":{"description":"An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.","properties":{"categories":{"items":{"type":"string"},"type":"array"}},"title":"Campaigns Object","type":"object"},"group_id":{"description":"Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n","format":"uuid","title":"Group ID","type":"string"},"push_id":{"description":"A unique identifier for a push operation.","format":"uuid","title":"Push ID","type":"string"},"time":{"description":"The UTC time when the push occurred.","format":"date-time","type":"string"},"variant_id":{"description":"The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).","title":"Variant ID","type":"integer"}},"required":["push_id"],"title":"Associated Push","type":"object"},"session_id":{"description":"Represents the “session” of user activity. Absent if the application was initialized while backgrounded.","format":"uuid","title":"Session ID","type":"string"},"time_expired":{"description":"The date-time when the message was set to expire.","format":"date-time","type":"string"},"time_sent":{"description":"The date-time when the in-app message payload was sent to the device.","format":"date-time","type":"string"},"triggering_push":{"description":"The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.","properties":{"campaigns":{"description":"An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.","properties":{"categories":{"items":{"type":"string"},"type":"array"}},"title":"Campaigns Object","type":"object"},"group_id":{"description":"Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n","format":"uuid","title":"Group ID","type":"string"},"push_id":{"description":"A unique identifier for a push operation.","format":"uuid","title":"Push ID","type":"string"},"time":{"description":"The UTC time when the push occurred.","format":"date-time","type":"string"},"variant_id":{"description":"The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).","title":"Variant ID","type":"integer"}},"required":["push_id"],"title":"Associated Push","type":"object"},"type":{"description":"Indicates how the In-App Message expired.\n\n* `REPLACED`: The In-App message was replaced by a more current one. If type is `REPLACED`, the `replacing_push` key will be present.\n* `EXPIRED`: The In-App message exceeded it’s expiration date. If type is `EXPIRED`, then the `time` key will be present.\n* `ALREADY_DISPLAYED`: The message was opened directly (either from the lock screen or notification center). The Airship SDK will NOT display it again in the app, because the user is guaranteed to have seen it.","enum":["REPLACED","EXPIRED","ALREADY_DISPLAYED"],"type":"string"},"variant_id":{"description":"The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).","title":"Variant ID","type":"integer"}},"type":"object"},"id":{"description":"Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.","type":"string"},"occurred":{"description":"When the event occurred.","format":"date-time","type":"string"},"offset":{"description":"An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.","type":"string"},"processed":{"description":"When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.","format":"date-time","type":"string"},"type":{"enum":["IN_APP_MESSAGE_EXPIRATION"],"type":"string"}},"required":["id","device","type","occurred","processed","body"],"title":"In-App Message Expiration","type":"object","x-schema-tag":"Events"}
+{
+    "description": "Occurs when a new message has taken the place of another message, a message has passed its expiration, or because displaying the message in-app would be redundant. This event type may be latent; it is not emitted until the app becomes active.\n",
+    "properties": {
+        "body": {
+            "properties": {
+                "app_defined_id": {
+                    "description": "An identifier defined by the application if the In-App Message was created by the application logic, not the UA system. If this field is present, the event body will not contain `push_id`, `group_id`,  `variant_id`, or `triggering_push` fields.",
+                    "type": "string"
+                },
+                "group_id": {
+                    "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+                    "format": "uuid",
+                    "title": "Group ID",
+                    "type": "string"
+                },
+                "push_id": {
+                    "description": "A unique identifier for a push operation.",
+                    "format": "uuid",
+                    "title": "Push ID",
+                    "type": "string"
+                },
+                "replacing_push": {
+                    "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
+                    "properties": {
+                        "campaigns": {
+                            "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
+                            "properties": {
+                                "categories": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                }
+                            },
+                            "title": "Campaigns Object",
+                            "type": "object"
+                        },
+                        "group_id": {
+                            "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+                            "format": "uuid",
+                            "title": "Group ID",
+                            "type": "string"
+                        },
+                        "push_id": {
+                            "description": "A unique identifier for a push operation.",
+                            "format": "uuid",
+                            "title": "Push ID",
+                            "type": "string"
+                        },
+                        "time": {
+                            "description": "The UTC time when the push occurred.",
+                            "format": "date-time",
+                            "type": "string"
+                        },
+                        "variant_id": {
+                            "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+                            "title": "Variant ID",
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "push_id"
+                    ],
+                    "title": "Associated Push",
+                    "type": "object"
+                },
+                "session_id": {
+                    "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
+                    "format": "uuid",
+                    "title": "Session ID",
+                    "type": "string"
+                },
+                "time_expired": {
+                    "description": "The date-time when the message was set to expire.",
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "time_sent": {
+                    "description": "The date-time when the in-app message payload was sent to the device.",
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "triggering_push": {
+                    "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
+                    "properties": {
+                        "campaigns": {
+                            "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
+                            "properties": {
+                                "categories": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                }
+                            },
+                            "title": "Campaigns Object",
+                            "type": "object"
+                        },
+                        "group_id": {
+                            "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+                            "format": "uuid",
+                            "title": "Group ID",
+                            "type": "string"
+                        },
+                        "push_id": {
+                            "description": "A unique identifier for a push operation.",
+                            "format": "uuid",
+                            "title": "Push ID",
+                            "type": "string"
+                        },
+                        "time": {
+                            "description": "The UTC time when the push occurred.",
+                            "format": "date-time",
+                            "type": "string"
+                        },
+                        "variant_id": {
+                            "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+                            "title": "Variant ID",
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "push_id"
+                    ],
+                    "title": "Associated Push",
+                    "type": "object"
+                },
+                "type": {
+                    "description": "Indicates how the In-App Message expired.\n\n* `REPLACED`: The In-App message was replaced by a more current one. If type is `REPLACED`, the `replacing_push` key will be present.\n* `EXPIRED`: The In-App message exceeded it’s expiration date. If type is `EXPIRED`, then the `time` key will be present.\n* `ALREADY_DISPLAYED`: The message was opened directly (either from the lock screen or notification center). The Airship SDK will NOT display it again in the app, because the user is guaranteed to have seen it.",
+                    "enum": [
+                        "REPLACED",
+                        "EXPIRED",
+                        "ALREADY_DISPLAYED"
+                    ],
+                    "type": "string"
+                },
+                "variant_id": {
+                    "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+                    "title": "Variant ID",
+                    "type": "integer"
+                }
+            },
+            "type": "object"
+        },
+        "id": {
+            "description": "Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.",
+            "type": "string"
+        },
+        "occurred": {
+            "description": "When the event occurred.",
+            "format": "date-time",
+            "type": "string"
+        },
+        "offset": {
+            "description": "An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.",
+            "type": "string"
+        },
+        "processed": {
+            "description": "When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.",
+            "format": "date-time",
+            "type": "string"
+        },
+        "type": {
+            "enum": [
+                "IN_APP_MESSAGE_EXPIRATION"
+            ],
+            "type": "string"
+        }
+    },
+    "required": [
+        "id",
+        "device",
+        "type",
+        "occurred",
+        "processed",
+        "body"
+    ],
+    "title": "In-App Message Expiration",
+    "type": "object",
+    "x-schema-tag": "Events"
+}

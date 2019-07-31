@@ -1,1 +1,1615 @@
-{"allOf":[{"properties":{"id":{"description":"Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.","type":"string"},"occurred":{"description":"When the event occurred.","format":"date-time","type":"string"},"offset":{"description":"An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.","type":"string"},"processed":{"description":"When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.","format":"date-time","type":"string"},"type":{"description":"Compliance events are the only types of events returned by this event stream.\n","enum":["COMPLIANCE"],"type":"string"}},"required":["id","type","occurred","processed"],"type":"object"},{"discriminator":{"propertyName":"event_type"},"oneOf":[{"description":"An event that occurs when an email could not be delivered to a particular address. The `bounce_class` can provide more information about why the message bounced.\n","properties":{"body":{"description":"Contains the event subtype and additional properties about the event.","properties":{"event_type":{"enum":["bounce"],"type":"string"},"identifiers":{"properties":{"address":{"description":"The email address registered.","type":"string"}},"type":"object"},"properties":{"properties":{"bounce_class":{"description":"The bounce classifcation as specified in Sparkpost.","maximum":100,"minimum":1,"type":"integer"},"bounce_event_type":{"enum":["bounce"],"type":"string"},"email":{"description":"The email address that bounced.","format":"email","type":"string"},"sender":{"description":"The address that the bounced email came from (typically the sender address for your project in Airship).","type":"string"},"subject":{"description":"The subject line of the bounced email.","type":"string"}},"type":"object"}},"required":["event_type","properties","identifiers"],"type":"object"},"device":{"description":"Holds information about the email \"device\" (an individual email channel) the event occurred against.","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The email address of the channel the event occured against.","type":"string"},"device_type":{"description":"email compliance events use the EMAIL device type.","enum":["EMAIL"],"type":"string"},"named_user":{"description":"The named user that the channel is associated with; appears only if the channel is associated with a named user.","type":"string"}},"required":["device_type","delivery_address"],"title":"Email Device","type":"object"}},"required":["device","body"],"title":"Email Bounce Event","type":"object","x-schema-tag":"Email Compliance Events"},{"description":"An event that occurs for email addresses used as a part of a create-and-send message.","properties":{"body":{"description":"Contains the event subtype and additional properties about the event.","properties":{"event_type":{"enum":["create_and_send"],"type":"string"},"identifiers":{"properties":{"address":{"description":"The email address a message was sent to using the create-and-send (inline list) feature.","type":"string"}},"required":["address"],"type":"object"},"properties":{"description":"Properties for an email create-and-send event.","properties":{"channel_registered":{"description":"If true, a new channel was created to represent the identifiers in the event. If false, the address was already registered to Airship.","type":"boolean"},"commercial_opted_in":{"description":"The date and time when the `address` opted into commercial email messages.","format":"date-time","type":"string"},"transactional_opted_in":{"description":"The date and time when the `address` opted into transactional email messages.","format":"date-time","type":"string"}},"required":["channel_registered"],"type":"object"}},"required":["event_type","identifiers","properties"],"type":"object"},"device":{"description":"Holds information about the email \"device\" (an individual email channel) the event occurred against.","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The email address of the channel the event occured against.","type":"string"},"device_type":{"description":"email compliance events use the EMAIL device type.","enum":["EMAIL"],"type":"string"},"named_user":{"description":"The named user that the channel is associated with; appears only if the channel is associated with a named user.","type":"string"}},"required":["device_type","delivery_address"],"title":"Email Device","type":"object"}},"required":["device","body"],"title":"Email Create-and-Send Event Body","type":"object","x-schema-tag":"Email Compliance Events"},{"description":"An event that occurs when users register to receive email messages.","properties":{"body":{"description":"Contains the event subtype and additional properties about the event.","properties":{"event_type":{"enum":["registration"],"type":"string"},"identifiers":{"properties":{"address":{"description":"The email address registered.","type":"string"}},"type":"object"},"properties":{"properties":{"commercial_opted_in":{"description":"The date and time when the user opted into commercial email messages.","format":"date-time","type":"string"},"registration_type":{"description":"`create` indicates that a channel was created in Airship. `update` represents a `PUT` call to the email channel registration API.\n","enum":["create","update"],"type":"string"}},"required":["registration_type"],"type":"object"}},"required":["event_type","identifiers","properties"],"type":"object"},"device":{"description":"Holds information about the email \"device\" (an individual email channel) the event occurred against.","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The email address of the channel the event occured against.","type":"string"},"device_type":{"description":"email compliance events use the EMAIL device type.","enum":["EMAIL"],"type":"string"},"named_user":{"description":"The named user that the channel is associated with; appears only if the channel is associated with a named user.","type":"string"}},"required":["device_type","delivery_address"],"title":"Email Device","type":"object"}},"required":["device","body"],"title":"Email Registration Event","type":"object","x-schema-tag":"Email Compliance Events"},{"description":"A compliance event representing a user who unsubscribed from your email notifications.","properties":{"body":{"description":"Contains the event subtype and additional properties about the event.","properties":{"event_type":{"description":"Unsubscribe events are considered \"registration\" events; the \"registration_type\" indicates the type of registration occurring.","enum":["registration"],"type":"string"},"identifiers":{"properties":{"address":{"description":"The email address registered.","type":"string"}},"type":"object"},"properties":{"properties":{"message_type":{"description":"The message type that the user unsubscribed from.","enum":["commercial"],"type":"string"},"registration_type":{"enum":["unsubscribe"],"type":"string"}},"required":["registration_type","message_type"],"type":"object"}},"required":["event_type","identifiers","properties"],"type":"object"},"device":{"description":"Holds information about the email \"device\" (an individual email channel) the event occurred against.","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The email address of the channel the event occured against.","type":"string"},"device_type":{"description":"email compliance events use the EMAIL device type.","enum":["EMAIL"],"type":"string"},"named_user":{"description":"The named user that the channel is associated with; appears only if the channel is associated with a named user.","type":"string"}},"required":["device_type","delivery_address"],"title":"Email Device","type":"object"}},"required":["device","body"],"title":"Email Unsubscribe Event","type":"object","x-schema-tag":"Email Compliance Events"},{"description":"Occurs when an SMS user is registered via the [Register SMS Channel API](../ua/#operation/api/channels/sms/post).\nThis event is *only* emitted when an opt-in date is not submitted\nin the `POST` request. If an opt-in date *is* submitted, a `registration` event is emitted instead. Therefore, if you see this\nevent, a channel will not have\nbeen created yet and you will see a dummy value of \n`\"ffffffff-ffff-ffff-ffff-ffffffffffff\"` for the channel.\n","properties":{"body":{"description":"Contains the event subtype, identifiers, and additional properties about the event.","properties":{"event_type":{"description":"Indicates a registration was started via the Airship API without an opt-in date,\nand a message was sent to the end user with instructions on how to opt in.\n","enum":["api_initiate_opt_in"],"type":"string"},"identifiers":{"description":"Contains the sender and MSISDN for the event.","properties":{"msisdn":{"description":"The phone number of the user involved in the compliance event.","type":"string"},"sender":{"description":"The phone number or shortcode of the sender involved in the compliance event.","type":"string"}},"required":["sender","msisdn"],"title":"SMS Identifiers","type":"object"}},"required":["event_type","identifiers"],"type":"object"},"device":{"description":"Holds information about an SMS \"device\" (an individual SMS channel).","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The phone number for the channel.","format":"msisdn","type":"string"},"device_type":{"description":"SMS compliance events list the SMS device type.","enum":["SMS"],"type":"string"},"identifiers":{"description":"If present, the `identifiers` object holds the value for the `sender` property.","properties":{"sender":{"description":"The sender that the `delivery_address` received a message from.","type":"string"}},"required":["sender"],"type":"object"}},"required":["device_type"],"title":"SMS Device","type":"object"}},"required":["device","body"],"title":"SMS API Initiated Opt In Event","type":"object","x-schema-tag":"SMS Compliance Events"},{"description":"Occurs when an MSISDN is deactivated by a carrier. This event type does not contain additional `properties`.","properties":{"body":{"description":"Contains the event subtype, identifiers, and additional properties about the event.","properties":{"event_type":{"description":"The carrier deactivated the address.","enum":["carrier_deactivation"],"type":"string"},"identifiers":{"description":"Contains the sender and MSISDN for the event.","properties":{"msisdn":{"description":"The phone number of the user involved in the compliance event.","type":"string"},"sender":{"description":"The phone number or shortcode of the sender involved in the compliance event.","type":"string"}},"required":["sender","msisdn"],"title":"SMS Identifiers","type":"object"}},"required":["event_type","identifiers"],"type":"object"}},"required":["body"],"title":"SMS Carrier Deactivation Event","type":"object","x-schema-tag":"SMS Compliance Events"},{"description":"An event that occurs for SMS channels used as a part of a create-and-send message.","properties":{"body":{"description":"Contains the event subtype and additional properties about the event.","properties":{"event_type":{"enum":["create_and_send"],"type":"string"},"identifiers":{"description":"Contains the sender and MSISDN for the event.","properties":{"msisdn":{"description":"The phone number of the user involved in the compliance event.","type":"string"},"sender":{"description":"The phone number or shortcode of the sender involved in the compliance event.","type":"string"}},"required":["sender","msisdn"],"title":"SMS Identifiers","type":"object"},"properties":{"description":"Properties for an SMS create-and-send event.","properties":{"channel_registered":{"description":"If true, a new channel was created to represent the identifiers in the event. If false, the address was already registered to Airship.","type":"boolean"},"opted_in":{"description":"The date-and-time when the `msisdn` opted into messages from the `sender`.","format":"date-time","type":"string"}},"required":["channel_registered"],"type":"object"}},"required":["event_type","identifiers","properties"],"type":"object"},"device":{"description":"Holds information about an SMS \"device\" (an individual SMS channel).","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The phone number for the channel.","format":"msisdn","type":"string"},"device_type":{"description":"SMS compliance events list the SMS device type.","enum":["SMS"],"type":"string"},"identifiers":{"description":"If present, the `identifiers` object holds the value for the `sender` property.","properties":{"sender":{"description":"The sender that the `delivery_address` received a message from.","type":"string"}},"required":["sender"],"type":"object"}},"required":["device_type"],"title":"SMS Device","type":"object"}},"required":["device","body"],"title":"SMS Create-and-Send Event","type":"object","x-schema-tag":"SMS Compliance Events"},{"description":"Occurs when a mobile-originated keyword is matched, and elicits a custom response.","properties":{"body":{"description":"Contains the event subtype, identifiers, and additional properties about the event.","properties":{"event_type":{"description":"Occurs when a mobile-originated keyword generates a custom response.","enum":["custom_keyword_response"],"type":"string"},"identifiers":{"description":"Contains the sender and MSISDN for the event.","properties":{"msisdn":{"description":"The phone number of the user involved in the compliance event.","type":"string"},"sender":{"description":"The phone number or shortcode of the sender involved in the compliance event.","type":"string"}},"required":["sender","msisdn"],"title":"SMS Identifiers","type":"object"},"properties":{"description":"Contains properties specific to the `event_type`.","properties":{"inbound_message":{"description":"The body of the inbound (to Airship) text message. This is the message a user sent to opt into or out of messages. This text corresponds to the `keyword` if present.","type":"string"},"outbound_message":{"description":"The message you sent to the user represented in the event.","type":"string"}},"type":"object"}},"required":["event_type","identifiers","properties"],"type":"object"},"device":{"description":"Holds information about an SMS \"device\" (an individual SMS channel).","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The phone number for the channel.","format":"msisdn","type":"string"},"device_type":{"description":"SMS compliance events list the SMS device type.","enum":["SMS"],"type":"string"},"identifiers":{"description":"If present, the `identifiers` object holds the value for the `sender` property.","properties":{"sender":{"description":"The sender that the `delivery_address` received a message from.","type":"string"}},"required":["sender"],"type":"object"}},"required":["device_type"],"title":"SMS Device","type":"object"}},"required":["device","body"],"title":"SMS Custom Keyword Response Event","type":"object","x-schema-tag":"SMS Compliance Events"},{"description":"If a channel does not exist for the MSISDN/sender combination and your account is configured\nto create a channel if none exists in such instances, we will emit this event. The resulting channel will necessarily be opted out, awaiting an opt-in action by the user.\n","properties":{"body":{"description":"Contains the event subtype, identifiers, and additional properties about the event.","properties":{"event_type":{"description":"Indicates that a channel for the `sms` event type was created.","enum":["mobile_create_channel"],"type":"string"},"identifiers":{"description":"Contains the sender and MSISDN for the event.","properties":{"msisdn":{"description":"The phone number of the user involved in the compliance event.","type":"string"},"sender":{"description":"The phone number or shortcode of the sender involved in the compliance event.","type":"string"}},"required":["sender","msisdn"],"title":"SMS Identifiers","type":"object"},"properties":{"description":"Contains properties specific to the `event_type`.","properties":{"opted_in":{"description":"The date and time when the channel was registered.","format":"date-time + offset","type":"string"},"registration_type":{"description":"Indicates that the channel was registered with Airship.","enum":["create"],"type":"string"}},"type":"object"}},"required":["event_type","identifiers","properties"],"type":"object"},"device":{"description":"Holds information about an SMS \"device\" (an individual SMS channel).","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The phone number for the channel.","format":"msisdn","type":"string"},"device_type":{"description":"SMS compliance events list the SMS device type.","enum":["SMS"],"type":"string"},"identifiers":{"description":"If present, the `identifiers` object holds the value for the `sender` property.","properties":{"sender":{"description":"The sender that the `delivery_address` received a message from.","type":"string"}},"required":["sender"],"type":"object"}},"required":["device_type"],"title":"SMS Device","type":"object"}},"required":["device","body"],"title":"SMS Mobile Create Channel Event","type":"object","x-schema-tag":"SMS Compliance Events"},{"description":"Occurs when a mobile-originated message contains a recognized keyword.\nIf the user has never opted in to the Airship system, a dummy channel with the value\n`\"ffffffff-ffff-ffff-ffff-ffffffffffff\"` will be present.\n","properties":{"body":{"description":"Contains the event subtype, identifiers, and additional properties about the event.","properties":{"event_type":{"description":"Occurs when a mobile-originated event contains a recognized keyword.","enum":["mobile_keyword_matched"],"type":"string"},"identifiers":{"description":"Contains the sender and MSISDN for the event.","properties":{"msisdn":{"description":"The phone number of the user involved in the compliance event.","type":"string"},"sender":{"description":"The phone number or shortcode of the sender involved in the compliance event.","type":"string"}},"required":["sender","msisdn"],"title":"SMS Identifiers","type":"object"},"properties":{"description":"Contains properties specific to the `event_type`.","properties":{"inbound_message":{"description":"The body of the inbound (to Airship) text message. This is the message a user sent to opt into or out of messages. This text corresponds to the `keyword` if present.","type":"string"},"keyword":{"description":"Indicates that a mobile-originated message contained a recognized keyword.","type":"string"},"outbound_message":{"description":"The message you sent to the user represented in the event.","type":"string"}},"type":"object"}},"required":["event_type","identifiers","properties"],"type":"object"},"device":{"description":"Holds information about an SMS \"device\" (an individual SMS channel).","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The phone number for the channel.","format":"msisdn","type":"string"},"device_type":{"description":"SMS compliance events list the SMS device type.","enum":["SMS"],"type":"string"},"identifiers":{"description":"If present, the `identifiers` object holds the value for the `sender` property.","properties":{"sender":{"description":"The sender that the `delivery_address` received a message from.","type":"string"}},"required":["sender"],"type":"object"}},"required":["device_type"],"title":"SMS Device","type":"object"}},"required":["device","body"],"title":"SMS Mobile Keyword Matched Event","type":"object","x-schema-tag":"SMS Compliance Events"},{"description":"Occurs when a mobile-originated message *does not* contain a recognized keyword.\nIf the user has never opted in to the Airship system, a dummy channel with the value\n`\"ffffffff-ffff-ffff-ffff-ffffffffffff\"` will be present.\n","properties":{"body":{"description":"Contains the event subtype, identifiers, and additional properties about the event.","properties":{"event_type":{"description":"Occurs when a mobile-originated event does not contain a recognized keyword.","enum":["mobile_keyword_unmatched"],"type":"string"},"identifiers":{"description":"Contains the sender and MSISDN for the event.","properties":{"msisdn":{"description":"The phone number of the user involved in the compliance event.","type":"string"},"sender":{"description":"The phone number or shortcode of the sender involved in the compliance event.","type":"string"}},"required":["sender","msisdn"],"title":"SMS Identifiers","type":"object"},"properties":{"description":"Contains properties specific to the `event_type`.","properties":{"inbound_message":{"description":"The body of the inbound (to Airship) text message. This is the message a user sent to opt into or out of messages. This text corresponds to the `keyword` if present.","type":"string"},"outbound_message":{"description":"The message you sent to the user represented in the event.","type":"string"}},"type":"object"}},"required":["event_type","identifiers","properties"],"type":"object"},"device":{"description":"Holds information about an SMS \"device\" (an individual SMS channel).","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The phone number for the channel.","format":"msisdn","type":"string"},"device_type":{"description":"SMS compliance events list the SMS device type.","enum":["SMS"],"type":"string"},"identifiers":{"description":"If present, the `identifiers` object holds the value for the `sender` property.","properties":{"sender":{"description":"The sender that the `delivery_address` received a message from.","type":"string"}},"required":["sender"],"type":"object"}},"required":["device_type"],"title":"SMS Device","type":"object"}},"required":["device","body"],"title":"SMS Mobile Keyword Unmatched Event","type":"object","x-schema-tag":"SMS Compliance Events"},{"description":"Occurs when a user opts in to text messages via a keyword.","properties":{"body":{"description":"Contains the event subtype, identifiers, and additional properties about the event.","properties":{"event_type":{"description":"Indicates that the event represents a newly registered address.","enum":["mobile_opt_in"],"type":"string"},"identifiers":{"description":"Contains the sender and MSISDN for the event.","properties":{"msisdn":{"description":"The phone number of the user involved in the compliance event.","type":"string"},"sender":{"description":"The phone number or shortcode of the sender involved in the compliance event.","type":"string"}},"required":["sender","msisdn"],"title":"SMS Identifiers","type":"object"},"properties":{"description":"Contains properties specific to the `event_type`.","properties":{"inbound_message":{"description":"The body of the inbound (to Airship) text message. This is the message a user sent to opt into or out of messages. This text corresponds to the `keyword` if present.","type":"string"},"keyword":{"description":"The keyword the user sent to opt in.","type":"string"},"outbound_message":{"description":"The message you sent to the user represented in the event.","type":"string"}},"type":"object"}},"required":["event_type","identifiers","properties"],"type":"object"},"device":{"description":"Holds information about an SMS \"device\" (an individual SMS channel).","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The phone number for the channel.","format":"msisdn","type":"string"},"device_type":{"description":"SMS compliance events list the SMS device type.","enum":["SMS"],"type":"string"},"identifiers":{"description":"If present, the `identifiers` object holds the value for the `sender` property.","properties":{"sender":{"description":"The sender that the `delivery_address` received a message from.","type":"string"}},"required":["sender"],"type":"object"}},"required":["device_type"],"title":"SMS Device","type":"object"}},"required":["device","body"],"title":"SMS Mobile Opt In Event","type":"object","x-schema-tag":"SMS Compliance Events"},{"description":"Occurs when a user sends a MO message that matches a keyword with an opt-out action. If present, this event would supplant a `mobile_keyword_matched` event.\n","properties":{"body":{"description":"Contains the event subtype, identifiers, and additional properties about the event.","properties":{"event_type":{"description":"The event represents a user who opted out of notifications.","enum":["mobile_opt_out"],"type":"string"},"identifiers":{"description":"Contains the sender and MSISDN for the event.","properties":{"msisdn":{"description":"The phone number of the user involved in the compliance event.","type":"string"},"sender":{"description":"The phone number or shortcode of the sender involved in the compliance event.","type":"string"}},"required":["sender","msisdn"],"title":"SMS Identifiers","type":"object"},"properties":{"description":"Contains properties specific to the `event_type`.","properties":{"inbound_message":{"description":"The body of the inbound (to Airship) text message. This is the message a user sent to opt into or out of messages. This text corresponds to the `keyword` if present.","type":"string"},"keyword":{"description":"Indicates that the user responded to opt out of messages. The enumerated values represent default keywords, but any custom keywords that you configure to allow mobile opt-outs can also appear here.","enum":["STOP","STOPALL","UNSUBSCRIBE","CANCEL","END","QUIT","ARRET"],"type":"string"},"outbound_message":{"description":"The message you sent to the user represented in the event.","type":"string"}},"type":"object"}},"required":["event_type","identifiers","properties"],"type":"object"},"device":{"description":"Holds information about an SMS \"device\" (an individual SMS channel).","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The phone number for the channel.","format":"msisdn","type":"string"},"device_type":{"description":"SMS compliance events list the SMS device type.","enum":["SMS"],"type":"string"},"identifiers":{"description":"If present, the `identifiers` object holds the value for the `sender` property.","properties":{"sender":{"description":"The sender that the `delivery_address` received a message from.","type":"string"}},"required":["sender"],"type":"object"}},"required":["device_type"],"title":"SMS Device","type":"object"}},"required":["device","body"],"title":"SMS Mobile Opt Out Event","type":"object","x-schema-tag":"SMS Compliance Events"},{"allOf":[{"properties":{"device":{"description":"Holds information about an SMS \"device\" (an individual SMS channel).","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The phone number for the channel.","format":"msisdn","type":"string"},"device_type":{"description":"SMS compliance events list the SMS device type.","enum":["SMS"],"type":"string"},"identifiers":{"description":"If present, the `identifiers` object holds the value for the `sender` property.","properties":{"sender":{"description":"The sender that the `delivery_address` received a message from.","type":"string"}},"required":["sender"],"type":"object"}},"required":["device_type"],"title":"SMS Device","type":"object"},"id":{"description":"Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.","type":"string"},"occurred":{"description":"When the event occurred.","format":"date-time","type":"string"},"offset":{"description":"An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.","type":"string"},"processed":{"description":"When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.","format":"date-time","type":"string"},"type":{"description":"Compliance events are the only types of events returned by this event stream.\n","enum":["COMPLIANCE"],"type":"string"}},"type":"object"},{"properties":{"body":{"description":"Contains the event subtype, identifiers, and additional properties about the event.","properties":{"event_type":{"description":"The address opted out of notifications.","enum":["opted_out"],"type":"string"},"identifiers":{"description":"Contains the sender and MSISDN for the event.","properties":{"msisdn":{"description":"The phone number of the user involved in the compliance event.","type":"string"},"sender":{"description":"The phone number or shortcode of the sender involved in the compliance event.","type":"string"}},"required":["sender","msisdn"],"title":"SMS Identifiers","type":"object"}},"required":["event_type","identifiers"],"type":"object"}},"required":["body"],"type":"object"}],"description":"Occurs when a user is opted out of an SMS audience via the Airship API, i.e., not via an opt-out keyword. This event type does not contain additional `properties`.","title":"SMS Opted Out Event","x-schema-tag":"SMS Compliance Events"},{"description":"Occurs when a user opts in to receive SMS messages from you, via a call to the [SMS registration API](../ua/#operation/api/channels/sms/post).","properties":{"body":{"description":"Contains the event subtype, identifiers, and additional properties about the event.","properties":{"event_type":{"description":"Indicates that the event represents a newly registered address.","enum":["registration"],"type":"string"},"identifiers":{"description":"Contains the sender and MSISDN for the event.","properties":{"msisdn":{"description":"The phone number of the user involved in the compliance event.","type":"string"},"sender":{"description":"The phone number or shortcode of the sender involved in the compliance event.","type":"string"}},"required":["sender","msisdn"],"title":"SMS Identifiers","type":"object"},"properties":{"description":"Contains properties specific to the `event_type`.","properties":{"opted_in":{"description":"The date and time when the channel was registered.","format":"date-time + offset","type":"string"},"registration_type":{"description":"Indicates that the channel was registered with Airship.","enum":["create"],"type":"string"}},"required":["registration_type","opted_in"],"type":"object"}},"required":["event_type","identifiers","properties"],"type":"object"},"device":{"description":"Holds information about an SMS \"device\" (an individual SMS channel).","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The phone number for the channel.","format":"msisdn","type":"string"},"device_type":{"description":"SMS compliance events list the SMS device type.","enum":["SMS"],"type":"string"},"identifiers":{"description":"If present, the `identifiers` object holds the value for the `sender` property.","properties":{"sender":{"description":"The sender that the `delivery_address` received a message from.","type":"string"}},"required":["sender"],"type":"object"}},"required":["device_type"],"title":"SMS Device","type":"object"}},"required":["device","body"],"title":"SMS Registration Event","type":"object","x-schema-tag":"SMS Compliance Events"},{"description":"Occurs when the [SMS uninstall API](../ua/#operation/api/channels/sms/uninstall/post) is called.","properties":{"body":{"description":"Contains the event subtype, identifiers, and additional properties about the event.","properties":{"event_type":{"description":"The address was uninstalled.","enum":["uninstall"],"type":"string"},"identifiers":{"description":"Contains the sender and MSISDN for the event.","properties":{"msisdn":{"description":"The phone number of the user involved in the compliance event.","type":"string"},"sender":{"description":"The phone number or shortcode of the sender involved in the compliance event.","type":"string"}},"required":["sender","msisdn"],"title":"SMS Identifiers","type":"object"}},"required":["event_type","identifiers"],"type":"object"},"device":{"description":"Holds information about an SMS \"device\" (an individual SMS channel).","properties":{"channel":{"description":"The unique, platform-agnostic channel identifier for a device.","type":"string"},"delivery_address":{"description":"The phone number for the channel.","format":"msisdn","type":"string"},"device_type":{"description":"SMS compliance events list the SMS device type.","enum":["SMS"],"type":"string"},"identifiers":{"description":"If present, the `identifiers` object holds the value for the `sender` property.","properties":{"sender":{"description":"The sender that the `delivery_address` received a message from.","type":"string"}},"required":["sender"],"type":"object"}},"required":["device_type"],"title":"SMS Device","type":"object"}},"required":["device","body"],"title":"SMS Uninstalled Event","type":"object","x-schema-tag":"SMS Compliance Events"}]}],"description":"Events relating to regulatory compliance for email and SMS channels.","title":"Compliance Event","x-schema-tag":"Events"}
+{
+    "allOf": [
+        {
+            "properties": {
+                "id": {
+                    "description": "Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.",
+                    "type": "string"
+                },
+                "occurred": {
+                    "description": "When the event occurred.",
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "offset": {
+                    "description": "An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.",
+                    "type": "string"
+                },
+                "processed": {
+                    "description": "When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.",
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "Compliance events are the only types of events returned by this event stream.\n",
+                    "enum": [
+                        "COMPLIANCE"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "type",
+                "occurred",
+                "processed"
+            ],
+            "type": "object"
+        },
+        {
+            "discriminator": {
+                "propertyName": "event_type"
+            },
+            "oneOf": [
+                {
+                    "description": "An event that occurs when an email could not be delivered to a particular address. The `bounce_class` can provide more information about why the message bounced.\n",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "enum": [
+                                        "bounce"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "properties": {
+                                        "address": {
+                                            "description": "The email address registered.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "properties": {
+                                    "properties": {
+                                        "bounce_class": {
+                                            "description": "The bounce classifcation as specified in Sparkpost.",
+                                            "maximum": 100,
+                                            "minimum": 1,
+                                            "type": "integer"
+                                        },
+                                        "bounce_event_type": {
+                                            "enum": [
+                                                "bounce"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "description": "The email address that bounced.",
+                                            "format": "email",
+                                            "type": "string"
+                                        },
+                                        "sender": {
+                                            "description": "The address that the bounced email came from (typically the sender address for your project in Airship).",
+                                            "type": "string"
+                                        },
+                                        "subject": {
+                                            "description": "The subject line of the bounced email.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "properties",
+                                "identifiers"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The email address of the channel the event occured against.",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "email compliance events use the EMAIL device type.",
+                                    "enum": [
+                                        "EMAIL"
+                                    ],
+                                    "type": "string"
+                                },
+                                "named_user": {
+                                    "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "device_type",
+                                "delivery_address"
+                            ],
+                            "title": "Email Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "Email Bounce Event",
+                    "type": "object",
+                    "x-schema-tag": "Email Compliance Events"
+                },
+                {
+                    "description": "An event that occurs for email addresses used as a part of a create-and-send message.",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "enum": [
+                                        "create_and_send"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "properties": {
+                                        "address": {
+                                            "description": "The email address a message was sent to using the create-and-send (inline list) feature.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "address"
+                                    ],
+                                    "type": "object"
+                                },
+                                "properties": {
+                                    "description": "Properties for an email create-and-send event.",
+                                    "properties": {
+                                        "channel_registered": {
+                                            "description": "If true, a new channel was created to represent the identifiers in the event. If false, the address was already registered to Airship.",
+                                            "type": "boolean"
+                                        },
+                                        "commercial_opted_in": {
+                                            "description": "The date and time when the `address` opted into commercial email messages.",
+                                            "format": "date-time",
+                                            "type": "string"
+                                        },
+                                        "transactional_opted_in": {
+                                            "description": "The date and time when the `address` opted into transactional email messages.",
+                                            "format": "date-time",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "channel_registered"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers",
+                                "properties"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The email address of the channel the event occured against.",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "email compliance events use the EMAIL device type.",
+                                    "enum": [
+                                        "EMAIL"
+                                    ],
+                                    "type": "string"
+                                },
+                                "named_user": {
+                                    "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "device_type",
+                                "delivery_address"
+                            ],
+                            "title": "Email Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "Email Create-and-Send Event Body",
+                    "type": "object",
+                    "x-schema-tag": "Email Compliance Events"
+                },
+                {
+                    "description": "An event that occurs when users register to receive email messages.",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "enum": [
+                                        "registration"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "properties": {
+                                        "address": {
+                                            "description": "The email address registered.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "properties": {
+                                    "properties": {
+                                        "commercial_opted_in": {
+                                            "description": "The date and time when the user opted into commercial email messages.",
+                                            "format": "date-time",
+                                            "type": "string"
+                                        },
+                                        "registration_type": {
+                                            "description": "`create` indicates that a channel was created in Airship. `update` represents a `PUT` call to the email channel registration API.\n",
+                                            "enum": [
+                                                "create",
+                                                "update"
+                                            ],
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "registration_type"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers",
+                                "properties"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The email address of the channel the event occured against.",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "email compliance events use the EMAIL device type.",
+                                    "enum": [
+                                        "EMAIL"
+                                    ],
+                                    "type": "string"
+                                },
+                                "named_user": {
+                                    "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "device_type",
+                                "delivery_address"
+                            ],
+                            "title": "Email Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "Email Registration Event",
+                    "type": "object",
+                    "x-schema-tag": "Email Compliance Events"
+                },
+                {
+                    "description": "A compliance event representing a user who unsubscribed from your email notifications.",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "description": "Unsubscribe events are considered \"registration\" events; the \"registration_type\" indicates the type of registration occurring.",
+                                    "enum": [
+                                        "registration"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "properties": {
+                                        "address": {
+                                            "description": "The email address registered.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "properties": {
+                                    "properties": {
+                                        "message_type": {
+                                            "description": "The message type that the user unsubscribed from.",
+                                            "enum": [
+                                                "commercial"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "registration_type": {
+                                            "enum": [
+                                                "unsubscribe"
+                                            ],
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "registration_type",
+                                        "message_type"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers",
+                                "properties"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The email address of the channel the event occured against.",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "email compliance events use the EMAIL device type.",
+                                    "enum": [
+                                        "EMAIL"
+                                    ],
+                                    "type": "string"
+                                },
+                                "named_user": {
+                                    "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "device_type",
+                                "delivery_address"
+                            ],
+                            "title": "Email Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "Email Unsubscribe Event",
+                    "type": "object",
+                    "x-schema-tag": "Email Compliance Events"
+                },
+                {
+                    "description": "Occurs when an SMS user is registered via the [Register SMS Channel API](../ua/#operation/api/channels/sms/post).\nThis event is *only* emitted when an opt-in date is not submitted\nin the `POST` request. If an opt-in date *is* submitted, a `registration` event is emitted instead. Therefore, if you see this\nevent, a channel will not have\nbeen created yet and you will see a dummy value of \n`\"ffffffff-ffff-ffff-ffff-ffffffffffff\"` for the channel.\n",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "description": "Indicates a registration was started via the Airship API without an opt-in date,\nand a message was sent to the end user with instructions on how to opt in.\n",
+                                    "enum": [
+                                        "api_initiate_opt_in"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "Contains the sender and MSISDN for the event.",
+                                    "properties": {
+                                        "msisdn": {
+                                            "description": "The phone number of the user involved in the compliance event.",
+                                            "type": "string"
+                                        },
+                                        "sender": {
+                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender",
+                                        "msisdn"
+                                    ],
+                                    "title": "SMS Identifiers",
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The phone number for the channel.",
+                                    "format": "msisdn",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "SMS compliance events list the SMS device type.",
+                                    "enum": [
+                                        "SMS"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+                                    "properties": {
+                                        "sender": {
+                                            "description": "The sender that the `delivery_address` received a message from.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "device_type"
+                            ],
+                            "title": "SMS Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "SMS API Initiated Opt In Event",
+                    "type": "object",
+                    "x-schema-tag": "SMS Compliance Events"
+                },
+                {
+                    "description": "Occurs when an MSISDN is deactivated by a carrier. This event type does not contain additional `properties`.",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "description": "The carrier deactivated the address.",
+                                    "enum": [
+                                        "carrier_deactivation"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "Contains the sender and MSISDN for the event.",
+                                    "properties": {
+                                        "msisdn": {
+                                            "description": "The phone number of the user involved in the compliance event.",
+                                            "type": "string"
+                                        },
+                                        "sender": {
+                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender",
+                                        "msisdn"
+                                    ],
+                                    "title": "SMS Identifiers",
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers"
+                            ],
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "body"
+                    ],
+                    "title": "SMS Carrier Deactivation Event",
+                    "type": "object",
+                    "x-schema-tag": "SMS Compliance Events"
+                },
+                {
+                    "description": "An event that occurs for SMS channels used as a part of a create-and-send message.",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "enum": [
+                                        "create_and_send"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "Contains the sender and MSISDN for the event.",
+                                    "properties": {
+                                        "msisdn": {
+                                            "description": "The phone number of the user involved in the compliance event.",
+                                            "type": "string"
+                                        },
+                                        "sender": {
+                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender",
+                                        "msisdn"
+                                    ],
+                                    "title": "SMS Identifiers",
+                                    "type": "object"
+                                },
+                                "properties": {
+                                    "description": "Properties for an SMS create-and-send event.",
+                                    "properties": {
+                                        "channel_registered": {
+                                            "description": "If true, a new channel was created to represent the identifiers in the event. If false, the address was already registered to Airship.",
+                                            "type": "boolean"
+                                        },
+                                        "opted_in": {
+                                            "description": "The date-and-time when the `msisdn` opted into messages from the `sender`.",
+                                            "format": "date-time",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "channel_registered"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers",
+                                "properties"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The phone number for the channel.",
+                                    "format": "msisdn",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "SMS compliance events list the SMS device type.",
+                                    "enum": [
+                                        "SMS"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+                                    "properties": {
+                                        "sender": {
+                                            "description": "The sender that the `delivery_address` received a message from.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "device_type"
+                            ],
+                            "title": "SMS Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "SMS Create-and-Send Event",
+                    "type": "object",
+                    "x-schema-tag": "SMS Compliance Events"
+                },
+                {
+                    "description": "Occurs when a mobile-originated keyword is matched, and elicits a custom response.",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "description": "Occurs when a mobile-originated keyword generates a custom response.",
+                                    "enum": [
+                                        "custom_keyword_response"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "Contains the sender and MSISDN for the event.",
+                                    "properties": {
+                                        "msisdn": {
+                                            "description": "The phone number of the user involved in the compliance event.",
+                                            "type": "string"
+                                        },
+                                        "sender": {
+                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender",
+                                        "msisdn"
+                                    ],
+                                    "title": "SMS Identifiers",
+                                    "type": "object"
+                                },
+                                "properties": {
+                                    "description": "Contains properties specific to the `event_type`.",
+                                    "properties": {
+                                        "inbound_message": {
+                                            "description": "The body of the inbound (to Airship) text message. This is the message a user sent to opt into or out of messages. This text corresponds to the `keyword` if present.",
+                                            "type": "string"
+                                        },
+                                        "outbound_message": {
+                                            "description": "The message you sent to the user represented in the event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers",
+                                "properties"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The phone number for the channel.",
+                                    "format": "msisdn",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "SMS compliance events list the SMS device type.",
+                                    "enum": [
+                                        "SMS"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+                                    "properties": {
+                                        "sender": {
+                                            "description": "The sender that the `delivery_address` received a message from.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "device_type"
+                            ],
+                            "title": "SMS Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "SMS Custom Keyword Response Event",
+                    "type": "object",
+                    "x-schema-tag": "SMS Compliance Events"
+                },
+                {
+                    "description": "If a channel does not exist for the MSISDN/sender combination and your account is configured\nto create a channel if none exists in such instances, we will emit this event. The resulting channel will necessarily be opted out, awaiting an opt-in action by the user.\n",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "description": "Indicates that a channel for the `sms` event type was created.",
+                                    "enum": [
+                                        "mobile_create_channel"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "Contains the sender and MSISDN for the event.",
+                                    "properties": {
+                                        "msisdn": {
+                                            "description": "The phone number of the user involved in the compliance event.",
+                                            "type": "string"
+                                        },
+                                        "sender": {
+                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender",
+                                        "msisdn"
+                                    ],
+                                    "title": "SMS Identifiers",
+                                    "type": "object"
+                                },
+                                "properties": {
+                                    "description": "Contains properties specific to the `event_type`.",
+                                    "properties": {
+                                        "opted_in": {
+                                            "description": "The date and time when the channel was registered.",
+                                            "format": "date-time + offset",
+                                            "type": "string"
+                                        },
+                                        "registration_type": {
+                                            "description": "Indicates that the channel was registered with Airship.",
+                                            "enum": [
+                                                "create"
+                                            ],
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers",
+                                "properties"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The phone number for the channel.",
+                                    "format": "msisdn",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "SMS compliance events list the SMS device type.",
+                                    "enum": [
+                                        "SMS"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+                                    "properties": {
+                                        "sender": {
+                                            "description": "The sender that the `delivery_address` received a message from.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "device_type"
+                            ],
+                            "title": "SMS Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "SMS Mobile Create Channel Event",
+                    "type": "object",
+                    "x-schema-tag": "SMS Compliance Events"
+                },
+                {
+                    "description": "Occurs when a mobile-originated message contains a recognized keyword.\nIf the user has never opted in to the Airship system, a dummy channel with the value\n`\"ffffffff-ffff-ffff-ffff-ffffffffffff\"` will be present.\n",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "description": "Occurs when a mobile-originated event contains a recognized keyword.",
+                                    "enum": [
+                                        "mobile_keyword_matched"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "Contains the sender and MSISDN for the event.",
+                                    "properties": {
+                                        "msisdn": {
+                                            "description": "The phone number of the user involved in the compliance event.",
+                                            "type": "string"
+                                        },
+                                        "sender": {
+                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender",
+                                        "msisdn"
+                                    ],
+                                    "title": "SMS Identifiers",
+                                    "type": "object"
+                                },
+                                "properties": {
+                                    "description": "Contains properties specific to the `event_type`.",
+                                    "properties": {
+                                        "inbound_message": {
+                                            "description": "The body of the inbound (to Airship) text message. This is the message a user sent to opt into or out of messages. This text corresponds to the `keyword` if present.",
+                                            "type": "string"
+                                        },
+                                        "keyword": {
+                                            "description": "Indicates that a mobile-originated message contained a recognized keyword.",
+                                            "type": "string"
+                                        },
+                                        "outbound_message": {
+                                            "description": "The message you sent to the user represented in the event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers",
+                                "properties"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The phone number for the channel.",
+                                    "format": "msisdn",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "SMS compliance events list the SMS device type.",
+                                    "enum": [
+                                        "SMS"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+                                    "properties": {
+                                        "sender": {
+                                            "description": "The sender that the `delivery_address` received a message from.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "device_type"
+                            ],
+                            "title": "SMS Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "SMS Mobile Keyword Matched Event",
+                    "type": "object",
+                    "x-schema-tag": "SMS Compliance Events"
+                },
+                {
+                    "description": "Occurs when a mobile-originated message *does not* contain a recognized keyword.\nIf the user has never opted in to the Airship system, a dummy channel with the value\n`\"ffffffff-ffff-ffff-ffff-ffffffffffff\"` will be present.\n",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "description": "Occurs when a mobile-originated event does not contain a recognized keyword.",
+                                    "enum": [
+                                        "mobile_keyword_unmatched"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "Contains the sender and MSISDN for the event.",
+                                    "properties": {
+                                        "msisdn": {
+                                            "description": "The phone number of the user involved in the compliance event.",
+                                            "type": "string"
+                                        },
+                                        "sender": {
+                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender",
+                                        "msisdn"
+                                    ],
+                                    "title": "SMS Identifiers",
+                                    "type": "object"
+                                },
+                                "properties": {
+                                    "description": "Contains properties specific to the `event_type`.",
+                                    "properties": {
+                                        "inbound_message": {
+                                            "description": "The body of the inbound (to Airship) text message. This is the message a user sent to opt into or out of messages. This text corresponds to the `keyword` if present.",
+                                            "type": "string"
+                                        },
+                                        "outbound_message": {
+                                            "description": "The message you sent to the user represented in the event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers",
+                                "properties"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The phone number for the channel.",
+                                    "format": "msisdn",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "SMS compliance events list the SMS device type.",
+                                    "enum": [
+                                        "SMS"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+                                    "properties": {
+                                        "sender": {
+                                            "description": "The sender that the `delivery_address` received a message from.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "device_type"
+                            ],
+                            "title": "SMS Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "SMS Mobile Keyword Unmatched Event",
+                    "type": "object",
+                    "x-schema-tag": "SMS Compliance Events"
+                },
+                {
+                    "description": "Occurs when a user opts in to text messages via a keyword.",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "description": "Indicates that the event represents a newly registered address.",
+                                    "enum": [
+                                        "mobile_opt_in"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "Contains the sender and MSISDN for the event.",
+                                    "properties": {
+                                        "msisdn": {
+                                            "description": "The phone number of the user involved in the compliance event.",
+                                            "type": "string"
+                                        },
+                                        "sender": {
+                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender",
+                                        "msisdn"
+                                    ],
+                                    "title": "SMS Identifiers",
+                                    "type": "object"
+                                },
+                                "properties": {
+                                    "description": "Contains properties specific to the `event_type`.",
+                                    "properties": {
+                                        "inbound_message": {
+                                            "description": "The body of the inbound (to Airship) text message. This is the message a user sent to opt into or out of messages. This text corresponds to the `keyword` if present.",
+                                            "type": "string"
+                                        },
+                                        "keyword": {
+                                            "description": "The keyword the user sent to opt in.",
+                                            "type": "string"
+                                        },
+                                        "outbound_message": {
+                                            "description": "The message you sent to the user represented in the event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers",
+                                "properties"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The phone number for the channel.",
+                                    "format": "msisdn",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "SMS compliance events list the SMS device type.",
+                                    "enum": [
+                                        "SMS"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+                                    "properties": {
+                                        "sender": {
+                                            "description": "The sender that the `delivery_address` received a message from.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "device_type"
+                            ],
+                            "title": "SMS Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "SMS Mobile Opt In Event",
+                    "type": "object",
+                    "x-schema-tag": "SMS Compliance Events"
+                },
+                {
+                    "description": "Occurs when a user sends a MO message that matches a keyword with an opt-out action. If present, this event would supplant a `mobile_keyword_matched` event.\n",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "description": "The event represents a user who opted out of notifications.",
+                                    "enum": [
+                                        "mobile_opt_out"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "Contains the sender and MSISDN for the event.",
+                                    "properties": {
+                                        "msisdn": {
+                                            "description": "The phone number of the user involved in the compliance event.",
+                                            "type": "string"
+                                        },
+                                        "sender": {
+                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender",
+                                        "msisdn"
+                                    ],
+                                    "title": "SMS Identifiers",
+                                    "type": "object"
+                                },
+                                "properties": {
+                                    "description": "Contains properties specific to the `event_type`.",
+                                    "properties": {
+                                        "inbound_message": {
+                                            "description": "The body of the inbound (to Airship) text message. This is the message a user sent to opt into or out of messages. This text corresponds to the `keyword` if present.",
+                                            "type": "string"
+                                        },
+                                        "keyword": {
+                                            "description": "Indicates that the user responded to opt out of messages. The enumerated values represent default keywords, but any custom keywords that you configure to allow mobile opt-outs can also appear here.",
+                                            "enum": [
+                                                "STOP",
+                                                "STOPALL",
+                                                "UNSUBSCRIBE",
+                                                "CANCEL",
+                                                "END",
+                                                "QUIT",
+                                                "ARRET"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "outbound_message": {
+                                            "description": "The message you sent to the user represented in the event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers",
+                                "properties"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The phone number for the channel.",
+                                    "format": "msisdn",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "SMS compliance events list the SMS device type.",
+                                    "enum": [
+                                        "SMS"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+                                    "properties": {
+                                        "sender": {
+                                            "description": "The sender that the `delivery_address` received a message from.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "device_type"
+                            ],
+                            "title": "SMS Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "SMS Mobile Opt Out Event",
+                    "type": "object",
+                    "x-schema-tag": "SMS Compliance Events"
+                },
+                {
+                    "allOf": [
+                        {
+                            "properties": {
+                                "device": {
+                                    "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+                                    "properties": {
+                                        "channel": {
+                                            "description": "The unique, platform-agnostic channel identifier for a device.",
+                                            "type": "string"
+                                        },
+                                        "delivery_address": {
+                                            "description": "The phone number for the channel.",
+                                            "format": "msisdn",
+                                            "type": "string"
+                                        },
+                                        "device_type": {
+                                            "description": "SMS compliance events list the SMS device type.",
+                                            "enum": [
+                                                "SMS"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "identifiers": {
+                                            "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+                                            "properties": {
+                                                "sender": {
+                                                    "description": "The sender that the `delivery_address` received a message from.",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "sender"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    },
+                                    "required": [
+                                        "device_type"
+                                    ],
+                                    "title": "SMS Device",
+                                    "type": "object"
+                                },
+                                "id": {
+                                    "description": "Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.",
+                                    "type": "string"
+                                },
+                                "occurred": {
+                                    "description": "When the event occurred.",
+                                    "format": "date-time",
+                                    "type": "string"
+                                },
+                                "offset": {
+                                    "description": "An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.",
+                                    "type": "string"
+                                },
+                                "processed": {
+                                    "description": "When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.",
+                                    "format": "date-time",
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "description": "Compliance events are the only types of events returned by this event stream.\n",
+                                    "enum": [
+                                        "COMPLIANCE"
+                                    ],
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        {
+                            "properties": {
+                                "body": {
+                                    "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+                                    "properties": {
+                                        "event_type": {
+                                            "description": "The address opted out of notifications.",
+                                            "enum": [
+                                                "opted_out"
+                                            ],
+                                            "type": "string"
+                                        },
+                                        "identifiers": {
+                                            "description": "Contains the sender and MSISDN for the event.",
+                                            "properties": {
+                                                "msisdn": {
+                                                    "description": "The phone number of the user involved in the compliance event.",
+                                                    "type": "string"
+                                                },
+                                                "sender": {
+                                                    "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "sender",
+                                                "msisdn"
+                                            ],
+                                            "title": "SMS Identifiers",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "required": [
+                                        "event_type",
+                                        "identifiers"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "body"
+                            ],
+                            "type": "object"
+                        }
+                    ],
+                    "description": "Occurs when a user is opted out of an SMS audience via the Airship API, i.e., not via an opt-out keyword. This event type does not contain additional `properties`.",
+                    "title": "SMS Opted Out Event",
+                    "x-schema-tag": "SMS Compliance Events"
+                },
+                {
+                    "description": "Occurs when a user opts in to receive SMS messages from you, via a call to the [SMS registration API](../ua/#operation/api/channels/sms/post).",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "description": "Indicates that the event represents a newly registered address.",
+                                    "enum": [
+                                        "registration"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "Contains the sender and MSISDN for the event.",
+                                    "properties": {
+                                        "msisdn": {
+                                            "description": "The phone number of the user involved in the compliance event.",
+                                            "type": "string"
+                                        },
+                                        "sender": {
+                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender",
+                                        "msisdn"
+                                    ],
+                                    "title": "SMS Identifiers",
+                                    "type": "object"
+                                },
+                                "properties": {
+                                    "description": "Contains properties specific to the `event_type`.",
+                                    "properties": {
+                                        "opted_in": {
+                                            "description": "The date and time when the channel was registered.",
+                                            "format": "date-time + offset",
+                                            "type": "string"
+                                        },
+                                        "registration_type": {
+                                            "description": "Indicates that the channel was registered with Airship.",
+                                            "enum": [
+                                                "create"
+                                            ],
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "registration_type",
+                                        "opted_in"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers",
+                                "properties"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The phone number for the channel.",
+                                    "format": "msisdn",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "SMS compliance events list the SMS device type.",
+                                    "enum": [
+                                        "SMS"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+                                    "properties": {
+                                        "sender": {
+                                            "description": "The sender that the `delivery_address` received a message from.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "device_type"
+                            ],
+                            "title": "SMS Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "SMS Registration Event",
+                    "type": "object",
+                    "x-schema-tag": "SMS Compliance Events"
+                },
+                {
+                    "description": "Occurs when the [SMS uninstall API](../ua/#operation/api/channels/sms/uninstall/post) is called.",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+                            "properties": {
+                                "event_type": {
+                                    "description": "The address was uninstalled.",
+                                    "enum": [
+                                        "uninstall"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "Contains the sender and MSISDN for the event.",
+                                    "properties": {
+                                        "msisdn": {
+                                            "description": "The phone number of the user involved in the compliance event.",
+                                            "type": "string"
+                                        },
+                                        "sender": {
+                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender",
+                                        "msisdn"
+                                    ],
+                                    "title": "SMS Identifiers",
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The phone number for the channel.",
+                                    "format": "msisdn",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "SMS compliance events list the SMS device type.",
+                                    "enum": [
+                                        "SMS"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+                                    "properties": {
+                                        "sender": {
+                                            "description": "The sender that the `delivery_address` received a message from.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "device_type"
+                            ],
+                            "title": "SMS Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "SMS Uninstalled Event",
+                    "type": "object",
+                    "x-schema-tag": "SMS Compliance Events"
+                }
+            ]
+        }
+    ],
+    "description": "Events relating to regulatory compliance for email and SMS channels.",
+    "title": "Compliance Event",
+    "x-schema-tag": "Events"
+}
