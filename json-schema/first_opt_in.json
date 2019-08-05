@@ -1,0 +1,102 @@
+{
+    "description": "This event appears in the stream when a channel is first opted in. This event is specific to email (commercial), sms and open channels.",
+    "properties": {
+        "device": {
+            "oneOf": [
+                {
+                    "description": "Information about the SMS or Email device related to an event.",
+                    "properties": {
+                        "channel": {
+                            "description": "the channel identifier",
+                            "type": "string"
+                        },
+                        "delivery_address": {
+                            "description": "* If 'device_type' is 'SMS', this field shows the MSISDN.\n* If `device_type` is `EMAIL`, this field shows the email address.\n",
+                            "type": "string"
+                        },
+                        "device_type": {
+                            "description": "The platform that the channel is on.",
+                            "enum": [
+                                "EMAIL",
+                                "SMS"
+                            ],
+                            "type": "string"
+                        },
+                        "named_user_id": {
+                            "description": "The named user the channel is associated with.",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "channel",
+                        "device_type"
+                    ],
+                    "title": "Device Information for SMS and/or Email",
+                    "type": "object",
+                    "x-schema-tag": "Device Information"
+                },
+                {
+                    "description": "Information about open channel users.",
+                    "properties": {
+                        "channel": {
+                            "description": "The unique, platform-agnostic channel identifier for a device.",
+                            "type": "string"
+                        },
+                        "device_type": {
+                            "description": "The platform that the channel is on.",
+                            "enum": [
+                                "OPEN"
+                            ],
+                            "type": "string"
+                        },
+                        "named_user_id": {
+                            "description": "the named user identifier for the device.",
+                            "type": "string"
+                        },
+                        "open_platform_name": {
+                            "description": "If `device_type` is set to `OPEN`, this field shows the full name of the platform.",
+                            "type": "string"
+                        }
+                    },
+                    "title": "Open Channel Device Information",
+                    "type": "object",
+                    "x-schema-tag": "Device Information"
+                }
+            ]
+        },
+        "id": {
+            "description": "Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.",
+            "type": "string"
+        },
+        "occurred": {
+            "description": "When the event occurred.",
+            "format": "date-time",
+            "type": "string"
+        },
+        "offset": {
+            "description": "An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.",
+            "type": "string"
+        },
+        "processed": {
+            "description": "When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.",
+            "format": "date-time",
+            "type": "string"
+        },
+        "type": {
+            "enum": [
+                "FIRST_OPT_IN"
+            ],
+            "type": "string"
+        }
+    },
+    "required": [
+        "id",
+        "device",
+        "type",
+        "occurred",
+        "processed"
+    ],
+    "title": "First opt-in",
+    "type": "object",
+    "x-schema-tag": "Events"
+}

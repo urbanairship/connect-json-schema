@@ -1,27 +1,42 @@
 {
-    "description": "Occurs when a user has finished viewing a screen. It is up to you to instrument your application with names for each screen. Doing so will allow you to deterimine the user’s path by filtering on the fields in the table below.\n",
+    "description": "Occurs when a push fails during communication with a third party, like APNS or GCM. This typically indicates that the user has uninstalled the app or otherwise invalidated the last-registered credentials stored in Airship. The event contains the rejected push and the group, variant, or campaigns the push belonged to.\n\n\nDevice information for the device that did not receive the push is included with `SEND_REJECTED` events.\n",
     "properties": {
         "body": {
             "properties": {
-                "duration": {
-                    "description": "The number of milliseconds that the user was on the screen.",
-                    "type": "integer"
+                "campaigns": {
+                    "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
+                    "properties": {
+                        "categories": {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "title": "Campaigns Object",
+                    "type": "object"
                 },
-                "previous_screen": {
-                    "description": "The name assigned to the screen the user was on prior to the `viewed_screen`.",
-                    "type": "string"
-                },
-                "session_id": {
-                    "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
+                "group_id": {
+                    "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
                     "format": "uuid",
-                    "title": "Session ID",
+                    "title": "Group ID",
                     "type": "string"
                 },
-                "viewed_screen": {
-                    "description": "The name assigned to the screen that the user left.",
+                "push_id": {
+                    "description": "A unique identifier for a push operation.",
+                    "format": "uuid",
+                    "title": "Push ID",
                     "type": "string"
+                },
+                "variant_id": {
+                    "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+                    "title": "Variant ID",
+                    "type": "integer"
                 }
             },
+            "required": [
+                "push_id"
+            ],
             "type": "object"
         },
         "device": {
@@ -210,7 +225,7 @@
         },
         "type": {
             "enum": [
-                "SCREEN_VIEWED"
+                "SEND_REJECTED"
             ],
             "type": "string"
         }
@@ -223,7 +238,7 @@
         "processed",
         "body"
     ],
-    "title": "Screen Viewed",
+    "title": "Send Rejected",
     "type": "object",
     "x-schema-tag": "Events"
 }
