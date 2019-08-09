@@ -22,6 +22,18 @@
                     "title": "Group ID",
                     "type": "string"
                 },
+                "properties": {
+                    "properties": {
+                        "original_url": {
+                            "description": "The URL represented by the Airship-shortened link.",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "original_url"
+                    ],
+                    "type": "object"
+                },
                 "push_id": {
                     "description": "A unique identifier for a push operation.",
                     "format": "uuid",
@@ -30,7 +42,8 @@
                 }
             },
             "required": [
-                "push_id"
+                "push_id",
+                "properties"
             ],
             "type": "object"
         },
