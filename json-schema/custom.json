@@ -1015,42 +1015,116 @@
                                     "type": "string"
                                 },
                                 "name": {
-                                    "description": "The name of the delivery report as specified by the vendor. Most events reference the status of the message with reference to the short message service center (SMSC) — the server that receives your message and dispatches it to your audience.\n\n* queued — Message is queued within REST API system and will be dispatched according to the rate of the account.\n* dispatched — Message has been dispatched and accepted for delivery by the SMSC.\n* aborted — Message was aborted before reaching SMSC.\n* rejected — Message was rejected by SMSC.\n* delivered — Message has been delivered.\n* failed — Message failed to be delivered.\n* expired — Message expired before delivery to SMSC. This may happen if the expiry time for the message was very short.\n* unknown — Message was delivered to SMSC but no Delivery Receipt has been received or a Delivery Receipt that could not be interpreted was received.\n",
+                                    "description": "The name of the delivery report as specified by the vendor. Most events reference the status of the message with reference to the short message service center (SMSC) — the server that receives your message and dispatches it to your audience.\n\n* dispatched — Message has been dispatched and accepted for delivery by the SMSC.\n* aborted — Message was aborted before reaching SMSC.\n* rejected — Message was rejected by SMSC.\n* delivered — Message has been delivered.\n* failed — Message failed to be delivered.\n* expired — Message expired before delivery to SMSC. This may happen if the expiry time for the message was very short.\n* unknown — Message was delivered to SMSC but no Delivery Receipt has been received or a Delivery Receipt that could not be interpreted was received.\n* undeliverable — Message cannot be delivered.\n",
                                     "enum": [
-                                        "queued",
                                         "dispatched",
                                         "aborted",
                                         "rejected",
                                         "delivered",
                                         "failed",
                                         "expired",
-                                        "unknown"
+                                        "unknown",
+                                        "undeliverable"
                                     ],
                                     "type": "string"
                                 },
                                 "properties": {
-                                    "properties": {
-                                        "sender": {
-                                            "description": "The number or shortcode that the message originated from.",
-                                            "type": "integer"
-                                        },
-                                        "vendor": {
-                                            "enum": [
-                                                "CLX"
+                                    "oneOf": [
+                                        {
+                                            "description": "A delivery report for SMS.\n",
+                                            "properties": {
+                                                "sender": {
+                                                    "description": "The number or shortcode that the message originated from.",
+                                                    "type": "integer"
+                                                },
+                                                "vendor": {
+                                                    "description": "The delivery service for the message.",
+                                                    "enum": [
+                                                        "CLX",
+                                                        "TYNTEC"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "vendorDeliveryId": {
+                                                    "description": "A unique identifier for the message from the SMS vendor.",
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "sender",
+                                                "vendor",
+                                                "vendorDeliveryId"
                                             ],
-                                            "type": "string"
+                                            "title": "SMS Delivery Properties",
+                                            "type": "object"
                                         },
-                                        "vendorDeliveryId": {
-                                            "description": "A unique identifier for the message from the SMS vendor",
-                                            "type": "string"
+                                        {
+                                            "description": "A delivery report for MMS.",
+                                            "properties": {
+                                                "carrier_id": {
+                                                    "description": "Identifies the carrier the message was sent through.",
+                                                    "type": "string"
+                                                },
+                                                "handset": {
+                                                    "description": "The profile of the handset that received the message. This information is only present if the `result_status` is `N102`.",
+                                                    "type": "string"
+                                                },
+                                                "result_code": {
+                                                    "description": "A status code from the vendor, if applicable.",
+                                                    "enum": [
+                                                        "N101",
+                                                        "N102",
+                                                        "E101",
+                                                        "E102"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "result_status": {
+                                                    "enum": [
+                                                        "Message Sent",
+                                                        "Message Sent/Delivered",
+                                                        "Message Failed",
+                                                        "Message,Sent/Expired",
+                                                        "Message Sent/Rejected",
+                                                        "Message Sent/Failed",
+                                                        "Message Sent/Not Supported"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "sender": {
+                                                    "description": "The number or shortcode that the message originated from.",
+                                                    "type": "integer"
+                                                },
+                                                "sent_as": {
+                                                    "description": "Indicates whether the MMS was delivered as MMS (binary) or SMS (HTML).\n",
+                                                    "enum": [
+                                                        "MMS",
+                                                        "SMS"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "tracking_Id": {
+                                                    "description": "An ID assigned by the delivery service (CLX Only).",
+                                                    "type": "string"
+                                                },
+                                                "vendor": {
+                                                    "description": "The delivery service for the message.",
+                                                    "enum": [
+                                                        "CLX"
+                                                    ],
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "tracking_id",
+                                                "vendor",
+                                                "sender",
+                                                "result_code"
+                                            ],
+                                            "title": "MMS Delivery Properties",
+                                            "type": "object"
                                         }
-                                    },
-                                    "required": [
-                                        "sender",
-                                        "vendor",
-                                        "vendorDeliveryId"
-                                    ],
-                                    "type": "object"
+                                    ]
                                 },
                                 "source": {
                                     "enum": [
