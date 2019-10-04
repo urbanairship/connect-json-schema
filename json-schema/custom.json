@@ -906,7 +906,7 @@
                                 },
                                 "source": {
                                     "enum": [
-                                        "SDK"
+                                        "API"
                                     ],
                                     "type": "string"
                                 },
