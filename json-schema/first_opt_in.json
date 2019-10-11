@@ -31,7 +31,7 @@
                         "channel",
                         "device_type"
                     ],
-                    "title": "Device Information for SMS and Email",
+                    "title": "Device Information for SMS and/or Email",
                     "type": "object",
                     "x-schema-tag": "Device Information"
                 },
