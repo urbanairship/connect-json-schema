@@ -414,7 +414,7 @@
                     "x-schema-tag": "Email Compliance Events"
                 },
                 {
-                    "description": "Occurs when an SMS user is registered via the [Register SMS Channel API](../ua/#operation/api/channels/sms/post).\nThis event is *only* emitted when an opt-in date is not submitted\nin the `POST` request. If an opt-in date *is* submitted, a `registration` event is emitted instead. Therefore, if you see this\nevent, a channel will not have\nbeen created yet and you will see a dummy value of \n`\"ffffffff-ffff-ffff-ffff-ffffffffffff\"` for the channel.\n",
+                    "description": "Occurs when an SMS user is registered via the [SMS Channel Registration API](../ua/#operation/api/channels/sms/post) without an `opted_in` value — indicating that the user has initiated, but not completed, the registration process. While this event contains a `channel_id`, you cannot send messages to this channel until the associated user completes the opt-in process (indicated by a `mobile_opt_in` event). \n",
                     "properties": {
                         "body": {
                             "description": "Contains the event subtype, identifiers, and additional properties about the event.",
@@ -861,7 +861,7 @@
                     "x-schema-tag": "SMS Compliance Events"
                 },
                 {
-                    "description": "Occurs when a mobile-originated message contains a recognized keyword.\nIf the user has never opted in to the Airship system, a dummy channel with the value\n`\"ffffffff-ffff-ffff-ffff-ffffffffffff\"` will be present.\n",
+                    "description": "Occurs when a mobile-originated message contains a recognized keyword.\n",
                     "properties": {
                         "body": {
                             "description": "Contains the event subtype, identifiers, and additional properties about the event.",
@@ -967,7 +967,7 @@
                     "x-schema-tag": "SMS Compliance Events"
                 },
                 {
-                    "description": "Occurs when a mobile-originated message *does not* contain a recognized keyword.\nIf the user has never opted in to the Airship system, a dummy channel with the value\n`\"ffffffff-ffff-ffff-ffff-ffffffffffff\"` will be present.\n",
+                    "description": "Occurs when a mobile-originated message *does not* contain a recognized keyword.\n",
                     "properties": {
                         "body": {
                             "description": "Contains the event subtype, identifiers, and additional properties about the event.",
@@ -1445,14 +1445,15 @@
                                     "description": "Contains properties specific to the `event_type`.",
                                     "properties": {
                                         "opted_in": {
-                                            "description": "The date and time when the channel was registered.",
-                                            "format": "date-time + offset",
+                                            "description": "The ISO 8601 datetime (UTC) when the channel opted-in to notifications.",
+                                            "format": "date-time",
                                             "type": "string"
                                         },
                                         "registration_type": {
-                                            "description": "Indicates that the channel was registered with Airship.",
+                                            "description": "Indicates whether the channel was created or updated.",
                                             "enum": [
-                                                "create"
+                                                "create",
+                                                "update"
                                             ],
                                             "type": "string"
                                         }
@@ -1603,6 +1604,93 @@
                         "body"
                     ],
                     "title": "SMS Uninstalled Event",
+                    "type": "object",
+                    "x-schema-tag": "SMS Compliance Events"
+                },
+                {
+                    "description": "Occurs when Airship sends an SMS message to a user. The message represented by this event could be a response to an individual mobile-originated (MO) message, or a message initiated from the Airship UI/API.\n",
+                    "properties": {
+                        "body": {
+                            "description": "Contains the Compliance event subtype and properties specific to the event subtype.",
+                            "properties": {
+                                "event_type": {
+                                    "description": "Airship has emitted a mobile-terminated message.",
+                                    "enum": [
+                                        "mobile_terminated_message"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "Contains the sender and MSISDN for the event.",
+                                    "properties": {
+                                        "msisdn": {
+                                            "description": "The phone number of the user involved in the compliance event.",
+                                            "type": "string"
+                                        },
+                                        "sender": {
+                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender",
+                                        "msisdn"
+                                    ],
+                                    "title": "SMS Identifiers",
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "event_type",
+                                "identifiers"
+                            ],
+                            "type": "object"
+                        },
+                        "device": {
+                            "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+                            "properties": {
+                                "channel": {
+                                    "description": "The unique, platform-agnostic channel identifier for a device.",
+                                    "type": "string"
+                                },
+                                "delivery_address": {
+                                    "description": "The phone number for the channel.",
+                                    "format": "msisdn",
+                                    "type": "string"
+                                },
+                                "device_type": {
+                                    "description": "SMS compliance events list the SMS device type.",
+                                    "enum": [
+                                        "SMS"
+                                    ],
+                                    "type": "string"
+                                },
+                                "identifiers": {
+                                    "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+                                    "properties": {
+                                        "sender": {
+                                            "description": "The sender that the `delivery_address` received a message from.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "sender"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "device_type"
+                            ],
+                            "title": "SMS Device",
+                            "type": "object"
+                        }
+                    },
+                    "required": [
+                        "device",
+                        "body"
+                    ],
+                    "title": "SMS Mobile Terminated Message Event",
                     "type": "object",
                     "x-schema-tag": "SMS Compliance Events"
                 }
