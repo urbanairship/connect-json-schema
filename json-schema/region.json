@@ -1,5 +1,5 @@
 {
-    "description": "Region Events are emitted when a device enters or exits a geofence or the range of any of a set of bluetooth beacons. Region events require a Gimbal integration. Events for Gimbal customers include the Gimbal application instance identifer as `com.urbanairship.gimbal.aii` within the `identifiers` object. \n",
+    "description": "Region Events are emitted when a device enters or exits a geofence or the range of any of a set of bluetooth beacons. Region events require a Gimbal integration. Events for Gimbal customers include the Gimbal application instance identifer as `com.urbanairship.gimbal.aii` within the `identifiers` object.\n",
     "properties": {
         "body": {
             "properties": {

@@ -1,5 +1,5 @@
 {
-    "description": "Occurs when you initiate a push through the API or dashboard.\n\nAirship fulfills delivery over a time interval with a number of child pushes, each with a unique Push ID and a common Group ID. There is no guarantee that push body events (defined in Push Body Event) for the child pushes fulfilling a group will appear in the stream.\n",
+    "description": "Occurs when you initiate a push, automation, or journey.\n\nAirship fulfills delivery over a time interval with a number of child pushes, each with a unique Push ID and a common Group ID. There is no guarantee that push body events (defined in Push Body Event) for the child pushes fulfilling a group will appear in the stream.\n\n**Note:** When you start, pause, or publish a journey, Airship emits a `push_body` event for the journey itself, and each message contained within the journey (i.e. messages +1). After you start a journey, Airship does not issue subsequent `push_body` events for the journey unless you pause or publish changes to the journey.\n",
     "properties": {
         "body": {
             "properties": {

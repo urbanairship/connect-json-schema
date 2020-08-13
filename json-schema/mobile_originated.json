@@ -19,7 +19,7 @@
                             "type": "string"
                         },
                         "sender": {
-                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                            "description": "The phone number or short code of the sender involved in the compliance event.",
                             "type": "string"
                         }
                     },
