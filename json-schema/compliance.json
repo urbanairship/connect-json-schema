@@ -414,7 +414,7 @@
                     "x-schema-tag": "Email Compliance Events"
                 },
                 {
-                    "description": "Occurs when an SMS user is registered via the [Register SMS Channel API](../ua/#operation/api/channels/sms/post).\nThis event is *only* emitted when an opt-in date is not submitted\nin the `POST` request. If an opt-in date *is* submitted, a `registration` event is emitted instead. Therefore, if you see this\nevent, a channel will not have\nbeen created yet and you will see a dummy value of \n`\"ffffffff-ffff-ffff-ffff-ffffffffffff\"` for the channel.\n",
+                    "description": "Occurs when an SMS user is registered via the [SMS Channel Registration API](../ua/#operation/api/channels/sms/post) without an `opted_in` value — indicating that the user has initiated, but not completed, the registration process. While this event contains a `channel_id`, you cannot send messages to this channel until the associated user completes the opt-in process (indicated by a `mobile_opt_in` event).\n",
                     "properties": {
                         "body": {
                             "description": "Contains the event subtype, identifiers, and additional properties about the event.",
@@ -434,7 +434,7 @@
                                             "type": "string"
                                         },
                                         "sender": {
-                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "description": "The phone number or short code of the sender involved in the compliance event.",
                                             "type": "string"
                                         }
                                     },
@@ -521,7 +521,7 @@
                                             "type": "string"
                                         },
                                         "sender": {
-                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "description": "The phone number or short code of the sender involved in the compliance event.",
                                             "type": "string"
                                         }
                                     },
@@ -567,7 +567,7 @@
                                             "type": "string"
                                         },
                                         "sender": {
-                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "description": "The phone number or short code of the sender involved in the compliance event.",
                                             "type": "string"
                                         }
                                     },
@@ -673,7 +673,7 @@
                                             "type": "string"
                                         },
                                         "sender": {
-                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "description": "The phone number or short code of the sender involved in the compliance event.",
                                             "type": "string"
                                         }
                                     },
@@ -775,7 +775,7 @@
                                             "type": "string"
                                         },
                                         "sender": {
-                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "description": "The phone number or short code of the sender involved in the compliance event.",
                                             "type": "string"
                                         }
                                     },
@@ -861,7 +861,7 @@
                     "x-schema-tag": "SMS Compliance Events"
                 },
                 {
-                    "description": "Occurs when a mobile-originated message contains a recognized keyword.\nIf the user has never opted in to the Airship system, a dummy channel with the value\n`\"ffffffff-ffff-ffff-ffff-ffffffffffff\"` will be present.\n",
+                    "description": "Occurs when a mobile-originated message contains a recognized keyword.\n",
                     "properties": {
                         "body": {
                             "description": "Contains the event subtype, identifiers, and additional properties about the event.",
@@ -881,7 +881,7 @@
                                             "type": "string"
                                         },
                                         "sender": {
-                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "description": "The phone number or short code of the sender involved in the compliance event.",
                                             "type": "string"
                                         }
                                     },
@@ -967,7 +967,7 @@
                     "x-schema-tag": "SMS Compliance Events"
                 },
                 {
-                    "description": "Occurs when a mobile-originated message *does not* contain a recognized keyword.\nIf the user has never opted in to the Airship system, a dummy channel with the value\n`\"ffffffff-ffff-ffff-ffff-ffffffffffff\"` will be present.\n",
+                    "description": "Occurs when a mobile-originated message *does not* contain a recognized keyword.\n",
                     "properties": {
                         "body": {
                             "description": "Contains the event subtype, identifiers, and additional properties about the event.",
@@ -987,7 +987,7 @@
                                             "type": "string"
                                         },
                                         "sender": {
-                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "description": "The phone number or short code of the sender involved in the compliance event.",
                                             "type": "string"
                                         }
                                     },
@@ -1089,7 +1089,7 @@
                                             "type": "string"
                                         },
                                         "sender": {
-                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "description": "The phone number or short code of the sender involved in the compliance event.",
                                             "type": "string"
                                         }
                                     },
@@ -1195,7 +1195,7 @@
                                             "type": "string"
                                         },
                                         "sender": {
-                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "description": "The phone number or short code of the sender involved in the compliance event.",
                                             "type": "string"
                                         }
                                     },
@@ -1380,7 +1380,7 @@
                                                     "type": "string"
                                                 },
                                                 "sender": {
-                                                    "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                                    "description": "The phone number or short code of the sender involved in the compliance event.",
                                                     "type": "string"
                                                 }
                                             },
@@ -1430,7 +1430,7 @@
                                             "type": "string"
                                         },
                                         "sender": {
-                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "description": "The phone number or short code of the sender involved in the compliance event.",
                                             "type": "string"
                                         }
                                     },
@@ -1445,14 +1445,15 @@
                                     "description": "Contains properties specific to the `event_type`.",
                                     "properties": {
                                         "opted_in": {
-                                            "description": "The date and time when the channel was registered.",
-                                            "format": "date-time + offset",
+                                            "description": "The ISO 8601 datetime (UTC) when the channel opted-in to notifications.",
+                                            "format": "date-time",
                                             "type": "string"
                                         },
                                         "registration_type": {
-                                            "description": "Indicates that the channel was registered with Airship.",
+                                            "description": "Indicates whether the channel was created or updated.",
                                             "enum": [
-                                                "create"
+                                                "create",
+                                                "update"
                                             ],
                                             "type": "string"
                                         }
@@ -1540,7 +1541,7 @@
                                             "type": "string"
                                         },
                                         "sender": {
-                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "description": "The phone number or short code of the sender involved in the compliance event.",
                                             "type": "string"
                                         }
                                     },
@@ -1627,7 +1628,7 @@
                                             "type": "string"
                                         },
                                         "sender": {
-                                            "description": "The phone number or shortcode of the sender involved in the compliance event.",
+                                            "description": "The phone number or short code of the sender involved in the compliance event.",
                                             "type": "string"
                                         }
                                     },

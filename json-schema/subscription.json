@@ -93,6 +93,6 @@
     ],
     "title": "Subscription Event",
     "type": "object",
-    "x-note": "These events appear in the stream whenever a user changes their opted_in or opted_out dates, which may not be meaningful in all cases; a user may opt into an email list on which they're already a member. \n",
+    "x-note": "These events appear in the stream whenever a user changes their opted_in or opted_out dates, which may not be meaningful in all cases; a user may opt into an email list on which they're already a member.\n",
     "x-schema-tag": "Events"
 }
