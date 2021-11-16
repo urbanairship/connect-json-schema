@@ -1,0 +1,113 @@
+{
+  "description": "Occurs when a user opts in to receive SMS messages from you, via a call to the [SMS registration API](../ua/#operation-api-channels-sms-post).",
+  "properties": {
+    "body": {
+      "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+      "properties": {
+        "event_type": {
+          "description": "Indicates that the event represents a newly registered address.",
+          "enum": [
+            "registration"
+          ],
+          "type": "string"
+        },
+        "identifiers": {
+          "description": "Contains the sender and MSISDN for the event.",
+          "properties": {
+            "msisdn": {
+              "description": "The phone number of the user involved in the compliance event.",
+              "type": "string"
+            },
+            "sender": {
+              "description": "The phone number or short code of the sender involved in the compliance event.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sender",
+            "msisdn"
+          ],
+          "title": "SMS Identifiers",
+          "type": "object",
+          "x-inline-component": true
+        },
+        "properties": {
+          "description": "Contains properties specific to the `event_type`.",
+          "properties": {
+            "opted_in": {
+              "description": "The ISO 8601 datetime (UTC) when the channel opted-in to notifications.",
+              "type": "string"
+            },
+            "registration_type": {
+              "description": "Indicates whether the channel was created or updated.",
+              "enum": [
+                "create",
+                "update"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "registration_type",
+            "opted_in"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "event_type",
+        "identifiers",
+        "properties"
+      ],
+      "type": "object"
+    },
+    "device": {
+      "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+      "properties": {
+        "channel": {
+          "description": "The unique, platform-agnostic channel identifier for a device.",
+          "type": "string",
+          "x-inline-component": true
+        },
+        "delivery_address": {
+          "description": "The phone number for the channel.",
+          "format": "msisdn",
+          "type": "string"
+        },
+        "device_type": {
+          "description": "SMS compliance events list the SMS device type.",
+          "enum": [
+            "SMS"
+          ],
+          "type": "string"
+        },
+        "identifiers": {
+          "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+          "properties": {
+            "sender": {
+              "description": "The sender that the `delivery_address` received a message from.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sender"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "device_type"
+      ],
+      "title": "SMS Device",
+      "type": "object",
+      "x-inline-component": true
+    }
+  },
+  "required": [
+    "device",
+    "body"
+  ],
+  "title": "SMS Registration Event",
+  "type": "object",
+  "x-schema-tag": "SMS Compliance Events"
+}

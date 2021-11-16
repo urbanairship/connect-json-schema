@@ -1,0 +1,30 @@
+{
+  "description": "Use subsets to return a proportion of the event stream and not all events meeting your other criteria. The `subset` object defines the proportion of the event stream that you want to return.",
+  "properties": {
+    "count": {
+      "description": "Required when the `type` is `PARTITION`. The value is the number of partitions you want to devide the event stream into.",
+      "type": "integer"
+    },
+    "proportion": {
+      "description": "Required when the `type` is `SAMPLE`. Specifies the percentage of events that will appear in the response, chosen randomly.",
+      "format": "float",
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    },
+    "selection": {
+      "description": "Required when the `type` is `PARTITION`. The value is the partition that you want to return in the response. Must be less than `count`.",
+      "type": "integer"
+    },
+    "type": {
+      "description": "The type of partition, `SAMPLE` or `PARTITION`.\n\n* `SAMPLE` returns a random sample of events; the sample `proportion` determines the fraction of total events that Real-time Data Streaming returns.\n* `PARTITION` segments the event stream into a number of partitions (determined by `count`) and returns a single partition in the event stream (determined by `selection`).",
+      "enum": [
+        "SAMPLE",
+        "PARTITION"
+      ],
+      "type": "string"
+    }
+  },
+  "title": "Request Subset",
+  "type": "object"
+}

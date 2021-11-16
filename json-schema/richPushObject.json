@@ -1,0 +1,26 @@
+{
+  "properties": {
+    "group_id": {
+      "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+      "format": "uuid",
+      "title": "Group ID",
+      "type": "string",
+      "x-inline-component": true
+    },
+    "push_id": {
+      "description": "A unique identifier for a push operation.",
+      "format": "uuid",
+      "title": "Push ID",
+      "type": "string",
+      "x-inline-component": true
+    },
+    "variant_id": {
+      "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+      "title": "Variant ID",
+      "type": "integer",
+      "x-inline-component": true
+    }
+  },
+  "type": "object",
+  "x-inline-component": true
+}

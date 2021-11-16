@@ -1,0 +1,29 @@
+{
+  "description": "Information about web users in tag change events.",
+  "properties": {
+    "channel": {
+      "description": "The unique, platform-agnostic channel identifier for a device.",
+      "type": "string",
+      "x-inline-component": true
+    },
+    "device_type": {
+      "description": "The platform that the channel is on.",
+      "enum": [
+        "WEB"
+      ],
+      "type": "string"
+    },
+    "named_user_id": {
+      "description": "the named user identifier for the device.",
+      "type": "string",
+      "x-inline-component": true
+    }
+  },
+  "required": [
+    "channel",
+    "device_type"
+  ],
+  "title": "Web Device Information without `attributes`",
+  "type": "object",
+  "x-inline-component": true
+}

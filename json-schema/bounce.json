@@ -1,0 +1,100 @@
+{
+  "description": "An event that occurs when an email could not be delivered to a particular address. The `bounce_class` can provide more information about why the message bounced.\n",
+  "properties": {
+    "body": {
+      "description": "Contains the event subtype and additional properties about the event.",
+      "properties": {
+        "event_type": {
+          "enum": [
+            "bounce"
+          ],
+          "type": "string"
+        },
+        "identifiers": {
+          "properties": {
+            "address": {
+              "description": "The email address registered.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "properties": {
+          "properties": {
+            "bounce_class": {
+              "description": "The bounce classifcation as specified in Sparkpost.",
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "bounce_event_type": {
+              "enum": [
+                "bounce"
+              ],
+              "type": "string"
+            },
+            "email": {
+              "description": "The email address that bounced.",
+              "format": "email",
+              "type": "string"
+            },
+            "sender": {
+              "description": "The address that the bounced email came from (typically the sender address for your project in Airship).",
+              "type": "string"
+            },
+            "subject": {
+              "description": "The subject line of the bounced email.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "event_type",
+        "properties",
+        "identifiers"
+      ],
+      "type": "object"
+    },
+    "device": {
+      "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
+      "properties": {
+        "channel": {
+          "description": "The unique, platform-agnostic channel identifier for a device.",
+          "type": "string",
+          "x-inline-component": true
+        },
+        "delivery_address": {
+          "description": "The email address of the channel the event occured against.",
+          "type": "string"
+        },
+        "device_type": {
+          "description": "email compliance events use the EMAIL device type.",
+          "enum": [
+            "EMAIL"
+          ],
+          "type": "string"
+        },
+        "named_user": {
+          "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "device_type",
+        "delivery_address"
+      ],
+      "title": "Email Device",
+      "type": "object",
+      "x-inline-component": true
+    }
+  },
+  "required": [
+    "device",
+    "body"
+  ],
+  "title": "Email Bounce Event",
+  "type": "object",
+  "x-schema-tag": "Email Compliance Events"
+}

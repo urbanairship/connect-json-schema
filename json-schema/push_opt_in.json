@@ -1,0 +1,5 @@
+{
+  "description": "Indicates whether or not the device is opted into push notifications.",
+  "type": "string",
+  "x-inline-component": true
+}

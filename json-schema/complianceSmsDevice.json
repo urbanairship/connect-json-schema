@@ -1,0 +1,41 @@
+{
+  "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+  "properties": {
+    "channel": {
+      "description": "The unique, platform-agnostic channel identifier for a device.",
+      "type": "string",
+      "x-inline-component": true
+    },
+    "delivery_address": {
+      "description": "The phone number for the channel.",
+      "format": "msisdn",
+      "type": "string"
+    },
+    "device_type": {
+      "description": "SMS compliance events list the SMS device type.",
+      "enum": [
+        "SMS"
+      ],
+      "type": "string"
+    },
+    "identifiers": {
+      "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+      "properties": {
+        "sender": {
+          "description": "The sender that the `delivery_address` received a message from.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sender"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "device_type"
+  ],
+  "title": "SMS Device",
+  "type": "object",
+  "x-inline-component": true
+}

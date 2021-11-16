@@ -1,0 +1,5 @@
+{
+  "description": "An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.",
+  "type": "string",
+  "x-inline-component": true
+}

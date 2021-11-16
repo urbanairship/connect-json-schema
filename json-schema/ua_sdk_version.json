@@ -1,0 +1,5 @@
+{
+  "description": "The version of the Airship SDK used in the app.",
+  "type": "string",
+  "x-inline-component": true
+}

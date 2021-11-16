@@ -1,0 +1,90 @@
+{
+  "description": "Occurs when an SMS user is registered via the [SMS Channel Registration API](../ua/#operation-api-channels-sms-post) without an `opted_in` value — indicating that the user has initiated, but not completed, the registration process. While this event contains a `channel_id`, you cannot send messages to this channel until the associated user completes the opt-in process (indicated by a `mobile_opt_in` event).\n",
+  "properties": {
+    "body": {
+      "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+      "properties": {
+        "event_type": {
+          "description": "Indicates a registration was started via the Airship API without an opt-in date,\nand a message was sent to the end user with instructions on how to opt in.\n",
+          "enum": [
+            "api_initiate_opt_in"
+          ],
+          "type": "string"
+        },
+        "identifiers": {
+          "description": "Contains the sender and MSISDN for the event.",
+          "properties": {
+            "msisdn": {
+              "description": "The phone number of the user involved in the compliance event.",
+              "type": "string"
+            },
+            "sender": {
+              "description": "The phone number or short code of the sender involved in the compliance event.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sender",
+            "msisdn"
+          ],
+          "title": "SMS Identifiers",
+          "type": "object",
+          "x-inline-component": true
+        }
+      },
+      "required": [
+        "event_type",
+        "identifiers"
+      ],
+      "type": "object"
+    },
+    "device": {
+      "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+      "properties": {
+        "channel": {
+          "description": "The unique, platform-agnostic channel identifier for a device.",
+          "type": "string",
+          "x-inline-component": true
+        },
+        "delivery_address": {
+          "description": "The phone number for the channel.",
+          "format": "msisdn",
+          "type": "string"
+        },
+        "device_type": {
+          "description": "SMS compliance events list the SMS device type.",
+          "enum": [
+            "SMS"
+          ],
+          "type": "string"
+        },
+        "identifiers": {
+          "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+          "properties": {
+            "sender": {
+              "description": "The sender that the `delivery_address` received a message from.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sender"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "device_type"
+      ],
+      "title": "SMS Device",
+      "type": "object",
+      "x-inline-component": true
+    }
+  },
+  "required": [
+    "device",
+    "body"
+  ],
+  "title": "SMS API Initiated Opt In Event",
+  "type": "object",
+  "x-schema-tag": "SMS Compliance Events"
+}

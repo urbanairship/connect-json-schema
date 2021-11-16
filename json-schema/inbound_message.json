@@ -1,0 +1,5 @@
+{
+  "description": "The body of the inbound (to Airship) text message. This is the message a user sent to opt into or out of messages. This text corresponds to the `keyword` if present.",
+  "type": "string",
+  "x-inline-component": true
+}

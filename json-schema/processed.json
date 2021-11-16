@@ -1,0 +1,5 @@
+{
+  "description": "When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.",
+  "type": "string",
+  "x-inline-component": true
+}

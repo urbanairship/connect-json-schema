@@ -1,0 +1,5 @@
+{
+  "description": "Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.",
+  "type": "string",
+  "x-inline-component": true
+}

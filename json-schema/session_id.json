@@ -1,0 +1,7 @@
+{
+  "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
+  "format": "uuid",
+  "title": "Session ID",
+  "type": "string",
+  "x-inline-component": true
+}

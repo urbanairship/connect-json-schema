@@ -1,0 +1,5 @@
+{
+  "description": "the named user identifier for the device.",
+  "type": "string",
+  "x-inline-component": true
+}

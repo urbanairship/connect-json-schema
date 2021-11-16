@@ -1,0 +1,32 @@
+{
+  "description": "Information about the SMS or Email device related to an event.",
+  "properties": {
+    "channel": {
+      "description": "the channel identifier",
+      "type": "string"
+    },
+    "delivery_address": {
+      "description": "* If 'device_type' is 'SMS', this field shows the MSISDN.\n* If `device_type` is `EMAIL`, this field shows the email address.\n",
+      "type": "string"
+    },
+    "device_type": {
+      "description": "The platform that the channel is on.",
+      "enum": [
+        "EMAIL",
+        "SMS"
+      ],
+      "type": "string"
+    },
+    "named_user_id": {
+      "description": "The named user the channel is associated with.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "channel",
+    "device_type"
+  ],
+  "title": "Device Information for SMS and Email",
+  "type": "object",
+  "x-schema-tag": "Device Information"
+}

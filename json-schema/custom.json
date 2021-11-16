@@ -1,1458 +1,1533 @@
 {
-    "allOf": [
+  "allOf": [
+    {
+      "properties": {
+        "id": {
+          "description": "Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.",
+          "type": "string",
+          "x-inline-component": true
+        },
+        "occurred": {
+          "description": "When the event occurred.",
+          "type": "string",
+          "x-inline-component": true
+        },
+        "offset": {
+          "description": "An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.",
+          "type": "string",
+          "x-inline-component": true
+        },
+        "processed": {
+          "description": "When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.",
+          "type": "string",
+          "x-inline-component": true
+        },
+        "type": {
+          "enum": [
+            "CUSTOM"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "occurred",
+        "processed",
+        "offset"
+      ],
+      "type": "object"
+    },
+    {
+      "discriminator": {
+        "propertyName": "event_type"
+      },
+      "oneOf": [
         {
-            "properties": {
-                "id": {
-                    "description": "Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.",
-                    "type": "string"
+          "description": "Occurs when the remote MTA (email server) acknowledges receipt of a message.",
+          "properties": {
+            "body": {
+              "properties": {
+                "name": {
+                  "enum": [
+                    "delivery"
+                  ],
+                  "type": "string"
                 },
-                "occurred": {
-                    "description": "When the event occurred.",
-                    "format": "date-time",
-                    "type": "string"
+                "properties": {
+                  "properties": {
+                    "email": {
+                      "description": "The recipient's email address.",
+                      "type": "string"
+                    },
+                    "sender": {
+                      "description": "The sender of the email specified by the event.",
+                      "type": "string"
+                    },
+                    "subject": {
+                      "description": "The subject line of the email specified by the event.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object",
+                  "x-inline-component": true
                 },
-                "offset": {
-                    "description": "An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.",
-                    "type": "string"
+                "session_id": {
+                  "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
+                  "format": "uuid",
+                  "title": "Session ID",
+                  "type": "string",
+                  "x-inline-component": true
                 },
-                "processed": {
-                    "description": "When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.",
-                    "format": "date-time",
-                    "type": "string"
+                "source": {
+                  "enum": [
+                    "API"
+                  ],
+                  "type": "string"
                 },
-                "type": {
-                    "enum": [
-                        "CUSTOM"
-                    ],
-                    "type": "string"
+                "triggering_push": {
+                  "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
+                  "properties": {
+                    "campaigns": {
+                      "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
+                      "properties": {
+                        "categories": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "title": "Campaigns Object",
+                      "type": "object",
+                      "x-inline-component": true
+                    },
+                    "group_id": {
+                      "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+                      "format": "uuid",
+                      "title": "Group ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "push_id": {
+                      "description": "A unique identifier for a push operation.",
+                      "format": "uuid",
+                      "title": "Push ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "time": {
+                      "description": "The UTC time when the push occurred.",
+                      "type": "string"
+                    },
+                    "variant_id": {
+                      "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+                      "title": "Variant ID",
+                      "type": "integer",
+                      "x-inline-component": true
+                    }
+                  },
+                  "required": [
+                    "push_id"
+                  ],
+                  "title": "Associated Push",
+                  "type": "object",
+                  "x-inline-component": true
                 }
+              },
+              "required": [
+                "name",
+                "triggering_push",
+                "properties",
+                "source"
+              ],
+              "type": "object"
             },
-            "required": [
-                "id",
-                "type",
-                "occurred",
-                "processed",
-                "offset"
-            ],
-            "type": "object"
+            "device": {
+              "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
+              "properties": {
+                "channel": {
+                  "description": "The unique, platform-agnostic channel identifier for a device.",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "delivery_address": {
+                  "description": "The email address of the channel the event occured against.",
+                  "type": "string"
+                },
+                "device_type": {
+                  "description": "email compliance events use the EMAIL device type.",
+                  "enum": [
+                    "EMAIL"
+                  ],
+                  "type": "string"
+                },
+                "named_user": {
+                  "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "device_type",
+                "delivery_address"
+              ],
+              "title": "Email Device",
+              "type": "object",
+              "x-inline-component": true
+            }
+          },
+          "required": [
+            "device",
+            "body"
+          ],
+          "title": "Email Delivery Event",
+          "type": "object",
+          "x-schema-tag": "Custom Email Events"
         },
         {
-            "discriminator": {
-                "propertyName": "event_type"
-            },
-            "oneOf": [
-                {
-                    "description": "Occurs when the remote MTA (email server) acknowledges receipt of a message.",
-                    "properties": {
-                        "body": {
-                            "properties": {
-                                "name": {
-                                    "enum": [
-                                        "delivery"
-                                    ],
-                                    "type": "string"
-                                },
-                                "properties": {
-                                    "properties": {
-                                        "email": {
-                                            "description": "The recipient's email address.",
-                                            "type": "string"
-                                        },
-                                        "sender": {
-                                            "description": "The sender of the email specified by the event.",
-                                            "type": "string"
-                                        },
-                                        "subject": {
-                                            "description": "The subject line of the email specified by the event.",
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                },
-                                "session_id": {
-                                    "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
-                                    "format": "uuid",
-                                    "title": "Session ID",
-                                    "type": "string"
-                                },
-                                "source": {
-                                    "enum": [
-                                        "API"
-                                    ],
-                                    "type": "string"
-                                },
-                                "triggering_push": {
-                                    "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
-                                    "properties": {
-                                        "campaigns": {
-                                            "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
-                                            "properties": {
-                                                "categories": {
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": "array"
-                                                }
-                                            },
-                                            "title": "Campaigns Object",
-                                            "type": "object"
-                                        },
-                                        "group_id": {
-                                            "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
-                                            "format": "uuid",
-                                            "title": "Group ID",
-                                            "type": "string"
-                                        },
-                                        "push_id": {
-                                            "description": "A unique identifier for a push operation.",
-                                            "format": "uuid",
-                                            "title": "Push ID",
-                                            "type": "string"
-                                        },
-                                        "time": {
-                                            "description": "The UTC time when the push occurred.",
-                                            "format": "date-time",
-                                            "type": "string"
-                                        },
-                                        "variant_id": {
-                                            "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
-                                            "title": "Variant ID",
-                                            "type": "integer"
-                                        }
-                                    },
-                                    "required": [
-                                        "push_id"
-                                    ],
-                                    "title": "Associated Push",
-                                    "type": "object"
-                                }
-                            },
-                            "required": [
-                                "name",
-                                "triggering_push",
-                                "properties",
-                                "source"
-                            ],
-                            "type": "object"
-                        },
-                        "device": {
-                            "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
-                            "properties": {
-                                "channel": {
-                                    "description": "The unique, platform-agnostic channel identifier for a device.",
-                                    "type": "string"
-                                },
-                                "delivery_address": {
-                                    "description": "The email address of the channel the event occured against.",
-                                    "type": "string"
-                                },
-                                "device_type": {
-                                    "description": "email compliance events use the EMAIL device type.",
-                                    "enum": [
-                                        "EMAIL"
-                                    ],
-                                    "type": "string"
-                                },
-                                "named_user": {
-                                    "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "device_type",
-                                "delivery_address"
-                            ],
-                            "title": "Email Device",
-                            "type": "object"
-                        }
-                    },
-                    "required": [
-                        "device",
-                        "body"
-                    ],
-                    "title": "Email Delivery Event",
-                    "type": "object",
-                    "x-schema-tag": "Custom Email Events"
+          "description": "This event occurs when the provider (SparkPost) receives a message — typically when a member of the audience responds to an email.",
+          "properties": {
+            "body": {
+              "properties": {
+                "name": {
+                  "enum": [
+                    "injection"
+                  ],
+                  "type": "string"
                 },
-                {
-                    "description": "This event occurs when the provider (SparkPost) receives a message — typically when a member of the audience responds to an email.",
-                    "properties": {
-                        "body": {
-                            "properties": {
-                                "name": {
-                                    "enum": [
-                                        "injection"
-                                    ],
-                                    "type": "string"
-                                },
-                                "properties": {
-                                    "properties": {
-                                        "email": {
-                                            "description": "The recipient's email address.",
-                                            "type": "string"
-                                        },
-                                        "sender": {
-                                            "description": "The sender of the email specified by the event.",
-                                            "type": "string"
-                                        },
-                                        "subject": {
-                                            "description": "The subject line of the email specified by the event.",
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                },
-                                "session_id": {
-                                    "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
-                                    "format": "uuid",
-                                    "title": "Session ID",
-                                    "type": "string"
-                                },
-                                "source": {
-                                    "enum": [
-                                        "API"
-                                    ],
-                                    "type": "string"
-                                },
-                                "triggering_push": {
-                                    "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
-                                    "properties": {
-                                        "campaigns": {
-                                            "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
-                                            "properties": {
-                                                "categories": {
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": "array"
-                                                }
-                                            },
-                                            "title": "Campaigns Object",
-                                            "type": "object"
-                                        },
-                                        "group_id": {
-                                            "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
-                                            "format": "uuid",
-                                            "title": "Group ID",
-                                            "type": "string"
-                                        },
-                                        "push_id": {
-                                            "description": "A unique identifier for a push operation.",
-                                            "format": "uuid",
-                                            "title": "Push ID",
-                                            "type": "string"
-                                        },
-                                        "time": {
-                                            "description": "The UTC time when the push occurred.",
-                                            "format": "date-time",
-                                            "type": "string"
-                                        },
-                                        "variant_id": {
-                                            "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
-                                            "title": "Variant ID",
-                                            "type": "integer"
-                                        }
-                                    },
-                                    "required": [
-                                        "push_id"
-                                    ],
-                                    "title": "Associated Push",
-                                    "type": "object"
-                                }
-                            },
-                            "required": [
-                                "name",
-                                "triggering_push",
-                                "properties",
-                                "source"
-                            ],
-                            "type": "object"
-                        },
-                        "device": {
-                            "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
-                            "properties": {
-                                "channel": {
-                                    "description": "The unique, platform-agnostic channel identifier for a device.",
-                                    "type": "string"
-                                },
-                                "delivery_address": {
-                                    "description": "The email address of the channel the event occured against.",
-                                    "type": "string"
-                                },
-                                "device_type": {
-                                    "description": "email compliance events use the EMAIL device type.",
-                                    "enum": [
-                                        "EMAIL"
-                                    ],
-                                    "type": "string"
-                                },
-                                "named_user": {
-                                    "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "device_type",
-                                "delivery_address"
-                            ],
-                            "title": "Email Device",
-                            "type": "object"
-                        }
+                "properties": {
+                  "properties": {
+                    "email": {
+                      "description": "The recipient's email address.",
+                      "type": "string"
                     },
-                    "required": [
-                        "device",
-                        "body"
-                    ],
-                    "title": "Email Injection Event",
-                    "type": "object",
-                    "x-schema-tag": "Custom Email Events"
-                },
-                {
-                    "description": "Occurs when a recipient opens an email, rendering a tracking pixel at the bottom of the message. If a message is truncated by a client or email provider, a user may have to open it in a separate window to render the tracking pixel (and register this event).\n",
-                    "properties": {
-                        "body": {
-                            "properties": {
-                                "name": {
-                                    "enum": [
-                                        "open"
-                                    ],
-                                    "type": "string"
-                                },
-                                "properties": {
-                                    "properties": {
-                                        "email": {
-                                            "description": "The recipient's email address.",
-                                            "type": "string"
-                                        },
-                                        "sender": {
-                                            "description": "The sender of the email specified by the event.",
-                                            "type": "string"
-                                        },
-                                        "subject": {
-                                            "description": "The subject line of the email specified by the event.",
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                },
-                                "session_id": {
-                                    "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
-                                    "format": "uuid",
-                                    "title": "Session ID",
-                                    "type": "string"
-                                },
-                                "source": {
-                                    "enum": [
-                                        "API"
-                                    ],
-                                    "type": "string"
-                                },
-                                "triggering_push": {
-                                    "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
-                                    "properties": {
-                                        "campaigns": {
-                                            "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
-                                            "properties": {
-                                                "categories": {
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": "array"
-                                                }
-                                            },
-                                            "title": "Campaigns Object",
-                                            "type": "object"
-                                        },
-                                        "group_id": {
-                                            "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
-                                            "format": "uuid",
-                                            "title": "Group ID",
-                                            "type": "string"
-                                        },
-                                        "push_id": {
-                                            "description": "A unique identifier for a push operation.",
-                                            "format": "uuid",
-                                            "title": "Push ID",
-                                            "type": "string"
-                                        },
-                                        "time": {
-                                            "description": "The UTC time when the push occurred.",
-                                            "format": "date-time",
-                                            "type": "string"
-                                        },
-                                        "variant_id": {
-                                            "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
-                                            "title": "Variant ID",
-                                            "type": "integer"
-                                        }
-                                    },
-                                    "required": [
-                                        "push_id"
-                                    ],
-                                    "title": "Associated Push",
-                                    "type": "object"
-                                }
-                            },
-                            "required": [
-                                "name",
-                                "triggering_push",
-                                "properties",
-                                "source"
-                            ],
-                            "type": "object"
-                        },
-                        "device": {
-                            "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
-                            "properties": {
-                                "channel": {
-                                    "description": "The unique, platform-agnostic channel identifier for a device.",
-                                    "type": "string"
-                                },
-                                "delivery_address": {
-                                    "description": "The email address of the channel the event occured against.",
-                                    "type": "string"
-                                },
-                                "device_type": {
-                                    "description": "email compliance events use the EMAIL device type.",
-                                    "enum": [
-                                        "EMAIL"
-                                    ],
-                                    "type": "string"
-                                },
-                                "named_user": {
-                                    "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "device_type",
-                                "delivery_address"
-                            ],
-                            "title": "Email Device",
-                            "type": "object"
-                        }
+                    "sender": {
+                      "description": "The sender of the email specified by the event.",
+                      "type": "string"
                     },
-                    "required": [
-                        "device",
-                        "body"
-                    ],
-                    "title": "Email Open Event",
-                    "type": "object",
-                    "x-note": "This event requires images to load in the email client. If a user blocks images in their email client, Airship will not register this event.",
-                    "x-schema-tag": "Custom Email Events"
+                    "subject": {
+                      "description": "The subject line of the email specified by the event.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object",
+                  "x-inline-component": true
                 },
-                {
-                    "description": "Occurs when a mailbox provider temporarily rejects an email. In general, this event indicates that the provider will attempt to resend the message.\n",
-                    "properties": {
-                        "body": {
-                            "properties": {
-                                "name": {
-                                    "enum": [
-                                        "delay"
-                                    ],
-                                    "type": "string"
-                                },
-                                "properties": {
-                                    "properties": {
-                                        "email": {
-                                            "description": "The recipient's email address.",
-                                            "type": "string"
-                                        },
-                                        "sender": {
-                                            "description": "The sender of the email specified by the event.",
-                                            "type": "string"
-                                        },
-                                        "subject": {
-                                            "description": "The subject line of the email specified by the event.",
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                },
-                                "session_id": {
-                                    "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
-                                    "format": "uuid",
-                                    "title": "Session ID",
-                                    "type": "string"
-                                },
-                                "source": {
-                                    "enum": [
-                                        "API"
-                                    ],
-                                    "type": "string"
-                                },
-                                "triggering_push": {
-                                    "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
-                                    "properties": {
-                                        "campaigns": {
-                                            "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
-                                            "properties": {
-                                                "categories": {
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": "array"
-                                                }
-                                            },
-                                            "title": "Campaigns Object",
-                                            "type": "object"
-                                        },
-                                        "group_id": {
-                                            "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
-                                            "format": "uuid",
-                                            "title": "Group ID",
-                                            "type": "string"
-                                        },
-                                        "push_id": {
-                                            "description": "A unique identifier for a push operation.",
-                                            "format": "uuid",
-                                            "title": "Push ID",
-                                            "type": "string"
-                                        },
-                                        "time": {
-                                            "description": "The UTC time when the push occurred.",
-                                            "format": "date-time",
-                                            "type": "string"
-                                        },
-                                        "variant_id": {
-                                            "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
-                                            "title": "Variant ID",
-                                            "type": "integer"
-                                        }
-                                    },
-                                    "required": [
-                                        "push_id"
-                                    ],
-                                    "title": "Associated Push",
-                                    "type": "object"
-                                }
-                            },
-                            "required": [
-                                "name",
-                                "triggering_push",
-                                "properties",
-                                "source"
-                            ],
-                            "type": "object"
-                        },
-                        "device": {
-                            "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
-                            "properties": {
-                                "channel": {
-                                    "description": "The unique, platform-agnostic channel identifier for a device.",
-                                    "type": "string"
-                                },
-                                "delivery_address": {
-                                    "description": "The email address of the channel the event occured against.",
-                                    "type": "string"
-                                },
-                                "device_type": {
-                                    "description": "email compliance events use the EMAIL device type.",
-                                    "enum": [
-                                        "EMAIL"
-                                    ],
-                                    "type": "string"
-                                },
-                                "named_user": {
-                                    "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "device_type",
-                                "delivery_address"
-                            ],
-                            "title": "Email Device",
-                            "type": "object"
-                        }
-                    },
-                    "required": [
-                        "device",
-                        "body"
-                    ],
-                    "title": "Email Delay Event",
-                    "type": "object",
-                    "x-schema-tag": "Custom Email Events"
+                "session_id": {
+                  "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
+                  "format": "uuid",
+                  "title": "Session ID",
+                  "type": "string",
+                  "x-inline-component": true
                 },
-                {
-                    "description": "Occurs when an email could not be delivered to an address. The `bounce_class` provides additional information about the reason your message bounced. This event occurs in conjunction with a similar `COMPLIANCE` event.\n",
-                    "properties": {
-                        "body": {
-                            "properties": {
-                                "name": {
-                                    "enum": [
-                                        "bounce"
-                                    ],
-                                    "type": "string"
-                                },
-                                "properties": {
-                                    "allOf": [
-                                        {
-                                            "properties": {
-                                                "email": {
-                                                    "description": "The recipient's email address.",
-                                                    "type": "string"
-                                                },
-                                                "sender": {
-                                                    "description": "The sender of the email specified by the event.",
-                                                    "type": "string"
-                                                },
-                                                "subject": {
-                                                    "description": "The subject line of the email specified by the event.",
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        {
-                                            "properties": {
-                                                "bounce_class": {
-                                                    "description": "A number between 1 and 100 that represents the specific reason the email abounced.",
-                                                    "format": "(100)|[1-9]\\d?",
-                                                    "type": "string"
-                                                },
-                                                "bounce_event_type": {
-                                                    "enum": [
-                                                        "bounce"
-                                                    ],
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    ]
-                                },
-                                "session_id": {
-                                    "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
-                                    "format": "uuid",
-                                    "title": "Session ID",
-                                    "type": "string"
-                                },
-                                "source": {
-                                    "enum": [
-                                        "API"
-                                    ],
-                                    "type": "string"
-                                },
-                                "triggering_push": {
-                                    "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
-                                    "properties": {
-                                        "campaigns": {
-                                            "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
-                                            "properties": {
-                                                "categories": {
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": "array"
-                                                }
-                                            },
-                                            "title": "Campaigns Object",
-                                            "type": "object"
-                                        },
-                                        "group_id": {
-                                            "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
-                                            "format": "uuid",
-                                            "title": "Group ID",
-                                            "type": "string"
-                                        },
-                                        "push_id": {
-                                            "description": "A unique identifier for a push operation.",
-                                            "format": "uuid",
-                                            "title": "Push ID",
-                                            "type": "string"
-                                        },
-                                        "time": {
-                                            "description": "The UTC time when the push occurred.",
-                                            "format": "date-time",
-                                            "type": "string"
-                                        },
-                                        "variant_id": {
-                                            "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
-                                            "title": "Variant ID",
-                                            "type": "integer"
-                                        }
-                                    },
-                                    "required": [
-                                        "push_id"
-                                    ],
-                                    "title": "Associated Push",
-                                    "type": "object"
-                                }
-                            },
-                            "required": [
-                                "name",
-                                "triggering_push",
-                                "properties",
-                                "source"
-                            ],
-                            "type": "object"
-                        },
-                        "device": {
-                            "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
-                            "properties": {
-                                "channel": {
-                                    "description": "The unique, platform-agnostic channel identifier for a device.",
-                                    "type": "string"
-                                },
-                                "delivery_address": {
-                                    "description": "The email address of the channel the event occured against.",
-                                    "type": "string"
-                                },
-                                "device_type": {
-                                    "description": "email compliance events use the EMAIL device type.",
-                                    "enum": [
-                                        "EMAIL"
-                                    ],
-                                    "type": "string"
-                                },
-                                "named_user": {
-                                    "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "device_type",
-                                "delivery_address"
-                            ],
-                            "title": "Email Device",
-                            "type": "object"
-                        }
-                    },
-                    "required": [
-                        "device",
-                        "body"
-                    ],
-                    "title": "Email Bounce Event",
-                    "type": "object",
-                    "x-schema-tag": "Custom Email Events"
+                "source": {
+                  "enum": [
+                    "API"
+                  ],
+                  "type": "string"
                 },
-                {
-                    "description": "Occurs when a recipient clicks a tracked link in a message. Tracked links are redirected through the provider's click-tracking server to record the event.",
-                    "properties": {
-                        "body": {
-                            "properties": {
-                                "name": {
-                                    "enum": [
-                                        "click"
-                                    ],
-                                    "type": "string"
-                                },
-                                "properties": {
-                                    "allOf": [
-                                        {
-                                            "properties": {
-                                                "email": {
-                                                    "description": "The recipient's email address.",
-                                                    "type": "string"
-                                                },
-                                                "sender": {
-                                                    "description": "The sender of the email specified by the event.",
-                                                    "type": "string"
-                                                },
-                                                "subject": {
-                                                    "description": "The subject line of the email specified by the event.",
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        {
-                                            "properties": {
-                                                "link_name": {
-                                                    "description": "The link text that the user clicked.",
-                                                    "type": "string"
-                                                },
-                                                "link_url": {
-                                                    "description": "The URL of the link that the user clicked.",
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    ]
-                                },
-                                "session_id": {
-                                    "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
-                                    "format": "uuid",
-                                    "title": "Session ID",
-                                    "type": "string"
-                                },
-                                "source": {
-                                    "enum": [
-                                        "API"
-                                    ],
-                                    "type": "string"
-                                },
-                                "triggering_push": {
-                                    "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
-                                    "properties": {
-                                        "campaigns": {
-                                            "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
-                                            "properties": {
-                                                "categories": {
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": "array"
-                                                }
-                                            },
-                                            "title": "Campaigns Object",
-                                            "type": "object"
-                                        },
-                                        "group_id": {
-                                            "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
-                                            "format": "uuid",
-                                            "title": "Group ID",
-                                            "type": "string"
-                                        },
-                                        "push_id": {
-                                            "description": "A unique identifier for a push operation.",
-                                            "format": "uuid",
-                                            "title": "Push ID",
-                                            "type": "string"
-                                        },
-                                        "time": {
-                                            "description": "The UTC time when the push occurred.",
-                                            "format": "date-time",
-                                            "type": "string"
-                                        },
-                                        "variant_id": {
-                                            "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
-                                            "title": "Variant ID",
-                                            "type": "integer"
-                                        }
-                                    },
-                                    "required": [
-                                        "push_id"
-                                    ],
-                                    "title": "Associated Push",
-                                    "type": "object"
-                                }
-                            },
-                            "required": [
-                                "name",
-                                "triggering_push",
-                                "properties",
-                                "source"
-                            ],
-                            "type": "object"
-                        },
-                        "device": {
-                            "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
-                            "properties": {
-                                "channel": {
-                                    "description": "The unique, platform-agnostic channel identifier for a device.",
-                                    "type": "string"
-                                },
-                                "delivery_address": {
-                                    "description": "The email address of the channel the event occured against.",
-                                    "type": "string"
-                                },
-                                "device_type": {
-                                    "description": "email compliance events use the EMAIL device type.",
-                                    "enum": [
-                                        "EMAIL"
-                                    ],
-                                    "type": "string"
-                                },
-                                "named_user": {
-                                    "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "device_type",
-                                "delivery_address"
-                            ],
-                            "title": "Email Device",
-                            "type": "object"
-                        }
-                    },
-                    "required": [
-                        "device",
-                        "body"
-                    ],
-                    "title": "Email Click Event",
-                    "type": "object",
-                    "x-schema-tag": "Custom Email Events"
-                },
-                {
-                    "description": "Occurs when a user clicks an unsubscribe link in an email you sent.",
-                    "properties": {
-                        "body": {
-                            "properties": {
-                                "name": {
-                                    "enum": [
-                                        "unsubscribe"
-                                    ],
-                                    "type": "string"
-                                },
-                                "properties": {
-                                    "properties": {
-                                        "unsubscribe_event_type": {
-                                            "enum": [
-                                                "link_unsubscribe"
-                                            ],
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                },
-                                "session_id": {
-                                    "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
-                                    "format": "uuid",
-                                    "title": "Session ID",
-                                    "type": "string"
-                                },
-                                "source": {
-                                    "enum": [
-                                        "API"
-                                    ],
-                                    "type": "string"
-                                },
-                                "triggering_push": {
-                                    "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
-                                    "properties": {
-                                        "campaigns": {
-                                            "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
-                                            "properties": {
-                                                "categories": {
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": "array"
-                                                }
-                                            },
-                                            "title": "Campaigns Object",
-                                            "type": "object"
-                                        },
-                                        "group_id": {
-                                            "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
-                                            "format": "uuid",
-                                            "title": "Group ID",
-                                            "type": "string"
-                                        },
-                                        "push_id": {
-                                            "description": "A unique identifier for a push operation.",
-                                            "format": "uuid",
-                                            "title": "Push ID",
-                                            "type": "string"
-                                        },
-                                        "time": {
-                                            "description": "The UTC time when the push occurred.",
-                                            "format": "date-time",
-                                            "type": "string"
-                                        },
-                                        "variant_id": {
-                                            "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
-                                            "title": "Variant ID",
-                                            "type": "integer"
-                                        }
-                                    },
-                                    "required": [
-                                        "push_id"
-                                    ],
-                                    "title": "Associated Push",
-                                    "type": "object"
-                                }
-                            },
-                            "required": [
-                                "name",
-                                "triggering_push",
-                                "properties",
-                                "source"
-                            ],
-                            "type": "object"
-                        },
-                        "device": {
-                            "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
-                            "properties": {
-                                "channel": {
-                                    "description": "The unique, platform-agnostic channel identifier for a device.",
-                                    "type": "string"
-                                },
-                                "delivery_address": {
-                                    "description": "The email address of the channel the event occured against.",
-                                    "type": "string"
-                                },
-                                "device_type": {
-                                    "description": "email compliance events use the EMAIL device type.",
-                                    "enum": [
-                                        "EMAIL"
-                                    ],
-                                    "type": "string"
-                                },
-                                "named_user": {
-                                    "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "device_type",
-                                "delivery_address"
-                            ],
-                            "title": "Email Device",
-                            "type": "object"
-                        }
-                    },
-                    "required": [
-                        "device",
-                        "body"
-                    ],
-                    "title": "Email Unsubscribe Link Event",
-                    "type": "object",
-                    "x-schema-tag": "Custom Email Events"
-                },
-                {
-                    "description": "Delivery reports are custom events sent from our third-party SMS providers.\nThese events report the status of your message between the provider and your audience up to, and including, delivery.\n",
-                    "properties": {
-                        "body": {
-                            "properties": {
-                                "interaction_type": {
-                                    "enum": [
-                                        "delivery_report"
-                                    ],
-                                    "type": "string"
-                                },
-                                "name": {
-                                    "description": "The name of the delivery report as specified by the vendor. Most events reference the status of the message with reference to the short message service center (SMSC) — the server that receives your message and dispatches it to your audience.\n\n* dispatched — Message has been dispatched and accepted for delivery by the SMSC.\n* aborted — Message was aborted before reaching SMSC.\n* rejected — Message was rejected by SMSC.\n* delivered — Message has been delivered.\n* failed — Message failed to be delivered.\n* expired — Message expired before delivery to SMSC. This may happen if the expiry time for the message was very short.\n* unknown — Message was delivered to SMSC but no Delivery Receipt has been received or a Delivery Receipt that could not be interpreted was received.\n* undeliverable — Message cannot be delivered.\n",
-                                    "enum": [
-                                        "dispatched",
-                                        "aborted",
-                                        "rejected",
-                                        "delivered",
-                                        "failed",
-                                        "expired",
-                                        "unknown",
-                                        "undeliverable"
-                                    ],
-                                    "type": "string"
-                                },
-                                "properties": {
-                                    "oneOf": [
-                                        {
-                                            "description": "A delivery report for SMS.\n",
-                                            "properties": {
-                                                "error_code": {
-                                                    "description": "An error code from the short message service center, if applicable.",
-                                                    "type": "string"
-                                                },
-                                                "sender": {
-                                                    "description": "The number or short code that the message originated from.",
-                                                    "type": "string"
-                                                },
-                                                "vendor": {
-                                                    "description": "The delivery service for the message.",
-                                                    "enum": [
-                                                        "CLX",
-                                                        "TYNTEC"
-                                                    ],
-                                                    "type": "string"
-                                                },
-                                                "vendorDeliveryId": {
-                                                    "description": "A unique identifier for the message from the SMS vendor.",
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "required": [
-                                                "sender",
-                                                "vendor",
-                                                "vendorDeliveryId"
-                                            ],
-                                            "title": "SMS Delivery Properties",
-                                            "type": "object"
-                                        },
-                                        {
-                                            "description": "A delivery report for MMS.",
-                                            "properties": {
-                                                "carrier_id": {
-                                                    "description": "Identifies the carrier the message was sent through.",
-                                                    "type": "string"
-                                                },
-                                                "error_code": {
-                                                    "description": "An error code from the short message service center, if applicable.",
-                                                    "type": "string"
-                                                },
-                                                "handset": {
-                                                    "description": "The profile of the handset that received the message. This information is only present if the `result_status` is `N102`.",
-                                                    "type": "string"
-                                                },
-                                                "result_code": {
-                                                    "description": "A status code from the vendor, if applicable.",
-                                                    "enum": [
-                                                        "N101",
-                                                        "N102",
-                                                        "E101",
-                                                        "E102"
-                                                    ],
-                                                    "type": "string"
-                                                },
-                                                "result_status": {
-                                                    "enum": [
-                                                        "Message Sent",
-                                                        "Message Sent/Delivered",
-                                                        "Message Failed",
-                                                        "Message,Sent/Expired",
-                                                        "Message Sent/Rejected",
-                                                        "Message Sent/Failed",
-                                                        "Message Sent/Not Supported"
-                                                    ],
-                                                    "type": "string"
-                                                },
-                                                "sender": {
-                                                    "description": "The number or short code that the message originated from.",
-                                                    "type": "string"
-                                                },
-                                                "sent_as": {
-                                                    "description": "Indicates whether the MMS was delivered as MMS (binary) or SMS (HTML).\n",
-                                                    "enum": [
-                                                        "MMS",
-                                                        "SMS"
-                                                    ],
-                                                    "type": "string"
-                                                },
-                                                "tracking_Id": {
-                                                    "description": "An ID assigned by the delivery service (CLX Only).",
-                                                    "type": "string"
-                                                },
-                                                "vendor": {
-                                                    "description": "The delivery service for the message.",
-                                                    "enum": [
-                                                        "CLX"
-                                                    ],
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "required": [
-                                                "tracking_id",
-                                                "vendor",
-                                                "sender",
-                                                "result_code"
-                                            ],
-                                            "title": "MMS Delivery Properties",
-                                            "type": "object"
-                                        }
-                                    ]
-                                },
-                                "source": {
-                                    "enum": [
-                                        "API"
-                                    ],
-                                    "type": "string"
-                                },
-                                "triggering_push": {
-                                    "description": "Identifies the push notification that caused the event.",
-                                    "properties": {
-                                        "campaigns": {
-                                            "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
-                                            "properties": {
-                                                "categories": {
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": "array"
-                                                }
-                                            },
-                                            "title": "Campaigns Object",
-                                            "type": "object"
-                                        },
-                                        "group_id": {
-                                            "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
-                                            "format": "uuid",
-                                            "title": "Group ID",
-                                            "type": "string"
-                                        },
-                                        "push_id": {
-                                            "description": "A unique identifier for a push operation.",
-                                            "format": "uuid",
-                                            "title": "Push ID",
-                                            "type": "string"
-                                        },
-                                        "variant_id": {
-                                            "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
-                                            "title": "Variant ID",
-                                            "type": "integer"
-                                        }
-                                    },
-                                    "required": [
-                                        "push_id"
-                                    ],
-                                    "type": "object"
-                                }
-                            },
-                            "required": [
-                                "source",
-                                "name",
-                                "properties"
-                            ],
-                            "type": "object"
-                        },
-                        "device": {
-                            "description": "Device properties for Custom events with the `delivery_report` interaction type always specify an SMS device.",
-                            "properties": {
-                                "channel": {
-                                    "description": "The unique, platform-agnostic channel identifier for a device.",
-                                    "type": "string"
-                                },
-                                "delivery_address": {
-                                    "description": "The phone number associated with the channel.",
-                                    "type": "string"
-                                },
-                                "device_type": {
-                                    "enum": [
-                                        "SMS"
-                                    ],
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "channel",
-                                "delivery_address",
-                                "device_type"
-                            ],
-                            "type": "object"
-                        },
-                        "id": {
-                            "description": "Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.",
+                "triggering_push": {
+                  "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
+                  "properties": {
+                    "campaigns": {
+                      "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
+                      "properties": {
+                        "categories": {
+                          "items": {
                             "type": "string"
-                        },
-                        "occurred": {
-                            "description": "When the event occurred.",
-                            "format": "date-time",
-                            "type": "string"
-                        },
-                        "offset": {
-                            "description": "An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.",
-                            "type": "string"
-                        },
-                        "processed": {
-                            "description": "When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.",
-                            "format": "date-time",
-                            "type": "string"
-                        },
-                        "type": {
-                            "enum": [
-                                "CUSTOM"
-                            ],
-                            "type": "string"
+                          },
+                          "type": "array"
                         }
+                      },
+                      "title": "Campaigns Object",
+                      "type": "object",
+                      "x-inline-component": true
                     },
-                    "required": [
-                        "id",
-                        "occurred",
-                        "offset",
-                        "processed",
-                        "type",
-                        "device",
-                        "body"
-                    ],
-                    "title": "SMS Delivery Report",
-                    "type": "object",
-                    "x-schema-tag": "Custom SMS Events"
-                },
-                {
-                    "properties": {
-                        "body": {
-                            "properties": {
-                                "customer_id": {
-                                    "description": "An external customer-side id, such as an email address. Absent if empty.",
-                                    "type": "string"
-                                },
-                                "interaction_id": {
-                                    "description": "An Airship identifier uniquely identifying the interaction. May be absent.",
-                                    "type": "string"
-                                },
-                                "interaction_type": {
-                                    "description": "The type of interaction as set by the UA SDK. Values determine whether the interaction triggered an event from the message center (`ua_mcrap`), a landing page (`ua_landing_page`), or an interactive notification (`ua_interactive_notification`).",
-                                    "enum": [
-                                        "ua_mcrap",
-                                        "ua_landing_page",
-                                        "ua_interactive_notification"
-                                    ],
-                                    "type": "string"
-                                },
-                                "last_delivered": {
-                                    "description": "Identifies the last push notification the audience received before the event. Absent if the last push occurred more than 12 hours ago.",
-                                    "properties": {
-                                        "campaigns": {
-                                            "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
-                                            "properties": {
-                                                "categories": {
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": "array"
-                                                }
-                                            },
-                                            "title": "Campaigns Object",
-                                            "type": "object"
-                                        },
-                                        "group_id": {
-                                            "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
-                                            "format": "uuid",
-                                            "title": "Group ID",
-                                            "type": "string"
-                                        },
-                                        "push_id": {
-                                            "description": "A unique identifier for a push operation.",
-                                            "format": "uuid",
-                                            "title": "Push ID",
-                                            "type": "string"
-                                        },
-                                        "time": {
-                                            "description": "The UTC time when the push occurred.",
-                                            "format": "date-time",
-                                            "type": "string"
-                                        },
-                                        "variant_id": {
-                                            "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
-                                            "title": "Variant ID",
-                                            "type": "integer"
-                                        }
-                                    },
-                                    "required": [
-                                        "push_id"
-                                    ],
-                                    "title": "Associated Push",
-                                    "type": "object"
-                                },
-                                "name": {
-                                    "description": "A plain-text name given to the event.\n",
-                                    "example": "purchased",
-                                    "not": {
-                                        "enum": [
-                                            "delivery",
-                                            "injection",
-                                            "open",
-                                            "bounce",
-                                            "click",
-                                            "unsubscribe",
-                                            "delivery_report"
-                                        ]
-                                    },
-                                    "type": "string"
-                                },
-                                "properties": {
-                                    "additionalProperties": true,
-                                    "description": "Supports up to 100 key/value pairs that describe custom event properties. If the event has no custom properties, this field is absent.",
-                                    "maxProperties": 100,
-                                    "type": "object"
-                                },
-                                "session_id": {
-                                    "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
-                                    "format": "uuid",
-                                    "title": "Session ID",
-                                    "type": "string"
-                                },
-                                "source": {
-                                    "description": "The event source. `SDK` indicates an event sent from the UA SDK. `API` indicates an event created by request against the [Server Side Custom Events API]{{< relref \"api/ua/#server-side-custom-events\" >}}.",
-                                    "enum": [
-                                        "SDK",
-                                        "API"
-                                    ],
-                                    "type": "string"
-                                },
-                                "transaction": {
-                                    "description": "If the event is one in a series representing a single transaction, use the value in this field to tie events together.",
-                                    "example": "886f53d4-3e0f-46d7-930e-c2792dac6e0a",
-                                    "type": "string"
-                                },
-                                "triggering_push": {
-                                    "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
-                                    "properties": {
-                                        "campaigns": {
-                                            "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
-                                            "properties": {
-                                                "categories": {
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "type": "array"
-                                                }
-                                            },
-                                            "title": "Campaigns Object",
-                                            "type": "object"
-                                        },
-                                        "group_id": {
-                                            "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
-                                            "format": "uuid",
-                                            "title": "Group ID",
-                                            "type": "string"
-                                        },
-                                        "push_id": {
-                                            "description": "A unique identifier for a push operation.",
-                                            "format": "uuid",
-                                            "title": "Push ID",
-                                            "type": "string"
-                                        },
-                                        "time": {
-                                            "description": "The UTC time when the push occurred.",
-                                            "format": "date-time",
-                                            "type": "string"
-                                        },
-                                        "variant_id": {
-                                            "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
-                                            "title": "Variant ID",
-                                            "type": "integer"
-                                        }
-                                    },
-                                    "required": [
-                                        "push_id"
-                                    ],
-                                    "title": "Associated Push",
-                                    "type": "object"
-                                },
-                                "value": {
-                                    "description": "Populated if the event is associated with a count or amount. Airship treats this field as a representation of money. The `value` field respects six digits of precision to the right of the decimal point.",
-                                    "example": 120.49,
-                                    "type": "number"
-                                }
-                            },
-                            "required": [
-                                "name",
-                                "source"
-                            ],
-                            "type": "object"
-                        },
-                        "device": {
-                            "properties": {
-                                "channel": {
-                                    "description": "The unique, platform-agnostic channel identifier for a device.",
-                                    "type": "string"
-                                },
-                                "device_type": {
-                                    "description": "The type of device the event was generated from.",
-                                    "enum": [
-                                        "OPEN",
-                                        "WEB",
-                                        "ANDROID",
-                                        "IOS",
-                                        "AMAZON",
-                                        "EMAIL",
-                                        "SMS"
-                                    ],
-                                    "type": "string"
-                                }
-                            },
-                            "required": [
-                                "channel",
-                                "device_type"
-                            ],
-                            "type": "object"
-                        }
+                    "group_id": {
+                      "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+                      "format": "uuid",
+                      "title": "Group ID",
+                      "type": "string",
+                      "x-inline-component": true
                     },
-                    "required": [
-                        "device",
-                        "body"
-                    ],
-                    "title": "General Custom Event",
-                    "type": "object"
+                    "push_id": {
+                      "description": "A unique identifier for a push operation.",
+                      "format": "uuid",
+                      "title": "Push ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "time": {
+                      "description": "The UTC time when the push occurred.",
+                      "type": "string"
+                    },
+                    "variant_id": {
+                      "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+                      "title": "Variant ID",
+                      "type": "integer",
+                      "x-inline-component": true
+                    }
+                  },
+                  "required": [
+                    "push_id"
+                  ],
+                  "title": "Associated Push",
+                  "type": "object",
+                  "x-inline-component": true
                 }
-            ]
+              },
+              "required": [
+                "name",
+                "triggering_push",
+                "properties",
+                "source"
+              ],
+              "type": "object"
+            },
+            "device": {
+              "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
+              "properties": {
+                "channel": {
+                  "description": "The unique, platform-agnostic channel identifier for a device.",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "delivery_address": {
+                  "description": "The email address of the channel the event occured against.",
+                  "type": "string"
+                },
+                "device_type": {
+                  "description": "email compliance events use the EMAIL device type.",
+                  "enum": [
+                    "EMAIL"
+                  ],
+                  "type": "string"
+                },
+                "named_user": {
+                  "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "device_type",
+                "delivery_address"
+              ],
+              "title": "Email Device",
+              "type": "object",
+              "x-inline-component": true
+            }
+          },
+          "required": [
+            "device",
+            "body"
+          ],
+          "title": "Email Injection Event",
+          "type": "object",
+          "x-schema-tag": "Custom Email Events"
+        },
+        {
+          "description": "Occurs when a recipient opens an email, rendering a tracking pixel at the bottom of the message. If a message is truncated by a client or email provider, a user may have to open it in a separate window to render the tracking pixel (and register this event).\n",
+          "properties": {
+            "body": {
+              "properties": {
+                "name": {
+                  "enum": [
+                    "open"
+                  ],
+                  "type": "string"
+                },
+                "properties": {
+                  "properties": {
+                    "email": {
+                      "description": "The recipient's email address.",
+                      "type": "string"
+                    },
+                    "sender": {
+                      "description": "The sender of the email specified by the event.",
+                      "type": "string"
+                    },
+                    "subject": {
+                      "description": "The subject line of the email specified by the event.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object",
+                  "x-inline-component": true
+                },
+                "session_id": {
+                  "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
+                  "format": "uuid",
+                  "title": "Session ID",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "source": {
+                  "enum": [
+                    "API"
+                  ],
+                  "type": "string"
+                },
+                "triggering_push": {
+                  "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
+                  "properties": {
+                    "campaigns": {
+                      "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
+                      "properties": {
+                        "categories": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "title": "Campaigns Object",
+                      "type": "object",
+                      "x-inline-component": true
+                    },
+                    "group_id": {
+                      "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+                      "format": "uuid",
+                      "title": "Group ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "push_id": {
+                      "description": "A unique identifier for a push operation.",
+                      "format": "uuid",
+                      "title": "Push ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "time": {
+                      "description": "The UTC time when the push occurred.",
+                      "type": "string"
+                    },
+                    "variant_id": {
+                      "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+                      "title": "Variant ID",
+                      "type": "integer",
+                      "x-inline-component": true
+                    }
+                  },
+                  "required": [
+                    "push_id"
+                  ],
+                  "title": "Associated Push",
+                  "type": "object",
+                  "x-inline-component": true
+                }
+              },
+              "required": [
+                "name",
+                "triggering_push",
+                "properties",
+                "source"
+              ],
+              "type": "object"
+            },
+            "device": {
+              "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
+              "properties": {
+                "channel": {
+                  "description": "The unique, platform-agnostic channel identifier for a device.",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "delivery_address": {
+                  "description": "The email address of the channel the event occured against.",
+                  "type": "string"
+                },
+                "device_type": {
+                  "description": "email compliance events use the EMAIL device type.",
+                  "enum": [
+                    "EMAIL"
+                  ],
+                  "type": "string"
+                },
+                "named_user": {
+                  "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "device_type",
+                "delivery_address"
+              ],
+              "title": "Email Device",
+              "type": "object",
+              "x-inline-component": true
+            }
+          },
+          "required": [
+            "device",
+            "body"
+          ],
+          "title": "Email Open Event",
+          "type": "object",
+          "x-note": "This event requires images to load in the email client. If a user blocks images in their email client, Airship will not register this event.",
+          "x-schema-tag": "Custom Email Events"
+        },
+        {
+          "description": "Occurs when a mailbox provider temporarily rejects an email. In general, this event indicates that the provider will attempt to resend the message.\n",
+          "properties": {
+            "body": {
+              "properties": {
+                "name": {
+                  "enum": [
+                    "delay"
+                  ],
+                  "type": "string"
+                },
+                "properties": {
+                  "properties": {
+                    "email": {
+                      "description": "The recipient's email address.",
+                      "type": "string"
+                    },
+                    "sender": {
+                      "description": "The sender of the email specified by the event.",
+                      "type": "string"
+                    },
+                    "subject": {
+                      "description": "The subject line of the email specified by the event.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object",
+                  "x-inline-component": true
+                },
+                "session_id": {
+                  "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
+                  "format": "uuid",
+                  "title": "Session ID",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "source": {
+                  "enum": [
+                    "API"
+                  ],
+                  "type": "string"
+                },
+                "triggering_push": {
+                  "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
+                  "properties": {
+                    "campaigns": {
+                      "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
+                      "properties": {
+                        "categories": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "title": "Campaigns Object",
+                      "type": "object",
+                      "x-inline-component": true
+                    },
+                    "group_id": {
+                      "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+                      "format": "uuid",
+                      "title": "Group ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "push_id": {
+                      "description": "A unique identifier for a push operation.",
+                      "format": "uuid",
+                      "title": "Push ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "time": {
+                      "description": "The UTC time when the push occurred.",
+                      "type": "string"
+                    },
+                    "variant_id": {
+                      "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+                      "title": "Variant ID",
+                      "type": "integer",
+                      "x-inline-component": true
+                    }
+                  },
+                  "required": [
+                    "push_id"
+                  ],
+                  "title": "Associated Push",
+                  "type": "object",
+                  "x-inline-component": true
+                }
+              },
+              "required": [
+                "name",
+                "triggering_push",
+                "properties",
+                "source"
+              ],
+              "type": "object"
+            },
+            "device": {
+              "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
+              "properties": {
+                "channel": {
+                  "description": "The unique, platform-agnostic channel identifier for a device.",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "delivery_address": {
+                  "description": "The email address of the channel the event occured against.",
+                  "type": "string"
+                },
+                "device_type": {
+                  "description": "email compliance events use the EMAIL device type.",
+                  "enum": [
+                    "EMAIL"
+                  ],
+                  "type": "string"
+                },
+                "named_user": {
+                  "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "device_type",
+                "delivery_address"
+              ],
+              "title": "Email Device",
+              "type": "object",
+              "x-inline-component": true
+            }
+          },
+          "required": [
+            "device",
+            "body"
+          ],
+          "title": "Email Delay Event",
+          "type": "object",
+          "x-schema-tag": "Custom Email Events"
+        },
+        {
+          "description": "Occurs when an email could not be delivered to an address. The `bounce_class` provides additional information about the reason your message bounced. This event occurs in conjunction with a similar `COMPLIANCE` event.\n",
+          "properties": {
+            "body": {
+              "properties": {
+                "name": {
+                  "enum": [
+                    "bounce"
+                  ],
+                  "type": "string"
+                },
+                "properties": {
+                  "allOf": [
+                    {
+                      "properties": {
+                        "email": {
+                          "description": "The recipient's email address.",
+                          "type": "string"
+                        },
+                        "sender": {
+                          "description": "The sender of the email specified by the event.",
+                          "type": "string"
+                        },
+                        "subject": {
+                          "description": "The subject line of the email specified by the event.",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object",
+                      "x-inline-component": true
+                    },
+                    {
+                      "properties": {
+                        "bounce_class": {
+                          "description": "A number between 1 and 100 that represents the specific reason the email abounced.",
+                          "format": "(100)|[1-9]\\d?",
+                          "type": "string"
+                        },
+                        "bounce_event_type": {
+                          "enum": [
+                            "bounce"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                },
+                "session_id": {
+                  "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
+                  "format": "uuid",
+                  "title": "Session ID",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "source": {
+                  "enum": [
+                    "API"
+                  ],
+                  "type": "string"
+                },
+                "triggering_push": {
+                  "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
+                  "properties": {
+                    "campaigns": {
+                      "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
+                      "properties": {
+                        "categories": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "title": "Campaigns Object",
+                      "type": "object",
+                      "x-inline-component": true
+                    },
+                    "group_id": {
+                      "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+                      "format": "uuid",
+                      "title": "Group ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "push_id": {
+                      "description": "A unique identifier for a push operation.",
+                      "format": "uuid",
+                      "title": "Push ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "time": {
+                      "description": "The UTC time when the push occurred.",
+                      "type": "string"
+                    },
+                    "variant_id": {
+                      "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+                      "title": "Variant ID",
+                      "type": "integer",
+                      "x-inline-component": true
+                    }
+                  },
+                  "required": [
+                    "push_id"
+                  ],
+                  "title": "Associated Push",
+                  "type": "object",
+                  "x-inline-component": true
+                }
+              },
+              "required": [
+                "name",
+                "triggering_push",
+                "properties",
+                "source"
+              ],
+              "type": "object"
+            },
+            "device": {
+              "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
+              "properties": {
+                "channel": {
+                  "description": "The unique, platform-agnostic channel identifier for a device.",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "delivery_address": {
+                  "description": "The email address of the channel the event occured against.",
+                  "type": "string"
+                },
+                "device_type": {
+                  "description": "email compliance events use the EMAIL device type.",
+                  "enum": [
+                    "EMAIL"
+                  ],
+                  "type": "string"
+                },
+                "named_user": {
+                  "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "device_type",
+                "delivery_address"
+              ],
+              "title": "Email Device",
+              "type": "object",
+              "x-inline-component": true
+            }
+          },
+          "required": [
+            "device",
+            "body"
+          ],
+          "title": "Email Bounce Event",
+          "type": "object",
+          "x-schema-tag": "Custom Email Events"
+        },
+        {
+          "description": "Occurs when a recipient clicks a tracked link in a message. Tracked links are redirected through the provider's click-tracking server to record the event.",
+          "properties": {
+            "body": {
+              "properties": {
+                "name": {
+                  "enum": [
+                    "click"
+                  ],
+                  "type": "string"
+                },
+                "properties": {
+                  "allOf": [
+                    {
+                      "properties": {
+                        "email": {
+                          "description": "The recipient's email address.",
+                          "type": "string"
+                        },
+                        "sender": {
+                          "description": "The sender of the email specified by the event.",
+                          "type": "string"
+                        },
+                        "subject": {
+                          "description": "The subject line of the email specified by the event.",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object",
+                      "x-inline-component": true
+                    },
+                    {
+                      "properties": {
+                        "link_name": {
+                          "description": "The link text that the user clicked.",
+                          "type": "string"
+                        },
+                        "link_url": {
+                          "description": "The URL of the link that the user clicked.",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  ]
+                },
+                "session_id": {
+                  "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
+                  "format": "uuid",
+                  "title": "Session ID",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "source": {
+                  "enum": [
+                    "API"
+                  ],
+                  "type": "string"
+                },
+                "triggering_push": {
+                  "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
+                  "properties": {
+                    "campaigns": {
+                      "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
+                      "properties": {
+                        "categories": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "title": "Campaigns Object",
+                      "type": "object",
+                      "x-inline-component": true
+                    },
+                    "group_id": {
+                      "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+                      "format": "uuid",
+                      "title": "Group ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "push_id": {
+                      "description": "A unique identifier for a push operation.",
+                      "format": "uuid",
+                      "title": "Push ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "time": {
+                      "description": "The UTC time when the push occurred.",
+                      "type": "string"
+                    },
+                    "variant_id": {
+                      "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+                      "title": "Variant ID",
+                      "type": "integer",
+                      "x-inline-component": true
+                    }
+                  },
+                  "required": [
+                    "push_id"
+                  ],
+                  "title": "Associated Push",
+                  "type": "object",
+                  "x-inline-component": true
+                }
+              },
+              "required": [
+                "name",
+                "triggering_push",
+                "properties",
+                "source"
+              ],
+              "type": "object"
+            },
+            "device": {
+              "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
+              "properties": {
+                "channel": {
+                  "description": "The unique, platform-agnostic channel identifier for a device.",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "delivery_address": {
+                  "description": "The email address of the channel the event occured against.",
+                  "type": "string"
+                },
+                "device_type": {
+                  "description": "email compliance events use the EMAIL device type.",
+                  "enum": [
+                    "EMAIL"
+                  ],
+                  "type": "string"
+                },
+                "named_user": {
+                  "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "device_type",
+                "delivery_address"
+              ],
+              "title": "Email Device",
+              "type": "object",
+              "x-inline-component": true
+            }
+          },
+          "required": [
+            "device",
+            "body"
+          ],
+          "title": "Email Click Event",
+          "type": "object",
+          "x-schema-tag": "Custom Email Events"
+        },
+        {
+          "description": "Occurs when a user clicks an unsubscribe link in an email you sent.",
+          "properties": {
+            "body": {
+              "properties": {
+                "name": {
+                  "enum": [
+                    "unsubscribe"
+                  ],
+                  "type": "string"
+                },
+                "properties": {
+                  "properties": {
+                    "unsubscribe_event_type": {
+                      "enum": [
+                        "link_unsubscribe"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "session_id": {
+                  "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
+                  "format": "uuid",
+                  "title": "Session ID",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "source": {
+                  "enum": [
+                    "API"
+                  ],
+                  "type": "string"
+                },
+                "triggering_push": {
+                  "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
+                  "properties": {
+                    "campaigns": {
+                      "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
+                      "properties": {
+                        "categories": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "title": "Campaigns Object",
+                      "type": "object",
+                      "x-inline-component": true
+                    },
+                    "group_id": {
+                      "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+                      "format": "uuid",
+                      "title": "Group ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "push_id": {
+                      "description": "A unique identifier for a push operation.",
+                      "format": "uuid",
+                      "title": "Push ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "time": {
+                      "description": "The UTC time when the push occurred.",
+                      "type": "string"
+                    },
+                    "variant_id": {
+                      "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+                      "title": "Variant ID",
+                      "type": "integer",
+                      "x-inline-component": true
+                    }
+                  },
+                  "required": [
+                    "push_id"
+                  ],
+                  "title": "Associated Push",
+                  "type": "object",
+                  "x-inline-component": true
+                }
+              },
+              "required": [
+                "name",
+                "triggering_push",
+                "properties",
+                "source"
+              ],
+              "type": "object"
+            },
+            "device": {
+              "description": "Holds information about the email \"device\" (an individual email channel) the event occurred against.",
+              "properties": {
+                "channel": {
+                  "description": "The unique, platform-agnostic channel identifier for a device.",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "delivery_address": {
+                  "description": "The email address of the channel the event occured against.",
+                  "type": "string"
+                },
+                "device_type": {
+                  "description": "email compliance events use the EMAIL device type.",
+                  "enum": [
+                    "EMAIL"
+                  ],
+                  "type": "string"
+                },
+                "named_user": {
+                  "description": "The named user that the channel is associated with; appears only if the channel is associated with a named user.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "device_type",
+                "delivery_address"
+              ],
+              "title": "Email Device",
+              "type": "object",
+              "x-inline-component": true
+            }
+          },
+          "required": [
+            "device",
+            "body"
+          ],
+          "title": "Email Unsubscribe Link Event",
+          "type": "object",
+          "x-schema-tag": "Custom Email Events"
+        },
+        {
+          "description": "Delivery reports are custom events sent from our third-party SMS providers.\nThese events report the status of your message between the provider and your audience up to, and including, delivery.\n",
+          "properties": {
+            "body": {
+              "properties": {
+                "interaction_type": {
+                  "enum": [
+                    "delivery_report"
+                  ],
+                  "type": "string"
+                },
+                "name": {
+                  "description": "The name of the delivery report as specified by the vendor. Most events reference the status of the message with reference to the short message service center (SMSC) — the server that receives your message and dispatches it to your audience.\n\n* dispatched — Message has been dispatched and accepted for delivery by the SMSC.\n* aborted — Message was aborted before reaching SMSC.\n* rejected — Message was rejected by SMSC.\n* delivered — Message has been delivered.\n* failed — Message failed to be delivered.\n* expired — Message expired before delivery to SMSC. This may happen if the expiry time for the message was very short.\n* unknown — Message was delivered to SMSC but no Delivery Receipt has been received or a Delivery Receipt that could not be interpreted was received.\n* undeliverable — Message cannot be delivered.\n* deleted — Message has been deleted.\n",
+                  "enum": [
+                    "dispatched",
+                    "aborted",
+                    "rejected",
+                    "delivered",
+                    "failed",
+                    "expired",
+                    "unknown",
+                    "undeliverable",
+                    "deleted"
+                  ],
+                  "type": "string"
+                },
+                "properties": {
+                  "oneOf": [
+                    {
+                      "description": "A delivery report for SMS.\n",
+                      "properties": {
+                        "error_code": {
+                          "description": "An error code from the short message service center, if applicable.",
+                          "type": "string"
+                        },
+                        "sender": {
+                          "description": "The number or short code that the message originated from.",
+                          "type": "string"
+                        },
+                        "vendor": {
+                          "description": "The delivery service for the message.",
+                          "enum": [
+                            "CLX",
+                            "TYNTEC"
+                          ],
+                          "type": "string"
+                        },
+                        "vendorDeliveryId": {
+                          "description": "A unique identifier for the message from the SMS vendor.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "sender",
+                        "vendor",
+                        "vendorDeliveryId"
+                      ],
+                      "title": "SMS Delivery Properties",
+                      "type": "object"
+                    },
+                    {
+                      "description": "A delivery report for MMS.",
+                      "properties": {
+                        "carrier_id": {
+                          "description": "Identifies the carrier the message was sent through.",
+                          "type": "string"
+                        },
+                        "error_code": {
+                          "description": "An error code from the short message service center, if applicable.",
+                          "type": "string"
+                        },
+                        "handset": {
+                          "description": "The profile of the handset that received the message. This information is only present if the `result_status` is `N102`.",
+                          "type": "string"
+                        },
+                        "result_code": {
+                          "description": "A status code from the vendor, if applicable.",
+                          "enum": [
+                            "N101",
+                            "N102",
+                            "E101",
+                            "E102"
+                          ],
+                          "type": "string"
+                        },
+                        "result_status": {
+                          "enum": [
+                            "Message Sent",
+                            "Message Sent/Delivered",
+                            "Message Failed",
+                            "Message,Sent/Expired",
+                            "Message Sent/Rejected",
+                            "Message Sent/Failed",
+                            "Message Sent/Not Supported"
+                          ],
+                          "type": "string"
+                        },
+                        "sender": {
+                          "description": "The number or short code that the message originated from.",
+                          "type": "string"
+                        },
+                        "sent_as": {
+                          "description": "Indicates whether the MMS was delivered as MMS (binary) or SMS (HTML).\n",
+                          "enum": [
+                            "MMS",
+                            "SMS"
+                          ],
+                          "type": "string"
+                        },
+                        "tracking_Id": {
+                          "description": "An ID assigned by the delivery service (CLX Only).",
+                          "type": "string"
+                        },
+                        "vendor": {
+                          "description": "The delivery service for the message.",
+                          "enum": [
+                            "CLX"
+                          ],
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "tracking_id",
+                        "vendor",
+                        "sender",
+                        "result_code"
+                      ],
+                      "title": "MMS Delivery Properties",
+                      "type": "object"
+                    }
+                  ]
+                },
+                "source": {
+                  "enum": [
+                    "API"
+                  ],
+                  "type": "string"
+                },
+                "triggering_push": {
+                  "description": "Identifies the push notification that caused the event.",
+                  "properties": {
+                    "campaigns": {
+                      "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
+                      "properties": {
+                        "categories": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "title": "Campaigns Object",
+                      "type": "object",
+                      "x-inline-component": true
+                    },
+                    "group_id": {
+                      "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+                      "format": "uuid",
+                      "title": "Group ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "push_id": {
+                      "description": "A unique identifier for a push operation.",
+                      "format": "uuid",
+                      "title": "Push ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "variant_id": {
+                      "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+                      "title": "Variant ID",
+                      "type": "integer",
+                      "x-inline-component": true
+                    }
+                  },
+                  "required": [
+                    "push_id"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "source",
+                "name",
+                "properties"
+              ],
+              "type": "object"
+            },
+            "device": {
+              "description": "Device properties for Custom events with the `delivery_report` interaction type always specify an SMS device.",
+              "properties": {
+                "channel": {
+                  "description": "The unique, platform-agnostic channel identifier for a device.",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "delivery_address": {
+                  "description": "The phone number associated with the channel.",
+                  "type": "string"
+                },
+                "device_type": {
+                  "enum": [
+                    "SMS"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "channel",
+                "delivery_address",
+                "device_type"
+              ],
+              "type": "object"
+            },
+            "id": {
+              "description": "Uniquely identifies an event. The data stream will occasionally send duplicate events. Duplicate events will have the same `id`, `type`, `occurred`, `device`, and `body` values but different `offset` and `processed` values. You should use the `id` to deduplicate.",
+              "type": "string",
+              "x-inline-component": true
+            },
+            "occurred": {
+              "description": "When the event occurred.",
+              "type": "string",
+              "x-inline-component": true
+            },
+            "offset": {
+              "description": "An identifier of a location in the stream; used to resume the stream after severing a connection. If you open a stream using the offset value, the stream will resume with the next element in the stream. You should store this value as a string so that you can easily resume the stream if it ends for any reason.",
+              "type": "string",
+              "x-inline-component": true
+            },
+            "processed": {
+              "description": "When the event was ingested by Airship. There may be some latency between when the event occurred, and when it was processed.",
+              "type": "string",
+              "x-inline-component": true
+            },
+            "type": {
+              "enum": [
+                "CUSTOM"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "occurred",
+            "offset",
+            "processed",
+            "type",
+            "device",
+            "body"
+          ],
+          "title": "SMS Delivery Report",
+          "type": "object",
+          "x-schema-tag": "Custom SMS Events"
+        },
+        {
+          "properties": {
+            "body": {
+              "properties": {
+                "customer_id": {
+                  "description": "An external customer-side id, such as an email address. Absent if empty.",
+                  "type": "string"
+                },
+                "interaction_id": {
+                  "description": "An Airship identifier uniquely identifying the interaction. May be absent.",
+                  "type": "string"
+                },
+                "interaction_type": {
+                  "description": "The type of interaction as set by the UA SDK. Values determine whether the interaction triggered an event from the message center (`ua_mcrap`), a landing page (`ua_landing_page`), or an interactive notification (`ua_interactive_notification`).",
+                  "enum": [
+                    "ua_mcrap",
+                    "ua_landing_page",
+                    "ua_interactive_notification"
+                  ],
+                  "type": "string"
+                },
+                "last_delivered": {
+                  "description": "Identifies the last push notification the audience received before the event. Absent if the last push occurred more than 12 hours ago.",
+                  "properties": {
+                    "campaigns": {
+                      "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
+                      "properties": {
+                        "categories": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "title": "Campaigns Object",
+                      "type": "object",
+                      "x-inline-component": true
+                    },
+                    "group_id": {
+                      "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+                      "format": "uuid",
+                      "title": "Group ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "push_id": {
+                      "description": "A unique identifier for a push operation.",
+                      "format": "uuid",
+                      "title": "Push ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "time": {
+                      "description": "The UTC time when the push occurred.",
+                      "type": "string"
+                    },
+                    "variant_id": {
+                      "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+                      "title": "Variant ID",
+                      "type": "integer",
+                      "x-inline-component": true
+                    }
+                  },
+                  "required": [
+                    "push_id"
+                  ],
+                  "title": "Associated Push",
+                  "type": "object",
+                  "x-inline-component": true
+                },
+                "name": {
+                  "description": "A plain-text name given to the event.\n",
+                  "example": "purchased",
+                  "not": {
+                    "enum": [
+                      "delivery",
+                      "injection",
+                      "open",
+                      "bounce",
+                      "click",
+                      "unsubscribe",
+                      "delivery_report"
+                    ]
+                  },
+                  "type": "string"
+                },
+                "properties": {
+                  "additionalProperties": true,
+                  "description": "Supports up to 100 key/value pairs that describe custom event properties. If the event has no custom properties, this field is absent.",
+                  "maxProperties": 100,
+                  "type": "object"
+                },
+                "session_id": {
+                  "description": "Represents the “session” of user activity. Absent if the application was initialized while backgrounded.",
+                  "format": "uuid",
+                  "title": "Session ID",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "source": {
+                  "description": "The event source. `SDK` indicates an event sent from the UA SDK. `API` indicates an event created by request against the [Server Side Custom Events API]{{< relref \"api/ua/#server-side-custom-events\" >}}.",
+                  "enum": [
+                    "SDK",
+                    "API"
+                  ],
+                  "type": "string"
+                },
+                "transaction": {
+                  "description": "If the event is one in a series representing a single transaction, use the value in this field to tie events together.",
+                  "example": "886f53d4-3e0f-46d7-930e-c2792dac6e0a",
+                  "type": "string"
+                },
+                "triggering_push": {
+                  "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
+                  "properties": {
+                    "campaigns": {
+                      "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
+                      "properties": {
+                        "categories": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "title": "Campaigns Object",
+                      "type": "object",
+                      "x-inline-component": true
+                    },
+                    "group_id": {
+                      "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+                      "format": "uuid",
+                      "title": "Group ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "push_id": {
+                      "description": "A unique identifier for a push operation.",
+                      "format": "uuid",
+                      "title": "Push ID",
+                      "type": "string",
+                      "x-inline-component": true
+                    },
+                    "time": {
+                      "description": "The UTC time when the push occurred.",
+                      "type": "string"
+                    },
+                    "variant_id": {
+                      "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+                      "title": "Variant ID",
+                      "type": "integer",
+                      "x-inline-component": true
+                    }
+                  },
+                  "required": [
+                    "push_id"
+                  ],
+                  "title": "Associated Push",
+                  "type": "object",
+                  "x-inline-component": true
+                },
+                "value": {
+                  "description": "Populated if the event is associated with a count or amount. Airship treats this field as a representation of money. The `value` field respects six digits of precision to the right of the decimal point.",
+                  "example": 120.49,
+                  "type": "number"
+                }
+              },
+              "required": [
+                "name",
+                "source"
+              ],
+              "type": "object"
+            },
+            "device": {
+              "properties": {
+                "channel": {
+                  "description": "The unique, platform-agnostic channel identifier for a device.",
+                  "type": "string",
+                  "x-inline-component": true
+                },
+                "device_type": {
+                  "description": "The type of device the event was generated from.",
+                  "enum": [
+                    "OPEN",
+                    "WEB",
+                    "ANDROID",
+                    "IOS",
+                    "AMAZON",
+                    "EMAIL",
+                    "SMS"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "channel",
+                "device_type"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "device",
+            "body"
+          ],
+          "title": "General Custom Event",
+          "type": "object"
         }
-    ],
-    "description": "Represents custom events that are either emmitted from the Airship SDK or submitted through the Custom Events API. You can configure custom events yourself. There are also several CUSTOM-type events for email and SMS that are defined by Airship.\n\nIn general, you can expect device information if the event source is `SDK` or if the event is one of the defined email or SMS events (as defined by `event_type`).\n",
-    "title": "Custom",
-    "x-schema-tag": "Events"
+      ]
+    }
+  ],
+  "description": "Represents custom events that are either emmitted from the Airship SDK or submitted through the Custom Events API. You can configure custom events yourself. There are also several CUSTOM-type events for email and SMS that are defined by Airship.\n\nIn general, you can expect device information if the event source is `SDK` or if the event is one of the defined email or SMS events (as defined by `event_type`).\n",
+  "title": "Custom",
+  "x-schema-tag": "Events"
 }

@@ -1,0 +1,5 @@
+{
+  "description": "The unique, platform-agnostic channel identifier for a device.",
+  "type": "string",
+  "x-inline-component": true
+}

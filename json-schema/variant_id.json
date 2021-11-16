@@ -1,0 +1,6 @@
+{
+  "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+  "title": "Variant ID",
+  "type": "integer",
+  "x-inline-component": true
+}

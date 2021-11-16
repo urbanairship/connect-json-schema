@@ -1,0 +1,7 @@
+{
+  "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+  "format": "uuid",
+  "title": "Group ID",
+  "type": "string",
+  "x-inline-component": true
+}

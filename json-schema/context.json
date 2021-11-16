@@ -1,0 +1,32 @@
+{
+  "description": "An object that establishes a relationship between a push and the origin of the message. Only messages triggered by a custom event will include the context.",
+  "properties": {
+    "event_uuid": {
+      "description": "The ID of the custom event which triggered the send.",
+      "format": "uuid",
+      "type": "string"
+    },
+    "interaction_id": {
+      "description": "If `interaction_id` was set on the custom event body, it will be populated here.",
+      "type": "string"
+    },
+    "transaction": {
+      "description": "If `transaction` was set on the custom event body, it will be populated here.",
+      "type": "string"
+    },
+    "triggered_by": {
+      "description": "The triggering event type.",
+      "enum": [
+        "custom_event"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "triggered_by",
+    "event_uuid"
+  ],
+  "title": "Context Object",
+  "type": "object",
+  "x-inline-component": true
+}

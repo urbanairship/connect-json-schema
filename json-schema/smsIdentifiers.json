@@ -1,0 +1,20 @@
+{
+  "description": "Contains the sender and MSISDN for the event.",
+  "properties": {
+    "msisdn": {
+      "description": "The phone number of the user involved in the compliance event.",
+      "type": "string"
+    },
+    "sender": {
+      "description": "The phone number or short code of the sender involved in the compliance event.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "sender",
+    "msisdn"
+  ],
+  "title": "SMS Identifiers",
+  "type": "object",
+  "x-inline-component": true
+}

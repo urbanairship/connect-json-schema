@@ -1,0 +1,49 @@
+{
+  "description": "The specific `push_id` and accompanying identifiers associated with an event. An associated push helps you trace an event to the original notification or operation.\n\nAn associated push object may specify a `time`, if the push was a singular operation sent at a defined time. Otherwise, the object will include a `group_id` if the push was sent at a relative time (`best_time` or `local_time`) an automation pipeline, or another operation resulting in multiple `push_id`s.",
+  "properties": {
+    "campaigns": {
+      "description": "An object listing the campaigns a push specification is associated with. The campaigns object includes an array of categories that must have between 1 and 10 elements, each of which is a string with a 64-byte and -character limit.",
+      "properties": {
+        "categories": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Campaigns Object",
+      "type": "object",
+      "x-inline-component": true
+    },
+    "group_id": {
+      "description": "Identifies a push specification delivered over an interval of time, e.g. multiple push_ids as part of the fulfillment of an automation pipeline or a push-to-local-time specification.\n",
+      "format": "uuid",
+      "title": "Group ID",
+      "type": "string",
+      "x-inline-component": true
+    },
+    "push_id": {
+      "description": "A unique identifier for a push operation.",
+      "format": "uuid",
+      "title": "Push ID",
+      "type": "string",
+      "x-inline-component": true
+    },
+    "time": {
+      "description": "The UTC time when the push occurred.",
+      "type": "string"
+    },
+    "variant_id": {
+      "description": "The ID of the variant that a push is associated with, if the push was a part of an A/B test (experiment).",
+      "title": "Variant ID",
+      "type": "integer",
+      "x-inline-component": true
+    }
+  },
+  "required": [
+    "push_id"
+  ],
+  "title": "Associated Push",
+  "type": "object",
+  "x-inline-component": true
+}
