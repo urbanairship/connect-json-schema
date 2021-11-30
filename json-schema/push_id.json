@@ -1,7 +1,0 @@
-{
-  "description": "A unique identifier for a push operation.",
-  "format": "uuid",
-  "title": "Push ID",
-  "type": "string",
-  "x-inline-component": true
-}

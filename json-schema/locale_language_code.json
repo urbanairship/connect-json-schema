@@ -1,5 +1,0 @@
-{
-  "description": "The ISO-639-1 two-letter language code reflecting the language that the device is set to.",
-  "type": "string",
-  "x-inline-component": true
-}

@@ -1,5 +1,0 @@
-{
-  "description": "When the event occurred.",
-  "type": "string",
-  "x-inline-component": true
-}

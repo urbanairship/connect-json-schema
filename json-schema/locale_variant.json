@@ -1,5 +1,0 @@
-{
-  "description": "The language variant",
-  "type": "string",
-  "x-inline-component": true
-}

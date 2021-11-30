@@ -1,5 +1,0 @@
-{
-  "description": "The ISO-3166-1 country code as defined in device settings.",
-  "type": "string",
-  "x-inline-component": true
-}

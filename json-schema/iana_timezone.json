@@ -1,5 +1,0 @@
-{
-  "description": "The time zone of the device.",
-  "type": "string",
-  "x-inline-component": true
-}

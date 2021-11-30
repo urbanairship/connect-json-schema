@@ -1,5 +1,0 @@
-{
-  "description": "The message you sent to the user represented in the event.",
-  "type": "string",
-  "x-inline-component": true
-}

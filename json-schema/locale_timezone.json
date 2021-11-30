@@ -1,5 +1,0 @@
-{
-  "description": "The device's timezone offset in seconds from UTC.",
-  "type": "string",
-  "x-inline-component": true
-}
