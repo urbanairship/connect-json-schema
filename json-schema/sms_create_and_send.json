@@ -1,0 +1,107 @@
+{
+  "description": "An event that occurs for SMS channels used as a part of a create-and-send message.",
+  "properties": {
+    "body": {
+      "description": "Contains the event subtype and additional properties about the event.",
+      "properties": {
+        "event_type": {
+          "enum": [
+            "create_and_send"
+          ],
+          "type": "string"
+        },
+        "identifiers": {
+          "description": "Contains the sender and MSISDN for the event.",
+          "properties": {
+            "msisdn": {
+              "description": "The phone number of the user involved in the compliance event.",
+              "type": "string"
+            },
+            "sender": {
+              "description": "The phone number or short code of the sender involved in the compliance event.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sender",
+            "msisdn"
+          ],
+          "title": "SMS Identifiers",
+          "type": "object",
+          "x-inline-component": true
+        },
+        "properties": {
+          "description": "Properties for an SMS create-and-send event.",
+          "properties": {
+            "channel_registered": {
+              "description": "If true, a new channel was created to represent the identifiers in the event. If false, the address was already registered to Airship.",
+              "type": "boolean"
+            },
+            "opted_in": {
+              "description": "The date-and-time when the `msisdn` opted into messages from the `sender`.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "channel_registered"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "event_type",
+        "identifiers",
+        "properties"
+      ],
+      "type": "object"
+    },
+    "device": {
+      "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+      "properties": {
+        "channel": {
+          "description": "The unique, platform-agnostic channel identifier for a device.",
+          "type": "string",
+          "x-inline-component": true
+        },
+        "delivery_address": {
+          "description": "The phone number for the channel.",
+          "format": "msisdn",
+          "type": "string"
+        },
+        "device_type": {
+          "description": "SMS compliance events list the SMS device type.",
+          "enum": [
+            "SMS"
+          ],
+          "type": "string"
+        },
+        "identifiers": {
+          "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+          "properties": {
+            "sender": {
+              "description": "The sender that the `delivery_address` received a message from.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sender"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "device_type"
+      ],
+      "title": "SMS Device",
+      "type": "object",
+      "x-inline-component": true
+    }
+  },
+  "required": [
+    "device",
+    "body"
+  ],
+  "title": "SMS Create-and-Send Event",
+  "type": "object",
+  "x-schema-tag": "SMS Compliance Events"
+}

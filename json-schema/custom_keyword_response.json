@@ -1,0 +1,107 @@
+{
+  "description": "Occurs when a mobile-originated keyword is matched, and elicits a custom response.",
+  "properties": {
+    "body": {
+      "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+      "properties": {
+        "event_type": {
+          "description": "Occurs when a mobile-originated keyword generates a custom response.",
+          "enum": [
+            "custom_keyword_response"
+          ],
+          "type": "string"
+        },
+        "identifiers": {
+          "description": "Contains the sender and MSISDN for the event.",
+          "properties": {
+            "msisdn": {
+              "description": "The phone number of the user involved in the compliance event.",
+              "type": "string"
+            },
+            "sender": {
+              "description": "The phone number or short code of the sender involved in the compliance event.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sender",
+            "msisdn"
+          ],
+          "title": "SMS Identifiers",
+          "type": "object",
+          "x-inline-component": true
+        },
+        "properties": {
+          "description": "Contains properties specific to the `event_type`.",
+          "properties": {
+            "inbound_message": {
+              "description": "The body of the inbound (to Airship) text message. This is the message a user sent to opt into or out of messages. This text corresponds to the `keyword` if present.",
+              "type": "string",
+              "x-inline-component": true
+            },
+            "outbound_message": {
+              "description": "The message you sent to the user represented in the event.",
+              "type": "string",
+              "x-inline-component": true
+            }
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "event_type",
+        "identifiers",
+        "properties"
+      ],
+      "type": "object"
+    },
+    "device": {
+      "description": "Holds information about an SMS \"device\" (an individual SMS channel).",
+      "properties": {
+        "channel": {
+          "description": "The unique, platform-agnostic channel identifier for a device.",
+          "type": "string",
+          "x-inline-component": true
+        },
+        "delivery_address": {
+          "description": "The phone number for the channel.",
+          "format": "msisdn",
+          "type": "string"
+        },
+        "device_type": {
+          "description": "SMS compliance events list the SMS device type.",
+          "enum": [
+            "SMS"
+          ],
+          "type": "string"
+        },
+        "identifiers": {
+          "description": "If present, the `identifiers` object holds the value for the `sender` property.",
+          "properties": {
+            "sender": {
+              "description": "The sender that the `delivery_address` received a message from.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sender"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "device_type"
+      ],
+      "title": "SMS Device",
+      "type": "object",
+      "x-inline-component": true
+    }
+  },
+  "required": [
+    "device",
+    "body"
+  ],
+  "title": "SMS Custom Keyword Response Event",
+  "type": "object",
+  "x-schema-tag": "SMS Compliance Events"
+}

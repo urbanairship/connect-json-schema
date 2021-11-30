@@ -1,0 +1,62 @@
+{
+  "description": "An event that occurs when a user sends a message from an SMS device, i.e., the message originates from a mobile device and not from the server (Airship). This event contains context related to the message's origin, the incoming message itself, and Airship's response to the origin.\n",
+  "properties": {
+    "event_type": {
+      "description": "The specific `MOBILE_ORIGINATED` event that occured.",
+      "enum": [
+        "mobile_originated_sms"
+      ],
+      "type": "string"
+    },
+    "identifiers": {
+      "description": "Contains the sender and MSISDN for the event.",
+      "properties": {
+        "msisdn": {
+          "description": "The phone number of the user involved in the compliance event.",
+          "type": "string"
+        },
+        "sender": {
+          "description": "The phone number or short code of the sender involved in the compliance event.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sender",
+        "msisdn"
+      ],
+      "title": "SMS Identifiers",
+      "type": "object",
+      "x-inline-component": true
+    },
+    "properties": {
+      "description": "Contains the mobile-originated message itself and the response to the message.\n",
+      "properties": {
+        "inbound_message": {
+          "description": "The contents of the message received from an SMS device.\n",
+          "type": "string"
+        },
+        "keyword": {
+          "description": "The specific keyword used in the inbound message, if recognized; the keyword in the `inbound_message` determines the `outbound_message` sent to the device. If a keyword could not be matched in the `inbound_message`, this field is absent.\n",
+          "type": "string"
+        },
+        "outbound_message": {
+          "description": "The response sent to the SMS device, based on the inbound message and keyword.\n",
+          "type": "string"
+        }
+      },
+      "required": [
+        "inbound_message",
+        "outbound_message"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "event_type",
+    "identifiers",
+    "properties"
+  ],
+  "type": "object",
+  "x-inline-component": true,
+  "x-schema-tag": "SMS-Specific Events"
+}

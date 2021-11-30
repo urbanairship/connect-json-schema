@@ -1,0 +1,48 @@
+{
+  "description": "Occurs when an MSISDN is deactivated by a carrier. This event type does not contain additional `properties`.",
+  "properties": {
+    "body": {
+      "description": "Contains the event subtype, identifiers, and additional properties about the event.",
+      "properties": {
+        "event_type": {
+          "description": "The carrier deactivated the address.",
+          "enum": [
+            "carrier_deactivation"
+          ],
+          "type": "string"
+        },
+        "identifiers": {
+          "description": "Contains the sender and MSISDN for the event.",
+          "properties": {
+            "msisdn": {
+              "description": "The phone number of the user involved in the compliance event.",
+              "type": "string"
+            },
+            "sender": {
+              "description": "The phone number or short code of the sender involved in the compliance event.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "sender",
+            "msisdn"
+          ],
+          "title": "SMS Identifiers",
+          "type": "object",
+          "x-inline-component": true
+        }
+      },
+      "required": [
+        "event_type",
+        "identifiers"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "body"
+  ],
+  "title": "SMS Carrier Deactivation Event",
+  "type": "object",
+  "x-schema-tag": "SMS Compliance Events"
+}
